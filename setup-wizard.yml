@@ -1,0 +1,16 @@
+version: "2"
+fields:
+  - id: POCKET_CORE_KEY
+    target:
+      type: environment
+      name: POCKET_CORE_KEY
+    title: POCKET_CORE_KEY title
+    description: >-
+      POCKET_CORE_KEY description
+  - id: POCKET_CORE_PASSPHRASE
+    target:
+      type: environment
+      name: POCKET_CORE_PASSPHRASE
+    title: POCKET_CORE_PASSPHRASE title
+    description: >-
+      POCKET_CORE_PASSPHRASE description

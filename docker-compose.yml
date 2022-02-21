@@ -1,0 +1,19 @@
+version: "3.4"
+services:
+  pocket:
+    image: "pocket.pocket.dnp.dappnode.eth:0.1.0"
+    build:
+      context: pocket
+      args:
+        UPSTREAM_VERSION: RC-0.7.1
+    restart: unless-stopped
+    volumes:
+      - "pocket-testnet:/home/app/.pocket/"
+    ports:
+      - "26656:26656"
+    environment:
+      POCKET_CORE_KEY: mypocketcorekey
+      POCKET_CORE_PASSPHRASE: mypassphrase
+      EXTRA_OPTS: ""
+volumes:
+  pocket-testnet: {}
