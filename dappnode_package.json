@@ -1,12 +1,13 @@
 {
   "name": "pocket.dnp.dappnode.eth",
   "version": "0.1.0",
-  "upstreamVersion": "RC-0.7.1",
+  "upstreamVersion": "RC-0.9.0",
   "upstreamRepo": "pokt-network/pocket-core",
   "upstreamArg": "UPSTREAM_VERSION",
   "shortDescription": "Web3 Infrastructure The Right Way.",
   "description": "Instead of deploying to a single service provider, paying absurd fees for random outages and leaked data, tap into Pocket's trustless API protocol and route your requests to 1000's of independent full nodes. Available for all major blockchain networks.",
   "type": "service",
+  "mainService": "pocket",
   "author": "DAppNode Association <admin@dappnode.io> (https://github.com/dappnode)",
   "contributors": [
     "DAppNode <edu@dappnode.io> (https://github.com/dappnode)"
@@ -14,7 +15,10 @@
   "categories": ["Blockchain"],
   "license": "GPL-3.0",
   "links": {
-    "homepage": "https://www.pokt.network"
+    "ui": "http://pocket.pocket.dappnode/",
+    "homepage": "https://www.pokt.network",
+    "Wallet": "https://wallet.pokt.network/",
+    "Explorer": "https://explorer.pokt.network/"
   },
   "repository": {
     "type": "git",
@@ -23,15 +27,24 @@
   "bugs": {
     "url": "https://github.com/dappnode/DAppNodePackage-pokt/issues"
   },
-  "dependencies": {
-    "goerli-geth.dnp.dappnode.eth": "latest"
-  },
   "exposable": [
     {
       "name": "Expose Pocket RPC",
       "description": "Expose Pocket RPC",
       "serviceName": "pocket",
-      "port": 8081
+      "fromSubdomain": "pocket-pocket",
+      "port": 8081,
+      "exposeByDefault": true
+    }
+  ],
+  "globalEnvs": {
+    "all": true
+  },
+  "backup": [
+    {
+      "name": "keyfile",
+      "path": "/home/app/.pocket/config/keyfile.json",
+      "service": "pocket"
     }
   ]
 }

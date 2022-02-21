@@ -14,7 +14,7 @@
             "write_buffer": 838860
         },
         "DBPath": "data",
-        "LogLevel": "*:error",
+        "LogLevel": "*:info",
         "LogFormat": "plain",
         "Genesis": "config/genesis.json",
         "PrivValidatorKey": "priv_val_key.json",
@@ -55,13 +55,13 @@
         "P2P": {
             "RootDir": "/home/app/.pocket",
             "ListenAddress": "tcp://0.0.0.0:26656",
-            "ExternalAddress": "",
-            "Seeds": "03b74fa3c68356bb40d58ecc10129479b159a145@seed1.mainnet.pokt.network:20656,64c91701ea98440bc3674fdb9a99311461cdfd6f@seed2.mainnet.pokt.network:21656",
-            "PersistentPeers": "bf214ae424a4bd698972e4f4fda97939e9909bdd@node11.mainnet.pokt.network:22756, e74727d0ba34d9f7f6f583cb4a87dbe91d692c5f@node10.mainnet.pokt.network:21756",
+            "ExternalAddress": "tcp://${_DAPPNODE_GLOBAL_DOMAIN}:26656",
+            "Seeds": "03b74fa3c68356bb40d58ecc10129479b159a145@seed1.mainnet.pokt.network:20656,64c91701ea98440bc3674fdb9a99311461cdfd6f@seed2.mainnet.pokt.network:21656,0057ee693f3ce332c4ffcb499ede024c586ae37b@seed3.mainnet.pokt.network:22856,9fd99b89947c6af57cd0269ad01ecb99960177cd@seed4.mainnet.pokt.network:23856,f2a4d0ec9d50ea61db18452d191687c899c3ca42@seed5.mainnet.pokt.network:24856,f2a9705924e8d0e11fed60484da2c3d22f7daba8@seed6.mainnet.pokt.network:25856,582177fd65dd03806eeaa2e21c9049e653672c7e@seed7.mainnet.pokt.network:26856,2ea0b13ab823986cfb44292add51ce8677b899ad@seed8.mainnet.pokt.network:27856,a5f4a4cd88db9fd5def1574a0bffef3c6f354a76@seed9.mainnet.pokt.network:28856,d4039bd71d48def9f9f61f670c098b8956e52a08@seed10.mainnet.pokt.network:29856,5c133f07ed296bb9e21e3e42d5f26e0f7d2b2832@poktseed100.chainflow.io:26656,361b1936d3fbe516628ebd6a503920fc4fc0f6a7@seed.pokt.rivet.cloud:26656",
+            "PersistentPeers": "",
             "UPNP": false,
             "AddrBook": "config/addrbook.json",
             "AddrBookStrict": false,
-            "MaxNumInboundPeers": 21,
+            "MaxNumInboundPeers": 14,
             "MaxNumOutboundPeers": 7,
             "UnconditionalPeerIDs": "",
             "PersistentPeersMaxDialPeriod": 0,
@@ -96,7 +96,7 @@
             "MaxTxBytes": 1048576
         },
         "FastSync": {
-            "Version": "v0"
+            "Version": "v1"
         },
         "Consensus": {
             "RootDir": "/home/app/.pocket",
@@ -139,10 +139,10 @@
         "max_evidence_cache_entries": 500,
         "max_session_cache_entries": 500,
         "json_sort_relay_responses": true,
-        "remote_cli_url": "http://localhost:8081",
+        "remote_cli_url": "https://pocket-pocket.${_DAPPNODE_GLOBAL_DOMAIN}",
         "user_agent": "",
-        "validator_cache_size": 100,
-        "application_cache_size": 100,
+        "validator_cache_size": 10000,
+        "application_cache_size": 10000,
         "rpc_timeout": 10000,
         "pocket_prometheus_port": "8083",
         "prometheus_max_open_files": 3,
@@ -150,7 +150,7 @@
         "proof_prevalidation": false,
         "ctx_cache_size": 20,
         "abci_logging": false,
-        "show_relay_errors": true
+        "show_relay_errors": true,
+        "disable_tx_events": true
     }
 }
-

@@ -1,0 +1,19 @@
+.wallet {
+  display: flex;
+  justify-content: space-around;
+
+  h4 {
+    margin: 0;
+    padding: 10px;
+    letter-spacing: 0.1rem;
+  }
+
+  @media screen and (max-width: 480px) {
+    flex-direction: column;
+  }
+}
+
+.badge.bg-primary {
+  color: var(--dappnode-dark-color) !important;
+  background-color: white !important;
+}

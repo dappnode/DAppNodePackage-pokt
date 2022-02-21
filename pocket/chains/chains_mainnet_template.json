@@ -1,0 +1,34 @@
+[
+    {
+        "id": "0001",
+        "url": "http://pocket.dappnode:8081"
+    },
+    {
+        "id": "0003",
+        "url": "http://avalanche.avalanche.public.dappnode:9650"
+    },
+    {
+        "id": "0021",
+        "url": "http://geth.dappnode:8545"
+    },
+    {
+        "id": "0023",
+        "url": "http://ropsten.dappnode:8545"
+    },
+    {
+        "id": "0025",
+        "url": "http://rinkeby.dappnode:8545"
+    },
+    {
+        "id": "0026",
+        "url": "http://goerli-geth.dappnode:8545"
+    },
+    {
+        "id": "0027",
+        "url": "http://nethermind-xdai.dappnode:8545"
+    },
+    {
+        "id": "0028",
+        "url": "http://rpcdaemon.erigon.dappnode:8545"
+    }
+]

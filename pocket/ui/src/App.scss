@@ -1,0 +1,54 @@
+@import "~bootstrap/scss/bootstrap";
+
+:root {
+  --dappnode-color: #2fbcb2;
+  --dappnode-color-dark: #218a82;
+  --dappnode-color-light: #a0bdbb;
+  --bg-color: #393e46;
+}
+
+.App {
+  min-height: 100vh;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  margin: 20px;
+
+  // deppend on screen size
+  @media screen and (max-width: 480px) {
+    min-height: 40vh;
+  }
+}
+
+.btn {
+  background-color: var(--dappnode-color) !important;
+}
+
+.card {
+  margin-top: 50px;
+  border-radius: 20px !important;
+}
+
+.form-label {
+  color: whitesmoke;
+  margin-top: 0.5rem;
+}
+
+.form-check-label {
+  color: whitesmoke;
+}
+
+.form-check-input {
+  color: whitesmoke;
+}
+
+/* .card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+ */

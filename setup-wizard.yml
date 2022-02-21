@@ -1,16 +1,19 @@
 version: "2"
 fields:
-  - id: POCKET_CORE_KEY
+  - id: armoredJSONFile
+    target:
+      type: fileUpload
+      path: /home/app/.pocket/config/keyfile.json
+      service: pocket
+    title: Wallet keyfile 
+    description: >-
+      Imports an account using the Encrypted ASCII armored file. You can create a new [wallet](https://wallet.pokt.network/) and then import the generate file here
+  - id: passphrase
     target:
       type: environment
-      name: POCKET_CORE_KEY
-    title: POCKET_CORE_KEY title
+      name: KEYFILE_PASSPHRASE
+      service: pocket
+    title: Passphrase
+    secret: true
     description: >-
-      POCKET_CORE_KEY description
-  - id: POCKET_CORE_PASSPHRASE
-    target:
-      type: environment
-      name: POCKET_CORE_PASSPHRASE
-    title: POCKET_CORE_PASSPHRASE title
-    description: >-
-      POCKET_CORE_PASSPHRASE description
+      Passphrase to desencrypt the keyfile

@@ -1,0 +1,17 @@
+.footer {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.footer-media {
+  display: flex;
+  column-gap: 10px;
+  transform: scale(1.2);
+}
+
+.footer-media a {
+  color: var(--dappnode-color-dark);
+  text-decoration: none;
+}
