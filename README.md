@@ -32,9 +32,9 @@ Ports: Expose Pocket RPC via HTTPS (Default :8081) and P2P port (Default: 26656)
 <!--Table with champion/s mantainers, versions and update status -->
 <!--UPDATED: :x: OR :heavy_check_mark: -->
 
-|      Updated       |   Champion/s   |
-| :----------------: | :------------: |
-| :heavy_check_mark: | @pablomendez95 |
+|      Updated       | Champion/s |
+| :----------------: | :--------: |
+| :heavy_check_mark: | @mgarciate |
 
 ### Additional links
 
