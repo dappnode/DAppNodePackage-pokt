@@ -169,7 +169,7 @@ app.post('/api/stake', (req, res) => {
     const address = shell.exec(`pocket accounts list --datadir=/home/app/.pocket/ | cut -d' ' -f2- `).stdout.trim();
     const domain = shell.exec(`echo $_DAPPNODE_GLOBAL_DOMAIN`).stdout.trim();
     // https://discord.com/channels/553741558869131266/564836328202567725/967105908347895819
-    const response = shell.exec(`pocket nodes stake custodial ${address} ${req.body.amount} ${req.body.chains} https://pocket-pocket.${domain}:443 ${network} 10000 ${network == 'mainnet' ? false : true} --datadir=/home/app/.pocket/ --pwd "${passphrase}" | tail -n +3`).stdout.trim();
+    const response = shell.exec(`pocket nodes stake custodial ${address} ${req.body.amount} ${req.body.chains} https://pocket-pocket.${domain}:443 ${network} 10000 true --datadir=/home/app/.pocket/ --pwd "${passphrase}" | tail -n +3`).stdout.trim();
     res.send(response);
 })
 
