@@ -1,7 +1,7 @@
 {
   "name": "pocket.dnp.dappnode.eth",
   "version": "0.1.1",
-  "upstreamVersion": "RC-0.9.0",
+  "upstreamVersion": "BETA-0.9.1.1",
   "upstreamRepo": "pokt-network/pocket-core",
   "upstreamArg": "UPSTREAM_VERSION",
   "shortDescription": "Web3 Infrastructure The Right Way.",
@@ -9,9 +9,7 @@
   "type": "service",
   "mainService": "pocket",
   "author": "DAppNode Association <admin@dappnode.io> (https://github.com/dappnode)",
-  "contributors": [
-    "DAppNode <edu@dappnode.io> (https://github.com/dappnode)"
-  ],
+  "contributors": ["DAppNode <edu@dappnode.io> (https://github.com/dappnode)"],
   "categories": ["Blockchain"],
   "license": "GPL-3.0",
   "links": {

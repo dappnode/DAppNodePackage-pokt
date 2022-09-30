@@ -5,7 +5,7 @@ services:
     build:
       context: pocket
       args:
-        UPSTREAM_VERSION: RC-0.9.0
+        UPSTREAM_VERSION: BETA-0.9.1.1
     restart: unless-stopped
     volumes:
       - "pocket-mainnet:/home/app/.pocket/"
