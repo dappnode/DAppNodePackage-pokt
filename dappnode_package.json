@@ -6,6 +6,7 @@
   "upstreamArg": "UPSTREAM_VERSION",
   "shortDescription": "Web3 Infrastructure The Right Way.",
   "description": "Instead of deploying to a single service provider, paying absurd fees for random outages and leaked data, tap into Pocket's trustless API protocol and route your requests to 1000's of independent full nodes. Available for all major blockchain networks.",
+  "architectures": ["linux/amd64", "linux/arm64"],
   "type": "service",
   "mainService": "pocket",
   "author": "DAppNode Association <admin@dappnode.io> (https://github.com/dappnode)",
