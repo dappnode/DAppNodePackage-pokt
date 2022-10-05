@@ -29,6 +29,6 @@
     },
     {
         "id": "0028",
-        "url": "http://rpcdaemon.erigon.dappnode:8545"
+        "url": "http://erigon.dappnode:8545"
     }
 ]
