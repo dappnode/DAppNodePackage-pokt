@@ -35,9 +35,7 @@
       "exposeByDefault": true
     }
   ],
-  "globalEnvs": {
-    "all": true
-  },
+  "globalEnvs": [{ "envs": ["DOMAIN"], "services": ["pocket"] }],
   "backup": [
     {
       "name": "keyfile",
