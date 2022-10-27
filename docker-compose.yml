@@ -15,6 +15,7 @@ services:
       KEYFILE_PASSPHRASE: null
       NETWORK: mainnet
       CUSTOM_UI_HTTP_PORT: 80
+      SNAPSHOT_URL: "https://snapshot.nodes.pokt.network/latest.tar"
       EXTRA_OPTS: ""
     ulimits:
       nofile:
