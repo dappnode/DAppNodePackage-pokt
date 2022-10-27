@@ -75,10 +75,22 @@ kill $PID_SIMULATE_RELAY
 
 echo "${INFO} Check if initializing with SNAPSHOT..."
 if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
+  echo "${INFO} SNAPSHOT Url: ${SNAPSHOT_URL}"
   echo "${INFO} Initializing with SNAPSHOT, it could take several hours..."
   start_downloading_ui
+  mkdir -p /home/app/.pocket/data
   cd /home/app/.pocket/data
-  wget -qO- https://snapshot.nodes.pokt.network/latest.tar | tar xvf -
+
+  # Use different tar arguments if the file ends with .tar.gz
+  if [[ $SNAPSHOT_URL == *.tar.gz* ]]
+  then
+    TAR_ARGS=xvzf
+  else
+    TAR_ARGS=xvf
+  fi
+
+  echo "${INFO} wget -qO- ${SNAPSHOT_URL} | tar ${TAR_ARGS} -"
+  wget -qO- ${SNAPSHOT_URL} | tar ${TAR_ARGS} -
   echo "${INFO} SNAPSHOT downloaded!"
   stop_downloading_ui
 fi
