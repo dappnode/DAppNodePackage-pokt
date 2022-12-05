@@ -83,6 +83,18 @@ function checkEthereumState(url) {
         return 0;
     }
 }
+// the below function very likely needs tweaking, wrote this PR on my phone with no access to my own node to test RPC calls with NEAR node.
+function checkNearState(url) {
+    try {
+        const syncing = JSON.parse(shell.exec(`curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"status","params":{"sync_info":"syncing"}}' ${url}`).stdout.trim());
+        if (syncing.status.sync_info === false) {
+            return 2;
+        }
+        return 1;
+    } catch (error) {
+        return 0;
+    }
+}
 
 function checkAvalancheState(url) {
     try {
@@ -100,6 +112,8 @@ function checkStateChain(type, url) {
     switch (type) {
         case "ethereum":
             return checkEthereumState(url);
+        case "near":
+            return checkNearState(url);
         case "avalanche":
             return checkAvalancheState(url);
         case "pokt":
@@ -196,4 +210,5 @@ const mainnetChains = {
     "0026": {"name": "Goerli", "type": "ethereum"},
     "0027": {"name": "xDai", "type": "ethereum"},
     "0028": {"name": "Erigon", "type": "ethereum"},
+    "0052": {"name": "NEAR", "type": "near"},
 }
