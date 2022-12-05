@@ -87,7 +87,7 @@ function checkEthereumState(url) {
 function checkNearState(url) {
     try {
         const syncing = JSON.parse(shell.exec(`curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"status","params":{"sync_info":"syncing"}}' ${url}`).stdout.trim());
-        if (syncing.reeult.status.sync_info.syncing === false) {
+        if (syncing.result.status.sync_info.syncing === false) {
             return 2;
         }
         return 1;
