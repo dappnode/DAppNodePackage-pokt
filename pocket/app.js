@@ -86,8 +86,8 @@ function checkEthereumState(url) {
 // the below function very likely needs tweaking, wrote this PR on my phone with no access to my own node to test RPC calls with NEAR node.
 function checkNearState(url) {
     try {
-        const syncing = JSON.parse(shell.exec(`curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"status","params":{"sync_info":"syncing"}}' ${url}`).stdout.trim());
-        if (syncing.result.status.sync_info.syncing === false) {
+        const syncing = JSON.parse(shell.exec(`curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"status","params":[],"id":1}' ${url}`).stdout.trim());
+        if (syncing.result.sync_info.syncing === false) {
             return 2;
         }
         return 1;
