@@ -9,7 +9,7 @@
     },
     {
         "id": "0021",
-        "url": "http://geth.dappnode:8545"
+        "url": "http://nethermind.public.dappnode:8545"
     },
     {
         "id": "0023",
@@ -29,6 +29,14 @@
     },
     {
         "id": "0028",
-        "url": "http://erigon.dappnode:8545"
+        "url": "https://erigon-erigon.bfe79233ad548937.dyndns.dappnode.io/"
+    },
+    {
+        "id": "0052",
+        "url": "http://near.near.dappnode:3030"
+    },
+    {
+        "id": "0066",
+        "url": "http://arbitrum-nitro.public.dappnode:8547"
     }
 ]

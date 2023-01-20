@@ -84,6 +84,18 @@ function checkEthereumState(url) {
     }
 }
 
+function checkNearState(url) {
+    try {
+        const syncing = JSON.parse(shell.exec(`curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"status","params":[],"id":1}' ${url}`).stdout.trim());
+        if (syncing.result.sync_info.syncing === false) {
+            return 2;
+        }
+        return 1;
+    } catch (error) {
+        return 0;
+    }
+}
+
 function checkAvalancheState(url) {
     try {
         const syncing = JSON.parse(shell.exec(`curl -X POST --data '{"jsonrpc":"2.0","id":1,"method":"info.isBootstrapped", "params": {"chain":"X"}}' -H 'content-type:application/json;' ${url}/ext/info`).stdout.trim());
@@ -102,6 +114,8 @@ function checkStateChain(type, url) {
             return checkEthereumState(url);
         case "avalanche":
             return checkAvalancheState(url);
+        case "near":
+            return checkNearState(url);
         case "pokt":
             return 2;
         default:
@@ -196,4 +210,6 @@ const mainnetChains = {
     "0026": {"name": "Goerli", "type": "ethereum"},
     "0027": {"name": "xDai", "type": "ethereum"},
     "0028": {"name": "Erigon", "type": "ethereum"},
+    "0052": {"name": "NEAR", "type": "near"},
+    "0066": {"name": "Arbitrum One", "type": "ethereum"},
 }

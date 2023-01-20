@@ -239,7 +239,7 @@ function App() {
             </div>
             <div>
             <Form.Text>
-              Stake = do stake for the first time. Re-stake = stake again after changing chains or amount.
+              Stake = Initial Stake. Re-stake = staking again after changing chains or amount staked.
             </Form.Text>
             </div>
           </div>
