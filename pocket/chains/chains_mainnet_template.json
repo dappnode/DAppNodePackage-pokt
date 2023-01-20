@@ -30,5 +30,9 @@
     {
         "id": "0028",
         "url": "http://erigon.dappnode:8545"
+    },
+    {
+        "id": "0053",
+        "url": "http://optimism.optimism.public.dappnode:8545"
     }
 ]
