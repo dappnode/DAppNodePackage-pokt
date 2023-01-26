@@ -211,5 +211,6 @@ const mainnetChains = {
     "0027": {"name": "xDai", "type": "ethereum"},
     "0028": {"name": "Erigon", "type": "ethereum"},
     "0052": {"name": "NEAR", "type": "near"},
+    "0053": {"name": "Optimism", "type": "ethereum"},
     "0066": {"name": "Arbitrum One", "type": "ethereum"},
 }
