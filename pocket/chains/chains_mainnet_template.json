@@ -6,12 +6,6 @@
     {
         "id": "0003",
         "url": "http://avalanche.avalanche.public.dappnode:9650"
-    
-    },
-    {
-        "id": "0007",
-        "url": "http://bor.polygon.public.dappnode:8545"
-
     },
     {
         "id": "0021",
@@ -35,11 +29,11 @@
     },
     {
         "id": "0028",
-        "url": "https://erigon-erigon.bfe79233ad548937.dyndns.dappnode.io/"
+        "url": "http://erigon.dappnode:8545"
     },
     {
         "id": "0052",
-        "url": "http://near.near.dappnode:3030"
+        "url": "http://near.dappnode:3030"
     },
     {
         "id": "0053",
