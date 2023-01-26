@@ -6,6 +6,12 @@
     {
         "id": "0003",
         "url": "http://avalanche.avalanche.public.dappnode:9650"
+    
+    },
+    {
+        "id": "0007",
+        "url": "http://bor.polygon.public.dappnode:8545"
+
     },
     {
         "id": "0021",
