@@ -5,11 +5,11 @@
     },
     {
         "id": "0003",
-        "url": "http://avalanche.avalanche.public.dappnode:9650"
+        "url": "http://avalanche.avalanche.public.dappnode:9650" 
     },
     {
         "id": "0021",
-        "url": "http://nethermind.public.dappnode:8545"
+        "url": "http://geth.dappnode:8545"
     },
     {
         "id": "0023",
