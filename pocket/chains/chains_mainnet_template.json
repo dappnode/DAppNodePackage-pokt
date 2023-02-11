@@ -34,5 +34,9 @@
     {
         "id": "0053",
         "url": "http://optimism.optimism.public.dappnode:8545"
+    },
+    {
+        "id": "0066",
+        "url": "http://arbitrum-nitro.public.dappnode:8547"
     }
 ]
