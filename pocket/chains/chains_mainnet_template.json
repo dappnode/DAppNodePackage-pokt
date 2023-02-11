@@ -33,6 +33,6 @@
     },
     {
         "id": "0052",
-        "url": "http://near.near.dappnode:3030"
+        "url": "http://near.dappnode:3030"
     }
 ]
