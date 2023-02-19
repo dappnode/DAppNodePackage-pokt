@@ -12,6 +12,10 @@
         "url": "http://nethermind.public.dappnode:8545"
     },
     {
+        "id": "0022",
+        "url": "https://mainnet.infura.io/v3/25c276e3a38a4a2b90d9022952db26a3"
+    },
+    {
         "id": "0023",
         "url": "http://ropsten.dappnode:8545"
     },
@@ -29,7 +33,7 @@
     },
     {
         "id": "0028",
-        "url": "http://erigon.dappnode:8545"
+        "url": "https://erigon-erigon.bfe79233ad548937.dyndns.dappnode.io/"
     },
     {
         "id": "0052",
@@ -37,7 +41,7 @@
     },
     {
         "id": "0053",
-        "url": "http://optimism.optimism.public.dappnode:8545"
+        "url": "https://optimism-mainnet.infura.io/v3/25c276e3a38a4a2b90d9022952db26a3"
     },
     {
         "id": "0066",

@@ -205,6 +205,7 @@ const mainnetChains = {
     "0001": {"name": "Pokt", "type": "pokt"},
     "0003": {"name": "Avalanche", "type": "avalanche"},
     "0021": {"name": "Ethereum", "type": "ethereum"},
+    "0022": {"name": "Ethereum Archival Node", "type": "ethereum"},
     "0023": {"name": "Ropsten", "type": "ethereum"},
     "0025": {"name": "Rinkeby", "type": "ethereum"},
     "0026": {"name": "Goerli", "type": "ethereum"},

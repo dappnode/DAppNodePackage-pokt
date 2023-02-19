@@ -9,7 +9,9 @@
   "type": "service",
   "mainService": "pocket",
   "author": "DAppNode Association <admin@dappnode.io> (https://github.com/dappnode)",
-  "contributors": ["DAppNode <edu@dappnode.io> (https://github.com/dappnode)"],
+  "contributors": [
+    "Eduadiez <edu@dappnode.io> (https://github.com/eduadiez)",
+    "Voss <voss@visnovalabs.io> (https://github.com/alexpeterson91)"],
   "categories": ["Blockchain"],
   "license": "GPL-3.0",
   "links": {
