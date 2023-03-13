@@ -25,6 +25,12 @@ function poktToUpokt(pokt) {
     return pokt * 1000000;
 }
 
+//sign message function- returns signature (must be integrated into UI as an app function)
+function signMessage(message, address) {
+    const signature = shell.exec(`pocket accounts sign ${message} ${address} --datadir=/home/app/.pocket/`).stdout.trim();
+    return signature;
+}
+
 app.get('/api/account', (req, res) => {
     // res.send(
     //     JSON.parse('{"amount":44799883637, "amountStaked":15200000000,"address":"6e00cb7e13812b3877d65df09639fad873b5a305","shortAddress":"6e00...a305","network":"testnet","node":{"address":"6e00cb7e13812b3877d65df09639fad873b5a305","chains":["0020","0002"],"jailed":false,"public_key":"1a33cdf837ed3c71aad3bc6a28c60fbfac2b27593bdecce4245e81954939f8fd","service_url":"https://pocket-pocket.39acfcb1331c8b7c.dyndns.dappnode.io:443","status":2,"tokens":"15200000000","unstaking_time":"0001-01-01T00:00:00Z"}}')
