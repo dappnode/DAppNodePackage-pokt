@@ -89,10 +89,13 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
     TAR_ARGS=xvf
   fi
 
-  echo "${INFO} wget -qO- ${SNAPSHOT_URL} | tar ${TAR_ARGS} -"
-  wget -qO- ${SNAPSHOT_URL} | tar ${TAR_ARGS} -
-  echo "${INFO} SNAPSHOT downloaded!"
-  stop_downloading_ui
+#uplink cp --access=1mg7uwv6EQNyvgCxAuXBb19BZAMne2T5Qkzc5LsahbpERiXviMvENvBKN5yTf85BRRBcetZ4NWaiBri9UyvVHFBN4vaaLTRJ5AJnWfThvqkS18ftS4hyZLJ1AGaoJpdVUp6uS7zsoHXr5E22J1cN5mj2kchajtNKK7fRB6Jq5Q6cmDd5aFS1n8y9AbG6RjJFpAcdXTssmDqqYmYcTfUs89C2SBBCHTvUyScLA3hUtFLa1Cp16okDZUzwh4miPgPjr5JboR3DJby15TAvKmFttNf9Vya5sTTtya6KnrAqtwTkbPE16Eo6VjtoWwbvgT3S2FmQw3h6LNzrT3QbXaiXzK18B49S5UXSH3RbXT2xvgTFA6pbv sj://pocket-public-blockchains-main/v0-snapshots/$(curl -s https://snapshot.nodes.pokt.network/latest.tar.gz | rev | cut -d'/' -f1|rev|cut -d'?' -f1) ./destination.tar.gz
+  echo "${INFO} uplink cp --access=1mg7uwv6EQNyvgCxAuXBb19BZAMne2T5Qkzc5LsahbpERiXviMvENvBKN5yTf85BRRBcetZ4NWaiBri9UyvVHFBN4vaaLTRJ5AJnWfThvqkS18ftS4hyZLJ1AGaoJpdVUp6uS7zsoHXr5E22J1cN5mj2kchajtNKK7fRB6Jq5Q6cmDd5aFS1n8y9AbG6RjJFpAcdXTssmDqqYmYcTfUs89C2SBBCHTvUyScLA3hUtFLa1Cp16okDZUzwh4miPgPjr5JboR3DJby15TAvKmFttNf9Vya5sTTtya6KnrAqtwTkbPE16Eo6VjtoWwbvgT3S2FmQw3h6LNzrT3QbXaiXzK18B49S5UXSH3RbXT2xvgTFA6pbv sj://pocket-public-blockchains-main/v0-snapshots ${SNAPSHOT_URL} /home/app/.pocket/data/"
+
+ # echo "${INFO} wget -qO- ${SNAPSHOT_URL} | tar ${TAR_ARGS} -"
+ # wget -qO- ${SNAPSHOT_URL} | tar ${TAR_ARGS} -
+ # echo "${INFO} SNAPSHOT downloaded!"
+ # stop_downloading_ui
 fi
 
 echo "${INFO} pocket start"

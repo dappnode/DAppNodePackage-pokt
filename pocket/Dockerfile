@@ -17,7 +17,7 @@ WORKDIR /home/app/
 USER root
 
 # RUN apk add -u gettext curl jq nginx supervisor
-RUN apk add -u gettext curl jq nodejs npm supervisor
+RUN apk add -u gettext curl jq nodejs npm supervisor uplink
 
 ADD entrypoint.sh /usr/local/bin/entrypoint.sh
 
