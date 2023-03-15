@@ -37,7 +37,7 @@
   ],
   "globalEnvs": [
     {
-      "envs": ["DOMAIN", "EXECUTION_CLIENT_MAINNET", "EXECUTION_CLIENT_PRATER"]
+      "envs": ["DOMAIN", "EXECUTION_CLIENT_MAINNET", "EXECUTION_CLIENT_PRATER"],
       "services": ["pocket"]
     }
   ],
