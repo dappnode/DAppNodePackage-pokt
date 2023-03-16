@@ -116,6 +116,8 @@ function checkStateChain(type, url) {
             return checkNearState(url);
         case "avalanche":
             return checkAvalancheState(url);
+        case "near":
+            return checkNearState(url);
         case "pokt":
             return 2;
         default:
@@ -205,12 +207,13 @@ const mainnetChains = {
     "0001": {"name": "Pokt", "type": "pokt"},
     "0003": {"name": "Avalanche", "type": "avalanche"},
     "0021": {"name": "Ethereum", "type": "ethereum"},
+    "0022": {"name": "Ethereum Archival Node", "type": "ethereum"},
     "0023": {"name": "Ropsten", "type": "ethereum"},
     "0025": {"name": "Rinkeby", "type": "ethereum"},
     "0026": {"name": "Goerli", "type": "ethereum"},
     "0027": {"name": "xDai", "type": "ethereum"},
     "0028": {"name": "Erigon", "type": "ethereum"},
-    "0053": {"name": "Optimism", "type": "ethereum"},
     "0052": {"name": "NEAR", "type": "near"},
-    "0066": {"name": "Arbitrum One Nitro", "type": "ethereum"},
+    "0053": {"name": "Optimism", "type": "ethereum"},
+    "0066": {"name": "Arbitrum One", "type": "ethereum"},
 }
