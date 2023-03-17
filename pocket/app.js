@@ -112,6 +112,8 @@ function checkStateChain(type, url) {
     switch (type) {
         case "ethereum":
             return checkEthereumState(url);
+        case "near":
+            return checkNearState(url);
         case "avalanche":
             return checkAvalancheState(url);
         case "near":

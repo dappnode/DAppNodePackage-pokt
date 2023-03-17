@@ -21,7 +21,7 @@ Requirements to run DAppNode package for Pocket
 
 <!--Requirements to run the dappnode package in a list: -->
 
-Hardware Requirements: 4 CPU’s (or vCPU’s) | 8 GB RAM | 450GB Disk for POKT node + disk space for nodes to relay 
+Hardware Requirements: 4 CPU’s (or vCPU’s) | 16 GB RAM | 700GB Disk for POKT node + disk space for nodes to relay 
 
 Ports: Expose Pocket RPC via HTTPS (Default :8081) and P2P port (Default: 26656)
 
