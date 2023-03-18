@@ -94,7 +94,23 @@ function App() {
   const unstake = async () => {
     try {
       setTxhash(null);
+      if ((account.amountStaked) < 0) {
+        throw new Error(`You do not have any POKT staked`);
+      }
       const responseUnstake = await appService.unstake();
+      console.log(responseUnstake);
+      if (!(responseUnstake.code) && !(responseUnstake.raw_log) && responseUnstake.txhash) {
+        toast.success(`It can take 15+ minutes for the next block to process on the Pocket blockchain. This means you will likely have to wait 15+ minutes before your validator will begin Unstaking.`);
+        setTxhash(responseUnstake.txhash);
+        await replaceChains();
+        return;
+      }
+      throw new Error(`Error while unstaking: ${JSON.stringify(responseUnstake)}`);
+    } catch (e) {
+      toast.error((e as Error).message);
+      console.error(e);
+    }
+  }
 
 
   function handleChange(id:string, isChecked: boolean) {

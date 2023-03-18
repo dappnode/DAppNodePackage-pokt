@@ -7,7 +7,7 @@ export default function Media() {
       <a href="https://github.com/dappnode">
         <FaGithub />
       </a>
-      <a href="https://discord.gg/c28an8dA5k">
+      <a href="https://discord.gg/dappnode">
         <FaDiscord />
       </a>
       <a href="https://twitter.com/dappnode">
