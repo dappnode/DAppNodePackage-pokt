@@ -91,6 +91,12 @@ function App() {
     }
   }
 
+  const unstake = async () => {
+    try {
+      setTxhash(null);
+      const responseUnstake = await appService.unstake();
+
+
   function handleChange(id:string, isChecked: boolean) {
     let modifiedMap = selectedChains;
     if(modifiedMap?.get(id) && !isChecked) {
@@ -239,12 +245,45 @@ function App() {
             </div>
             <div>
             <Form.Text>
-              Stake = do stake for the first time. Re-stake = stake again after changing chains or amount.
+              Stake =  Stake node for the first time. Re-stake = stake node again after changing chains or amount of Pokt staked.
             </Form.Text>
             </div>
           </div>
         </Form.Group>
 
+        <div>
+          <div>
+            <div>
+            <Form.Label>Before Un-staking</Form.Label>
+            </div>
+            <div>
+            <Form.Text>
+              Remember it takes 21 days to unstake your node.
+            </Form.Text>
+            </div>
+            <div>
+            <Form.Text>
+              More info <a href="https://docs.pokt.network/node/staking/#unstaking" target="_blank" rel="noreferrer">here</a>.
+            </Form.Text>
+            </div>
+            </div>
+            <div>
+              <Button
+                onClick={() => unstake()}
+                disabled={(currentBlock ?? 0) === 0}
+              >{account?.node ? `Un-Stake`}</Button>
+              {txhash && (
+                <Form.Text>
+                  {` `}Tx: {txhash}
+                </Form.Text>
+              )}
+              {(currentBlock ?? 0) === 0 && (
+                <Form.Text>
+                  {` `}(Not Staked)
+                </Form.Text>
+              )}
+            </div>
+          </div>
       </div>
 
       <Footer />

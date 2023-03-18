@@ -187,6 +187,16 @@ app.post('/api/stake', (req, res) => {
     res.send(response);
 })
 
+app.post('/api/unstake', (req, res) => {
+    // res.send({});
+    // return;
+    const network = shell.exec(`echo $NETWORK`).stdout.trim();
+    const passphrase = shell.exec(`echo $KEYFILE_PASSPHRASE`).stdout.trim();
+    const address = shell.exec(`pocket accounts list --datadir=/home/app/.pocket/ | cut -d' ' -f2- `).stdout.trim();
+    const response = shell.exec(`pocket nodes unstake ${address} ${address} ${network} 10000 false --datadir=/home/app/.pocket/ --pwd "${passphrase}" | tail -n +3`).stdout.trim();
+    res.send(response);
+})
+
 var server = app.listen(CUSTOM_UI_HTTP_PORT, function () {
     var host = server.address().address;
     var port = server.address().port;
