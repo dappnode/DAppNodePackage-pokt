@@ -20,6 +20,8 @@ export class AppService {
         return response.data;
     }
 
+    public async unstake()
+
     public async replaceChains(chains: string) {
         const response = await axios.post(`/api/replaceChains`, {chains});
         return response.data;
