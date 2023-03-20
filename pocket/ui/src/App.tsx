@@ -94,7 +94,7 @@ function App() {
   const unstake = async () => {
     try {
       setTxhash(null);
-      if ((account.amountStaked) < 0) {
+      if (account && ((account.amountStaked) < 0)) {
         throw new Error(`You do not have any POKT staked`);
       }
       const responseUnstake = await appService.unstake();
@@ -265,41 +265,40 @@ function App() {
             </Form.Text>
             </div>
           </div>
-        </Form.Group>
-
-        <div>
           <div>
             <div>
-            <Form.Label>Before Un-staking</Form.Label>
+              <div>
+              <Form.Label>Before Un-staking</Form.Label>
+              </div>
+              <div>
+              <Form.Text>
+                Remember it takes 21 days to unstake your node.
+              </Form.Text>
+              </div>
+              <div>
+              <Form.Text>
+                More info <a href="https://docs.pokt.network/node/staking/#unstaking" target="_blank" rel="noreferrer">here</a>.
+              </Form.Text>
+              </div>
+              </div>
+              <div>
+                <Button
+                  onClick={() => unstake()}
+                  disabled={(currentBlock ?? 0) === 0}
+                >{account?.node ?? `Un-Stake`}</Button>
+                {txhash && (
+                  <Form.Text>
+                    {` `}Tx: {txhash}
+                  </Form.Text>
+                )}
+                {(currentBlock ?? 0) === 0 && (
+                  <Form.Text>
+                    {` `}(Not Staked)
+                  </Form.Text>
+                )}
+              </div>
             </div>
-            <div>
-            <Form.Text>
-              Remember it takes 21 days to unstake your node.
-            </Form.Text>
-            </div>
-            <div>
-            <Form.Text>
-              More info <a href="https://docs.pokt.network/node/staking/#unstaking" target="_blank" rel="noreferrer">here</a>.
-            </Form.Text>
-            </div>
-            </div>
-            <div>
-              <Button
-                onClick={() => unstake()}
-                disabled={(currentBlock ?? 0) === 0}
-              >{account?.node ? `Un-Stake`}</Button>
-              {txhash && (
-                <Form.Text>
-                  {` `}Tx: {txhash}
-                </Form.Text>
-              )}
-              {(currentBlock ?? 0) === 0 && (
-                <Form.Text>
-                  {` `}(Not Staked)
-                </Form.Text>
-              )}
-            </div>
-          </div>
+        </Form.Group>
       </div>
 
       <Footer />
