@@ -33,7 +33,7 @@
     },
     {
         "id": "0028",
-        "url": "https://erigon-erigon.bfe79233ad548937.dyndns.dappnode.io/"
+        "url": "http://erigon.dappnode:8545"
     },
     {
         "id": "0052",
@@ -41,7 +41,7 @@
     },
     {
         "id": "0053",
-        "url": "https://optimism-mainnet.infura.io/v3/25c276e3a38a4a2b90d9022952db26a3"
+        "url": "http://optimism.optimism.public.dappnode:8545"
     },
     {
         "id": "0066",
