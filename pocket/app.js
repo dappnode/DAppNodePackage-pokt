@@ -187,6 +187,14 @@ app.post('/api/stake', (req, res) => {
     res.send(response);
 })
 
+app.post('/api/sign', (req, res) => {
+    const passphrase = shell.exec(`echo $KEYFILE_PASSPHRASE`).stdout.trim();
+    const address = shell.exec(`pocket accounts list --datadir=/home/app/.pocket/ | cut -d' ' -f2- `).stdout.trim();
+    const message = req.body.message;
+    const response = shell.exec(`pocket accounts sign ${address} ${message} --datadir=/home/app/.pocket/ --pwd "${passphrase}"`).stdout.trim();
+    res.send(response);
+})
+
 var server = app.listen(CUSTOM_UI_HTTP_PORT, function () {
     var host = server.address().address;
     var port = server.address().port;

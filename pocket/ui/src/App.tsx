@@ -15,6 +15,7 @@ function App() {
   const [availableChains, setAvailableChains] = useState<[Chain]>();
   const [currentBlock, setCurrentBlock] = useState<number | null>(null);
   const [amountToStake, setAmountToStake] = useState<number | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [selectedChains, setSelectedChains] = useState(new Map());
   const [first, setFirst] = useState(true);
   const [txhash, setTxhash] = useState<string | null>(null);
@@ -90,6 +91,16 @@ function App() {
       console.error(e);
     }
   }
+
+  // working on message signing variable
+  const signMessage = async () => {
+    try {
+      setMessage(null);
+      if (message) 
+    }
+    appService.signMessage({message});
+  }
+
 
   function handleChange(id:string, isChecked: boolean) {
     let modifiedMap = selectedChains;
@@ -241,6 +252,66 @@ function App() {
             <Form.Text>
               Stake = Initial Stake. Re-stake = staking again after changing chains or amount staked.
             </Form.Text>
+            </div>
+            
+            <div>
+            <Form.Label> Sign Message with your Account </Form.Label>
+            </div>
+            <div>
+            <Form.Label>Address</Form.Label>
+            </div>
+            <div>
+            <Form.Control
+              type="text"
+              placeholder="Validator address"
+              value={account?.address ?? 'Unknown'}
+              disabled={true}
+              readOnly={true}
+            />
+            <Form.Text>
+              Address to Sign Message
+            </Form.Text>
+            </div>
+            <div>
+            <Form.Label>Message</Form.Label>
+            </div>
+            <div>
+            <Form.Control
+              type="text"
+              placeholder="Message to be signed"
+              value={messageToSign ?? 'Unknown'}
+              disabled={false}
+              readOnly={false}
+            />
+            <Form.Text>
+              You can enter any message to be signed here, but it's primary use is to self-sign the address of the account,
+            </Form.Text>
+            </div>
+            <div>
+            <Form.Text>  
+               You are using to stake with in order to prove ownership of the account, and begin the Node-Runner Tropy Process. 
+            </Form.Text>
+            </div>
+            <div>
+            <Form.Text>
+              More info on the Node-Runner Trophy Process <a href="https://docs.pokt.network/home/paths/node-runner#node-runner-trophy-process" target="_blank" rel="noreferrer">here</a>.  
+            </Form.Text>
+            </div>
+            <div>
+              <Button
+                onClick={() => signMessage()}
+                disabled={(currentBlock ?? 0) === 0}
+              >{account?.node ?? `Sign`}</Button>
+              {txhash && (
+                <Form.Text>
+                  {` `}Tx: {txhash}
+                </Form.Text>
+              )}
+              {(currentBlock ?? 0) === 0 && (
+                <Form.Text>
+                  {` `}(Syncing...)
+                </Form.Text>
+              )}
             </div>
           </div>
         </Form.Group>
