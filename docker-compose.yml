@@ -1,7 +1,7 @@
 version: "3.4"
 services:
   pocket:
-    image: "pocket.pocket.dnp.dappnode.eth:0.1.0"
+    image: "pocket.pocket.dnp.dappnode.eth:0.1.5"
     build:
       context: pocket
       args:
@@ -19,7 +19,7 @@ services:
       EXTRA_OPTS: ""
     ulimits:
       nofile:
-        soft: 16384
-        hard: 16384
+        soft: 32384
+        hard: 32384
 volumes:
   pocket-mainnet: {}
