@@ -9,7 +9,7 @@
     },
     {
         "id": "0021",
-        "url": "http://nethermind.public.dappnode:8545"
+        "url": "http://geth.dappnode:8545"
     },
     {
         "id": "0022",
