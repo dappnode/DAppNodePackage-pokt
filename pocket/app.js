@@ -184,7 +184,7 @@ app.post('/api/stake', (req, res) => {
     const address = shell.exec(`pocket accounts list --datadir=/home/app/.pocket/ | cut -d' ' -f2- `).stdout.trim();
     const domain = shell.exec(`echo $_DAPPNODE_GLOBAL_DOMAIN`).stdout.trim();
     // https://discord.com/channels/553741558869131266/564836328202567725/967105908347895819
-    const response = shell.exec(`pocket nodes stake custodial ${address} ${req.body.amount} ${req.body.chains} https://pocket-pocket.${domain}:443 ${network} 10000 true --datadir=/home/app/.pocket/ --pwd "${passphrase}" | tail -n +3`).stdout.trim();
+    const response = shell.exec(`pocket nodes stake custodial ${address} ${req.body.amount} ${req.body.chains} https://pocket-pocket.${domain}:443 ${network} 10000 false --datadir=/home/app/.pocket/ --pwd "${passphrase}" | tail -n +3`).stdout.trim();
     res.send(response);
 })
 
@@ -207,11 +207,12 @@ const mainnetChains = {
     "0003": {"name": "Avalanche", "type": "avalanche"},
     "0007": {"name": "Polygon Bor", "type": "ethereum"},
     "0021": {"name": "Ethereum", "type": "ethereum"},
+    "0022": {"name": "Ethereum Archival", "type": "ethereum"},
     "0023": {"name": "Ropsten", "type": "ethereum"},
     "0025": {"name": "Rinkeby", "type": "ethereum"},
     "0026": {"name": "Goerli", "type": "ethereum"},
-    "0027": {"name": "xDai", "type": "ethereum"},    
-    "0028": {"name": "Erigon", "type": "ethereum"},
+    "0027": {"name": "Gnosis Chain", "type": "ethereum"},    
+    "0028": {"name": "Ethereum Archival Trace", "type": "ethereum"},
     "0052": {"name": "NEAR", "type": "near"},
     "0053": {"name": "Optimism", "type": "ethereum"},
     "0066": {"name": "Arbitrum One", "type": "ethereum"},
