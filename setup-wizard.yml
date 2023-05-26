@@ -7,7 +7,7 @@ fields:
       service: pocket
     title: Wallet keyfile 
     description: >-
-      Upload an account using an Encrypted ASCII armored keyfile. You can create a new [keyfile/wallet here](https://wallet.pokt.network/) and then upload the generated file here
+      Import an account using an Encrypted ASCII armored keyfile. You can create a new [keyfile/wallet here](https://wallet.pokt.network/) and then upload the generated file here.
   - id: passphrase
     target:
       type: environment
