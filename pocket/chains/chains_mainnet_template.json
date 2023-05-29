@@ -44,6 +44,10 @@
         "url": "http://optimism.optimism.public.dappnode:8545"
     },
     {
+        "id": "0063",
+        "url": "http://goerli-erigon.dappnode:8545"
+    },    
+    {
         "id": "0066",
         "url": "http://arbitrum-nitro.public.dappnode:8547"
     }
