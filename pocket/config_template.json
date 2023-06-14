@@ -57,7 +57,7 @@
             "ListenAddress": "tcp://0.0.0.0:26656",
             "ExternalAddress": "tcp://${_DAPPNODE_GLOBAL_DOMAIN}:26656",
             "Seeds": "7c0d7ec36db6594c1ffaa99724e1f8300bbd52d0@seed1.mainnet.pokt.network:26662,cdcf936d70726dd724e0e6a8353d8e5ba5abdd20@seed2.mainnet.pokt.network:26663,74b4322a91c4a7f3e774648d0730c1e610494691@seed3.mainnet.pokt.network:26662,b3235089ff302c9615ba661e13e601d9d6265b15@seed4.mainnet.pokt.network:26663",
-            "PersistentPeers": "d9376ae2daef9d3aaa42b77b205f24744dca4385@https://pocket-pocket.8e17e5ffd607d5ca.dyndns.dappnode.io/v1",
+            "PersistentPeers": "d9376ae2daef9d3aaa42b77b205f24744dca4385@8e17e5ffd607d5ca.dyndns.dappnode.io:26656",
             "UPNP": false,
             "AddrBook": "config/addrbook.json",
             "AddrBookStrict": false,
