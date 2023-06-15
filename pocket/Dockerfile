@@ -10,7 +10,7 @@ WORKDIR /app/ui
 RUN yarn && yarn build
 
 
-FROM ghcr.io/pokt-network/pocket-v0:${UPSTREAM_VERSION}
+RUN docker pull ghcr.io/pokt-network/pocket-v0:${UPSTREAM_VERSION}
 #ghcr.io/pokt-network/pocket-v0:BETA-0.10.2
 
 WORKDIR /home/app/
