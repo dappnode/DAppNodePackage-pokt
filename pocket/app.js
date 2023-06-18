@@ -215,4 +215,5 @@ const mainnetChains = {
     "0053": {"name": "Optimism", "type": "ethereum"},
     "0063": {"name": "Goerli Archival", "type": "ethereum"},
     "0066": {"name": "Arbitrum One", "type": "ethereum"},
+    "000C": {"name": "Gnosis Chain Archival", "type": "ethereum"},
 }
