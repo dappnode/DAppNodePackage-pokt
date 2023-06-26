@@ -11,6 +11,7 @@ services:
       - "pocket-mainnet:/home/app/.pocket/"
     ports:
       - "26656:26656/udp"
+      - "26656:26656/tcp"
     environment:
       KEYFILE_PASSPHRASE: null
       NETWORK: mainnet
