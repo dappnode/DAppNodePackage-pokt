@@ -12,6 +12,10 @@
         "url": "${GLOBAL_EXEXUTION_CLIENT_MAINNET}"
     },
     {
+        "id": "0022",
+        "url": "http://erigon.dappnode:8545"
+    },    
+    {
         "id": "0023",
         "url": "http://ropsten.dappnode:8545"
     },
@@ -32,15 +36,23 @@
         "url": "http://erigon.dappnode:8545"
     },
     {
+        "id": "0052",
+        "url": "http://near.dappnode:3030"
+    },    
+    {
         "id": "0053",
         "url": "http://optimism.optimism.public.dappnode:8545"
     },
     {
-        "id": "0052",
-        "url": "http://near.dappnode:3030"
+        "id": "0063",
+        "url": "http://goerli-erigon.dappnode:8545"
     },
     {
         "id": "0066",
         "url": "http://arbitrum-nitro.public.dappnode:8547"
+    },
+    {
+        "id": "000C",
+        "url":"http://erigon-gnosis.dappnode:8545"
     }
 ]
