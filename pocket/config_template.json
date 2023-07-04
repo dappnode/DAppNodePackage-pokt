@@ -14,7 +14,7 @@
             "write_buffer": 838860
         },
         "DBPath": "data",
-        "LogLevel": "*:info",
+        "LogLevel": "*:info, *:error",
         "LogFormat": "plain",
         "Genesis": "config/genesis.json",
         "PrivValidatorKey": "priv_val_key.json",
@@ -61,8 +61,8 @@
             "UPNP": false,
             "AddrBook": "config/addrbook.json",
             "AddrBookStrict": false,
-            "MaxNumInboundPeers": 14,
-            "MaxNumOutboundPeers": 14,
+            "MaxNumInboundPeers": 28,
+            "MaxNumOutboundPeers": 12,
             "UnconditionalPeerIDs": "",
             "PersistentPeersMaxDialPeriod": 0,
             "FlushThrottleTimeout": 100000000,
@@ -141,9 +141,9 @@
         "json_sort_relay_responses": true,
         "remote_cli_url": "https://pocket-pocket.${_DAPPNODE_GLOBAL_DOMAIN}",
         "user_agent": "",
-        "validator_cache_size": 10000,
+        "validator_cache_size": 40000,
         "application_cache_size": 10000,
-        "rpc_timeout": 10000,
+        "rpc_timeout": 30000,
         "pocket_prometheus_port": "8083",
         "prometheus_max_open_files": 3,
         "max_claim_age_for_proof_retry": 32,
@@ -151,6 +151,11 @@
         "ctx_cache_size": 20,
         "abci_logging": false,
         "show_relay_errors": true,
-        "disable_tx_events": true
+        "disable_tx_events": true,
+        "iavl_cache_size": 5000000,
+	    "chains_hot_reload": true,
+	    "generate_token_on_start": false,
+	    "lean_pocket": false,
+	    "lean_pocket_user_key_file": "lean_nodes_keys.json"
     }
 }
