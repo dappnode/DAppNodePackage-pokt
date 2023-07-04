@@ -46,6 +46,16 @@
       "name": "keyfile",
       "path": "/home/app/.pocket/config/keyfile.json",
       "service": "pocket"
+    },
+    {
+      "name": "addrbook",
+      "path": "/home/app/.pocket/config/addrbook.json",
+      "service": "pocket"
+    },
+    {
+      "name": "chains_mainnet_template",
+      "path": "/home/app/chains_mainnet_template.json",
+      "service": "pocket"
     }
   ]
 }
