@@ -16,10 +16,6 @@
         "url": "http://erigon.dappnode:8545"
     },    
     {
-        "id": "0023",
-        "url": "http://ropsten.dappnode:8545"
-    },
-    {
         "id": "0025",
         "url": "http://rinkeby.dappnode:8545"
     },
@@ -52,7 +48,15 @@
         "url": "http://arbitrum-nitro.public.dappnode:8547"
     },
     {
+        "id": "0077",
+        "url": "http://sepolia-geth.dappnode:8545"
+    },
+    {
+        "id": "0078",
+        "url": "http://sepolia-erigon.dappnode:8545"
+    },
+    {
         "id": "000C",
-        "url":"http://erigon-gnosis.dappnode:8545"
+        "url": "http://erigon-gnosis.dappnode:8545"
     }
 ]
