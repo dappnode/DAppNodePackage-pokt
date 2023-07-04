@@ -96,7 +96,7 @@
             "MaxTxBytes": 1048576
         },
         "FastSync": {
-            "Version": "v1"
+            "Version": "v2"
         },
         "Consensus": {
             "RootDir": "/home/app/.pocket",
