@@ -81,7 +81,7 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
   mkdir -p /home/app/.pocket/data
   cd /home/app/.pocket/data
 
-  #Update snapshot to Liquify
+  #Update snapshot to Liquify Compressed Version to save disk space and bandwidth during initial sync
   echo "${INFO} Downloading snapshot file version..."
   wget -O latest.txt "${SNAPSHOT_URL}"
   echo "${INFO} latest.txt: $(cat latest.txt)"
