@@ -16,7 +16,7 @@ services:
       KEYFILE_PASSPHRASE: null
       NETWORK: mainnet
       CUSTOM_UI_HTTP_PORT: 80
-      SNAPSHOT_URL: "https://snapshot.nodes.pokt.network/latest.tar"
+      SNAPSHOT_URL: "https://pocket-snapshot.liquify.com/files/latest_compressed.txt"
       EXTRA_OPTS: ""
     ulimits:
       nofile:

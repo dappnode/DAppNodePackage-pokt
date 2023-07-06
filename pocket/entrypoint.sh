@@ -81,17 +81,17 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
   mkdir -p /home/app/.pocket/data
   cd /home/app/.pocket/data
 
-  # Use different tar arguments if the file ends with .tar.gz
-  if [[ $SNAPSHOT_URL == *.tar.gz* ]]
-  then
-    TAR_ARGS=xvzf
-  else
-    TAR_ARGS=xvf
-  fi
-
-  echo "${INFO} wget -qO- ${SNAPSHOT_URL} | tar ${TAR_ARGS} -"
-  wget -qO- ${SNAPSHOT_URL} | tar ${TAR_ARGS} -
-  echo "${INFO} SNAPSHOT downloaded!"
+  #Update snapshot to Liquify
+  echo "${INFO} Downloading snapshot file version..."
+  wget -O latest.txt "${SNAPSHOT_URL}"
+  echo "${INFO} latest.txt: $(cat latest.txt)"
+  latestFile=$(cat latest.txt)
+  echo "${INFO} Downloading and decompressing the latest snapshot file..."
+  wget -qO - "https://pocket-snapshot.liquify.com/files/$latestFile" | lz4 -d - | tar -xvf -
+  echo "${INFO} Snapshot Downloaded and Decompressed!"
+  echo "${INFO} Removing temporary snapshot file metadata..."
+  rm latest.txt
+  echo "${INFO} Snapshot Ready!"
   stop_downloading_ui
 fi
 
