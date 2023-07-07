@@ -86,13 +86,24 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
   wget -O latest.txt "${SNAPSHOT_URL}"
   echo "${INFO} latest.txt: $(cat latest.txt)"
   latestFile=$(cat latest.txt)
-  echo "${INFO} Downloading and decompressing the latest snapshot file..."
-  wget -qO - "https://pocket-snapshot.liquify.com/files/$latestFile" | lz4 -d - | tar -xvf -
-  echo "${INFO} Snapshot Downloaded and Decompressed!"
-  echo "${INFO} Removing temporary snapshot file metadata..."
-  rm latest.txt
-  echo "${INFO} Snapshot Ready!"
-  stop_downloading_ui
+  if [[ $SNAPSHOT_URL == *compressed.txt* ]]
+  then
+    echo "${INFO} Downloading and decompressing the latest compressed snapshot file..."
+    wget -qO - "https://pocket-snapshot-us.liquify.com/files/$latestFile" | lz4 -d - | tar -xvf -
+    echo "${INFO} Snapshot Downloaded and Decompressed!"
+    echo "${INFO} Removing temporary snapshot file metadata..."
+    rm latest.txt
+    echo "${INFO} Snapshot Ready!"
+    stop_downloading_ui
+  else
+    echo "${INFO} Downloading and decompressing the latest uncompressed snapshot file..."
+    wget -qO - "https://pocket-snapshot-us.liquify.com/files/$latestFile" | tar -xvf -
+    echo "${INFO} Snapshot Downloaded and Decompressed!"
+    echo "${INFO} Removing temporary snapshot file metadata..."
+    rm latest.txt
+    echo "${INFO} Snapshot Ready!"
+    stop_downloading_ui
+  fi
 fi
 
 echo "${INFO} pocket start"
