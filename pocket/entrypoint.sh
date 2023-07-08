@@ -73,6 +73,8 @@ else
 fi
 kill $PID_SIMULATE_RELAY
 
+# Check if the node is initialized with SNAPSHOT
+# Handle Snapshot Download and Decompression if needed
 echo "${INFO} Check if initializing with SNAPSHOT..."
 if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
   echo "${INFO} SNAPSHOT Url: ${SNAPSHOT_URL}"
@@ -83,13 +85,15 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
 
   #Update snapshot to Liquify Compressed Version to save disk space and bandwidth during initial sync
   echo "${INFO} Downloading snapshot file version..."
+  echo "${INFO} wget -O latest.txt ${SNAPSHOT_URL}"
   wget -O latest.txt "${SNAPSHOT_URL}"
   echo "${INFO} latest.txt: $(cat latest.txt)"
   latestFile=$(cat latest.txt)
   if [[ $SNAPSHOT_URL == *compressed.txt* ]]
   then
     echo "${INFO} Downloading and decompressing the latest compressed snapshot file..."
-    wget -qO - "https://pocket-snapshot-us.liquify.com/files/$latestFile" | lz4 -d - | tar -xvf -
+    echo "${INFO} wget -c -O - https://pocket-snapshot.liquify.com/files/$latestFile | lz4 -d - | tar -xvf -"
+    wget -c -O - "https://pocket-snapshot.liquify.com/files/$latestFile" | lz4 -d - | tar -xvf -
     echo "${INFO} Snapshot Downloaded and Decompressed!"
     echo "${INFO} Removing temporary snapshot file metadata..."
     rm latest.txt
@@ -97,7 +101,8 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
     stop_downloading_ui
   else
     echo "${INFO} Downloading and decompressing the latest uncompressed snapshot file..."
-    wget -qO - "https://pocket-snapshot-us.liquify.com/files/$latestFile" | tar -xvf -
+    echo "${INFO} wget -c -O - https://pocket-snapshot.liquify.com/files/$latestFile | tar -xvf -"
+    wget -c -O - "https://pocket-snapshot.liquify.com/files/$latestFile" | tar -xvf -
     echo "${INFO} Snapshot Downloaded and Decompressed!"
     echo "${INFO} Removing temporary snapshot file metadata..."
     rm latest.txt
