@@ -20,7 +20,11 @@ services:
       EXTRA_OPTS: ""
     ulimits:
       nofile:
-        soft: 32768
-        hard: 32768
+        soft: 65536
+        hard: 65536
+    deploy:
+      resources:
+        limits:
+          memory: 32G
 volumes:
   pocket-mainnet: {}
