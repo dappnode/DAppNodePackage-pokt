@@ -1,6 +1,6 @@
 <!-- :female_detective: Looking for a new champion -->
 
-# DAppNode package _Pocket_
+# DAppNode Package _Pocket_
 
 <!--DAppNode package logo (could be added with an hyperlink to a youtube video): -->
 
@@ -21,11 +21,11 @@ Requirements to run DAppNode package for Pocket
 
 <!--Requirements to run the dappnode package in a list: -->
 
-Hardware Requirements: 4 CPU’s (or vCPU’s) | 16 GB RAM | 750GB Disk for POKT node + disk space for nodes to relay 
+Minimum Hardware Requirements: 4 CPU’s (or vCPU’s) | 16 GB RAM | 800GB Disk (SSD required, NVMe reccomended) for POKT node + disk space for nodes to relay
 
 Ports: Expose Pocket RPC via HTTPS (Default :8081) and P2P port (Default: 26656)
 
-(With UPnP disabled on your router, please, map UDP 26656 and TCP 443 to your Dappnode)
+(With UPnP disabled on your router, please, map TCP 26656 and TCP 443 to your Dappnode)
 
 ### Maintenance
 

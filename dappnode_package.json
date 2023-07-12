@@ -1,7 +1,7 @@
 {
   "name": "pocket.dnp.dappnode.eth",
-  "version": "0.1.1",
-  "upstreamVersion": "BETA-0.10.2",
+  "version": "0.1.6",
+  "upstreamVersion": "RC-0.10.4",
   "upstreamRepo": "pokt-network/pocket-core",
   "upstreamArg": "UPSTREAM_VERSION",
   "shortDescription": "Web3 Infrastructure The Right Way.",
@@ -46,6 +46,16 @@
     {
       "name": "keyfile",
       "path": "/home/app/.pocket/config/keyfile.json",
+      "service": "pocket"
+    },
+    {
+      "name": "addrbook",
+      "path": "/home/app/.pocket/config/addrbook.json",
+      "service": "pocket"
+    },
+    {
+      "name": "chains_mainnet_template",
+      "path": "/home/app/chains_mainnet_template.json",
       "service": "pocket"
     }
   ]
