@@ -116,8 +116,6 @@ function checkStateChain(type, url) {
             return checkNearState(url);
         case "avalanche":
             return checkAvalancheState(url);
-        case "near":
-            return checkNearState(url);
         case "pokt":
             return 2;
         default:
@@ -171,8 +169,7 @@ app.post('/api/replaceChains', (req, res) => {
         shell.exec(`pkill pocket`);
         res.send(response);
     } else {
-        throw new Error("Empty json");  
-
+        throw new Error("Empty json");
     }
 })
 
