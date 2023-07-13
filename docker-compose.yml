@@ -1,21 +1,22 @@
 version: "3.4"
 services:
   pocket:
-    image: "pocket.pocket.dnp.dappnode.eth:0.1.6"
+    image: "pocket.pocket.dnp.dappnode.eth:0.1.0"
     build:
       context: pocket
       args:
-        UPSTREAM_VERSION: BETA-0.10.2
+        UPSTREAM_VERSION: RC-0.10.4
     restart: unless-stopped
     volumes:
       - "pocket-mainnet:/home/app/.pocket/"
     ports:
-      - "26657:26657/udp"
+      - "26656:26656/udp"
+      - "26656:26656/tcp"
     environment:
       KEYFILE_PASSPHRASE: null
       NETWORK: mainnet
       CUSTOM_UI_HTTP_PORT: 80
-      SNAPSHOT_URL: "https://snapshot.nodes.pokt.network/latest.tar"
+      SNAPSHOT_URL: "https://pocket-snapshot.liquify.com/files/latest.txt"
       EXTRA_OPTS: ""
     ulimits:
       nofile:

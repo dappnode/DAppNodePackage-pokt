@@ -112,6 +112,8 @@ function checkStateChain(type, url) {
     switch (type) {
         case "ethereum":
             return checkEthereumState(url);
+        case "near":
+            return checkNearState(url);
         case "avalanche":
             return checkAvalancheState(url);
         case "near":
@@ -208,13 +210,16 @@ const mainnetChains = {
     "0007": {"name": "Polygon Bor", "type": "ethereum"},
     "0021": {"name": "Ethereum", "type": "ethereum"},
     "0022": {"name": "Ethereum Archival", "type": "ethereum"},
-    "0023": {"name": "Ropsten", "type": "ethereum"},
     "0025": {"name": "Rinkeby", "type": "ethereum"},
     "0026": {"name": "Goerli", "type": "ethereum"},
-    "0027": {"name": "Gnosis Chain", "type": "ethereum"},    
+    "0027": {"name": "Gnosis Chain", "type": "ethereum"},
     "0028": {"name": "Ethereum Archival Trace", "type": "ethereum"},
     "0052": {"name": "NEAR", "type": "near"},
     "0053": {"name": "Optimism", "type": "ethereum"},
+    "0063": {"name": "Goerli Archival", "type": "ethereum"},
     "0066": {"name": "Arbitrum One", "type": "ethereum"},
+    "0077": {"name": "Sepolia", "type": "ethereum"},
+    "0078": {"name": "Sepolia Archival", "type": "ethereum"},
+    "000C": {"name": "Gnosis Chain Archival", "type": "ethereum"},
 }
  
