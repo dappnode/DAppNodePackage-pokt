@@ -62,7 +62,7 @@
             "AddrBook": "config/addrbook.json",
             "AddrBookStrict": false,
             "MaxNumInboundPeers": 28,
-            "MaxNumOutboundPeers": 14,
+            "MaxNumOutboundPeers": 10,
             "UnconditionalPeerIDs": "",
             "PersistentPeersMaxDialPeriod": 0,
             "FlushThrottleTimeout": 100000000,

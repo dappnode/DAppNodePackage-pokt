@@ -73,26 +73,42 @@ else
 fi
 kill $PID_SIMULATE_RELAY
 
+# Check if the node is initialized with SNAPSHOT
+# Handle Snapshot Download and Decompression if needed
 echo "${INFO} Check if initializing with SNAPSHOT..."
 if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
   echo "${INFO} SNAPSHOT Url: ${SNAPSHOT_URL}"
   echo "${INFO} Initializing with SNAPSHOT, it could take several hours..."
   start_downloading_ui
-  mkdir -p /home/app/.pocket/data
-  cd /home/app/.pocket/data
+  mkdir -p /home/app/.pocket/
+  cd /home/app/.pocket/
 
-  # Use different tar arguments if the file ends with .tar.gz
-  if [[ $SNAPSHOT_URL == *.tar.gz* ]]
+  #Update snapshot to Liquify Compressed Version to save disk space and bandwidth during initial sync
+  echo "${INFO} Downloading snapshot file version..."
+  echo "${INFO} wget -O latest.txt ${SNAPSHOT_URL}"
+  wget -O latest.txt "${SNAPSHOT_URL}"
+  echo "${INFO} latest.txt: $(cat latest.txt)"
+  latestFile=$(cat latest.txt)
+  if [[ $SNAPSHOT_URL == *compressed.txt* ]]
   then
-    TAR_ARGS=xvzf
+    echo "${INFO} Downloading and decompressing the latest compressed snapshot file..."
+    echo "${INFO} wget -c -O - https://pocket-snapshot.liquify.com/files/$latestFile | lz4 -d - | tar -xv -"
+    wget -c -O - "https://pocket-snapshot.liquify.com/files/$latestFile" | lz4 -d - | tar -xv -
+    echo "${INFO} Snapshot Downloaded and Decompressed!"
+    echo "${INFO} Removing temporary snapshot file metadata..."
+    rm latest.txt
+    echo "${INFO} Snapshot Ready!"
+    stop_downloading_ui
   else
-    TAR_ARGS=xvf
+    echo "${INFO} Downloading and decompressing the latest uncompressed snapshot file..."
+    echo "${INFO} wget -c -O - https://pocket-snapshot.liquify.com/files/$latestFile | tar -xv -"
+    wget -c -O - "https://pocket-snapshot.liquify.com/files/$latestFile" | tar -xv -
+    echo "${INFO} Snapshot Downloaded and Decompressed!"
+    echo "${INFO} Removing temporary snapshot file metadata..."
+    rm latest.txt
+    echo "${INFO} Snapshot Ready!"
+    stop_downloading_ui
   fi
-
-  echo "${INFO} wget -qO- ${SNAPSHOT_URL} | tar ${TAR_ARGS} -"
-  wget -qO- ${SNAPSHOT_URL} | tar ${TAR_ARGS} -
-  echo "${INFO} SNAPSHOT downloaded!"
-  stop_downloading_ui
 fi
 
 echo "${INFO} pocket start"
