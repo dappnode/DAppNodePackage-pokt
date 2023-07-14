@@ -13,12 +13,8 @@
     },
     {
         "id": "0022",
-        "url": "https://mainnet.infura.io/v3/25c276e3a38a4a2b90d9022952db26a3"
-    },
-    {
-        "id": "0023",
-        "url": "http://ropsten.dappnode:8545"
-    },
+        "url": "http://erigon.dappnode:8545"
+    },    
     {
         "id": "0025",
         "url": "http://rinkeby.dappnode:8545"
@@ -33,7 +29,7 @@
     },
     {
         "id": "0028",
-        "url": "https://erigon-erigon.bfe79233ad548937.dyndns.dappnode.io/"
+        "url": "http://erigon.dappnode:8545"
     },
     {
         "id": "0052",
@@ -41,10 +37,26 @@
     },
     {
         "id": "0053",
-        "url": "https://optimism-mainnet.infura.io/v3/25c276e3a38a4a2b90d9022952db26a3"
+        "url": "http://optimism.optimism.public.dappnode:8545"
+    },
+    {
+        "id": "0063",
+        "url": "http://goerli-erigon.dappnode:8545"
     },
     {
         "id": "0066",
         "url": "http://arbitrum-nitro.public.dappnode:8547"
+    },
+    {
+        "id": "0077",
+        "url": "http://sepolia-geth.dappnode:8545"
+    },
+    {
+        "id": "0078",
+        "url": "http://sepolia-erigon.dappnode:8545"
+    },
+    {
+        "id": "000C",
+        "url": "http://erigon-gnosis.dappnode:8545"
     }
 ]

@@ -178,7 +178,7 @@ function App() {
               minLength={5}
             />
             <Form.Text>
-              The amount of POKT to stake. Must be higher than the current value of the StakeMinimum parameter, found <a href="https://docs.pokt.network/home/references/protocol-parameters#stakeminimum" target="_blank" rel="noreferrer">here</a>.
+              The amount of POKT to stake. Must be higher than the current value of the StakeMinimum parameter, found <a href="https://docs.pokt.network/learn/economics/nodes/#node-staking" target="_blank" rel="noreferrer">here</a>.
             </Form.Text>
           </div>
           <div>

@@ -14,7 +14,7 @@
             "write_buffer": 838860
         },
         "DBPath": "data",
-        "LogLevel": "*:info",
+        "LogLevel": "*:info, *:error",
         "LogFormat": "plain",
         "Genesis": "config/genesis.json",
         "PrivValidatorKey": "priv_val_key.json",
@@ -61,8 +61,8 @@
             "UPNP": false,
             "AddrBook": "config/addrbook.json",
             "AddrBookStrict": false,
-            "MaxNumInboundPeers": 20,
-            "MaxNumOutboundPeers": 20,
+            "MaxNumInboundPeers": 28,
+            "MaxNumOutboundPeers": 14,
             "UnconditionalPeerIDs": "",
             "PersistentPeersMaxDialPeriod": 0,
             "FlushThrottleTimeout": 100000000,
@@ -90,10 +90,10 @@
             "Recheck": true,
             "Broadcast": true,
             "WalPath": "",
-            "Size": 9000,
-            "MaxTxsBytes": 1073741824,
-            "CacheSize": 9000,
-            "MaxTxBytes": 1048576
+            "Size": 18000,
+            "MaxTxsBytes": 2147483648,
+            "CacheSize": 18000,
+            "MaxTxBytes": 2097152
         },
         "FastSync": {
             "Version": "v1"
@@ -154,8 +154,8 @@
         "show_relay_errors": true,
         "disable_tx_events": true,
         "iavl_cache_size": 5000000,
-        "chains_hot_reload": false,
-        "generate_token_on_start": true,
+        "chains_hot_reload": true,
+        "generate_token_on_start": false,
         "lean_pocket": false,
         "lean_pocket_user_key_file": "lean_nodes_keys.json"
     }
