@@ -9,15 +9,15 @@ COPY ui /app/ui
 WORKDIR /app/ui
 RUN yarn && yarn build
 
-
-FROM poktnetwork/pocket-core:${UPSTREAM_VERSION}
+#Starting with version BETA-0.10.2 of the v0 Pokt Core, the Docker package registry has been replaced by the Github Container Registry at ghcr.io/pokt-network/pocket-v0:BETA-0.10.2
+FROM ghcr.io/pokt-network/pocket-v0:${UPSTREAM_VERSION}
 
 WORKDIR /home/app/
 
 USER root
 
-# RUN apk add -u gettext curl jq nginx supervisor
-RUN apk add -u gettext curl jq nodejs npm supervisor
+# RUN apk add -u gettext curl jq nginx supervisor lz4 aria2
+RUN apk add -u gettext curl jq nodejs npm supervisor lz4
 
 ADD entrypoint.sh /usr/local/bin/entrypoint.sh
 

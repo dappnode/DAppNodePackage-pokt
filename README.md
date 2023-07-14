@@ -1,19 +1,21 @@
 <!-- :female_detective: Looking for a new champion -->
 
-# DAppNode package _Pocket_
+# DAppNode Package _Pocket_
 
 <!--DAppNode package logo (could be added with an hyperlink to a youtube video): -->
+
+![image](/avatar.png)
 
 <!--Brief introduction about the source project (official project definition is an option): -->
 Pocket Network is the TCP/IP of Web3 node infrastructure – a multi-chain relay protocol that incentivizes RPC nodes to provide DApps and their users with unstoppable Web3 access.
 
-More information about the source project can be found at [their official website](https://pokt.network)
+More information about the source project can be found at their [Official Website](https://pokt.network)
 
-### Why _Pocket_ ?
+## Why _Pocket_ ?
 
 <!--What can you do with this package?: -->
 
-Support your favorite applications and networks while earning from them. Join the first of its kind network that rewards full nodes for the necessary work to keep public protocols secure and actually decentralized.
+Support your favorite applications and networks by sharing access to your node's enpoint via Pokt Network's by providing decentralized access for developers and users building and running applications on the Pokt Network. Join this novel decentalized infrastructure network that rewards servicer and validator nodes for the necessary work to keep public RPC endpoints for dozens of different blockchains properly decentralized and secure.
 
 ### Requirements
 
@@ -21,11 +23,12 @@ Requirements to run DAppNode package for Pocket
 
 <!--Requirements to run the dappnode package in a list: -->
 
-Hardware Requirements: 4 CPU’s (or vCPU’s) | 16 GB RAM | 700GB Disk for POKT node + disk space for nodes to relay 
+Minimum Hardware Requirements: 4 CPU Cores | 16 GB RAM | 800GB SSD or NVMe for POKT node + disk space for nodes you intend to relay on Pocket Network.
 
-Ports: Expose Pocket RPC via HTTPS (Default :8081) and P2P port (Default: 26656)
+Ports: Be sure your node has properly exposed the Pocket RPC via HTTPS (Container Default Port 8081 to be forwarded via HTTPS:443) and P2P port (Default: 26656/TCP)
+This package attempts to automatically properly map the RPC port via the HTTPS Portal during installation.
 
-(With UPnP disabled on your router, please, map UDP 26656 and TCP 443 to your Dappnode)
+UPnP (if enabled on your router and Dappnode) will attempt to forward ports 26656/TCP and 443/TCP to your Dappnode. If you have UPnP disabled, please ensure to forward these ports manually.
 
 ### Maintenance
 
@@ -38,7 +41,7 @@ Ports: Expose Pocket RPC via HTTPS (Default :8081) and P2P port (Default: 26656)
 
 ### Additional links
 
-https://docs.pokt.network/home/paths/node-runner
+https://docs.pokt.network/node/
 
 https://docs.pokt.network/core/guides/quickstart
 
