@@ -116,8 +116,6 @@ function checkStateChain(type, url) {
             return checkNearState(url);
         case "avalanche":
             return checkAvalancheState(url);
-        case "near":
-            return checkNearState(url);
         case "pokt":
             return 2;
         default:
