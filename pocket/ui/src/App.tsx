@@ -261,7 +261,7 @@ function App() {
             </div>
             <div>
             <Form.Text>
-              Stake =  Stake node for the first time. Re-stake = stake node again after changing chains or amount of Pokt staked.
+              Stake =  Stake node for the first time. Re-stake = stake node again after changing staked chains or the amount of Pokt staked.
             </Form.Text>
             </div>
           </div>
