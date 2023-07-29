@@ -26,8 +26,8 @@ function poktToUpokt(pokt) {
 }
 
 //sign message function- returns signature (must be integrated into UI as an app function)
-function signMessage(message, address) {
-    const signature = shell.exec(`pocket accounts sign ${message} ${address} --datadir=/home/app/.pocket/`).stdout.trim();
+function signMessage(address, address) {
+    const signature = shell.exec(`pocket accounts sign ${address} ${address} --datadir=/home/app/.pocket/ --pwd "${passphrase}" | tail -n +3`).stdout.trim();
     return signature;
 }
 
@@ -212,14 +212,19 @@ const testnetChains = {
 const mainnetChains = {
     "0001": {"name": "Pokt", "type": "pokt"},
     "0003": {"name": "Avalanche", "type": "avalanche"},
+    "0007": {"name": "Polygon Bor", "type": "ethereum"},
     "0021": {"name": "Ethereum", "type": "ethereum"},
-    "0022": {"name": "Ethereum Archival Node", "type": "ethereum"},
-    "0023": {"name": "Ropsten", "type": "ethereum"},
+    "0022": {"name": "Ethereum Archival", "type": "ethereum"},
     "0025": {"name": "Rinkeby", "type": "ethereum"},
     "0026": {"name": "Goerli", "type": "ethereum"},
-    "0027": {"name": "xDai", "type": "ethereum"},
-    "0028": {"name": "Erigon", "type": "ethereum"},
+    "0027": {"name": "Gnosis Chain", "type": "ethereum"},
+    "0028": {"name": "Ethereum Archival Trace", "type": "ethereum"},
     "0052": {"name": "NEAR", "type": "near"},
     "0053": {"name": "Optimism", "type": "ethereum"},
+    "0063": {"name": "Goerli Archival", "type": "ethereum"},
     "0066": {"name": "Arbitrum One", "type": "ethereum"},
+    "0077": {"name": "Sepolia", "type": "ethereum"},
+    "0078": {"name": "Sepolia Archival", "type": "ethereum"},
+    "000C": {"name": "Gnosis Chain Archival", "type": "ethereum"},
 }
+ 
