@@ -77,13 +77,130 @@ kill $PID_SIMULATE_RELAY
 # Handle Snapshot Download and Decompression if needed
 echo "${INFO} Check if initializing with SNAPSHOT..."
 if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
+  
+  if [ "$SNAPSHOT_MIRROR" == "U.S." ] then
+    $MIRROR_URL="https://pocket-snapshot-us.liquify.com/files/"
+  elif [ "$SNAPSHOT_MIRROR" == "U.K." ] then
+    $MIRROR_URL="https://pocket-snapshot-uk.liquify.com/files/"
+  elif [ "$SNAPSHOT_MIRROR" == "Japan" ] then
+    $MIRROR_URL="https://pocket-snapshot-jp.liquify.com/files/"
+  else 
+    $MIRROR_URL="https://pocket-snapshot.liquify.com/files/"
+  fi
+  
+  if [ "$PRUNED_SNAPSHOT" == "yes" ]; then
+    MIRROR_URL=$MIRROR_URL"pruned/"
+  else
+    MIRROR_URL=$MIRROR_URL
+  fi
+
+  if [ "$COMPRESSED_SNAPSHOT" == "yes" ]; then
+    fileName="latest_compressed.txt"
+    SNAPSHOT_URL="$MIRROR_URL$fileName"
+  else
+    fileName="latest.txt"
+    SNAPSHOT_URL="$MIRROR_URL$fileName"
+  fi
+
+  if [ "$ARIA2_SNAPSHOT" == "yes" ]; then
+    echo "${INFO} Initializing with SNAPSHOT, it could take several hours..."
+    start_downloading_ui
+    mkdir -p /home/app/.pocket/
+    cd /home/app/.pocket/
+    echo "${INFO} Downloading snapshot file version..."
+    echo "${INFO} wget -O ${fileName} ${MIRROR_URL}"
+    wget -O "${fileName}" "${MIRROR_URL}"
+    echo "${INFO} $fileName: $(cat $fileName)"
+    latestFile=$(cat $fileName)
+    # Function to check if the download is complete
+    is_complete() {
+        if [[ -f "$latestFile" ]]; then
+            # Check if the file is a valid tar archive
+            tar -tf "$fileName" >/dev/null 2>&1
+            if [[ $? -eq 0 ]]; then
+                return 0
+            fi
+        fi
+        return 1
+    }
+
+    # Function to extract the downloaded file to /home/app/.pocket/ directory
+    extract_file() {
+        if [[ $latestFile == *.tar.lz4 ]]; then
+            lz4 -c -d "$latestFile" | tar -x -C /home/app/.pocket/
+        elif [[ $latestFile == *.tar ]]; then
+            tar -xvf "$latestFile" -C /home/app/.pocket/
+        fi
+    }
+
+    # Loop until the download is complete
+    while [[ ! $(is_complete) ]]; do
+        echo "Starting download..."
+        aria2c -x16 -s16 -o "$latestFile" "$MIRROR_URL"
+    done
+
+    echo "Download complete!"
+
+    # Extract the downloaded file to /home/app/.pocket/ directory
+    echo "Extracting the downloaded file to /home/app/.pocket/..."
+    extract_file
+
+    # Delete the source file
+    echo "Deleting the source file..."
+    rm "$latestFile"
+
+    echo "${INFO} Extraction and cleanup of snapshot complete!"
+    stop_downloading_ui
+  else
+########FINISH HERE
+    ##############################################################################################################
+    echo "${INFO} Initializing with SNAPSHOT, it could take several hours..."
+    start_downloading_ui
+    mkdir -p /home/app/.pocket/
+    cd /home/app/.pocket/
+    echo "${INFO} Downloading snapshot file version..."
+    echo "${INFO} wget -O latest.txt ${MIRROR_URL}"
+    wget -O latest.txt "${MIRROR_URL}"
+    echo "${INFO} latest.txt: $(cat latest.txt)"
+    latestFile=$(cat latest.txt)
+    if [ "$COMPRESSED_SNAPSHOT" == "yes" ]; then
+      echo "${INFO} Downloading and decompressing the latest compressed snapshot file..."
+      echo "${INFO} wget -c -O - https://pocket-snapshot.liquify.com/files/pruned/$latestFile | lz4 -d - | tar -xv -"
+      wget -c -O - "https://pocket-snapshot.liquify.com/files/pruned/$latestFile" | lz4 -d - | tar -xv -
+      echo "${INFO} Snapshot Downloaded and Decompressed!"
+      echo "${INFO} Removing temporary snapshot file metadata..."
+      rm latest.txt
+      echo "${INFO} Snapshot Ready!"
+      stop_downloading_ui
+    else
+      echo "${INFO} Downloading and decompressing the latest uncompressed snapshot file..."
+      echo "${INFO} wget -c -O - https://pocket-snapshot.liquify.com/files/pruned/$latestFile | tar -xv -"
+      wget -c -O - "https://pocket-snapshot.liquify.com/files/pruned/$latestFile" | tar -xv -
+      echo "${INFO} Snapshot Downloaded and Decompressed!"
+      echo "${INFO} Removing temporary snapshot file metadata..."
+      rm latest.txt
+      echo "${INFO} Snapshot Ready!"
+      stop_downloading_ui
+    fi
+  else
+    echo "${INFO} Initializing with SNAPSHOT, it could take several hours..."
+    start_downloading_ui
+    mkdir -p /home/app/.pocket/
+    cd /home/app/.pocket/
+    echo "${INFO} Downloading snapshot file version..."
+    echo "${INFO} wget -O latest.txt ${MIRROR_URL}"
+    wget -O latest.txt "${MIRROR_URL}"
+    echo "${INFO} latest.txt: $(cat latest.txt)"
+    latestFile=$(cat latest.txt)
+    if [ "$COMPRESSED_SNAPSHOT" == "yes" ];
+
   echo "${INFO} SNAPSHOT Url: ${SNAPSHOT_URL}"
   echo "${INFO} Initializing with SNAPSHOT, it could take several hours..."
   start_downloading_ui
   mkdir -p /home/app/.pocket/
   cd /home/app/.pocket/
 
-  #Update snapshot to Liquify Compressed Version to save disk space and bandwidth during initial sync
+  #Update snapshot to Liquify Pruned Uncomepressed and Compressed Version to save disk space and bandwidth during initial sync
   echo "${INFO} Downloading snapshot file version..."
   echo "${INFO} wget -O latest.txt ${SNAPSHOT_URL}"
   wget -O latest.txt "${SNAPSHOT_URL}"
@@ -92,8 +209,8 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
   if [[ $SNAPSHOT_URL == *compressed.txt* ]]
   then
     echo "${INFO} Downloading and decompressing the latest compressed snapshot file..."
-    echo "${INFO} wget -c -O - https://pocket-snapshot.liquify.com/files/$latestFile | lz4 -d - | tar -xv -"
-    wget -c -O - "https://pocket-snapshot.liquify.com/files/$latestFile" | lz4 -d - | tar -xv -
+    echo "${INFO} wget -c -O - https://pocket-snapshot.liquify.com/files/pruned/$latestFile | lz4 -d - | tar -xv -"
+    wget -c -O - "https://pocket-snapshot.liquify.com/files/pruned/$latestFile" | lz4 -d - | tar -xv -
     echo "${INFO} Snapshot Downloaded and Decompressed!"
     echo "${INFO} Removing temporary snapshot file metadata..."
     rm latest.txt
@@ -101,8 +218,8 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
     stop_downloading_ui
   else
     echo "${INFO} Downloading and decompressing the latest uncompressed snapshot file..."
-    echo "${INFO} wget -c -O - https://pocket-snapshot.liquify.com/files/$latestFile | tar -xv -"
-    wget -c -O - "https://pocket-snapshot.liquify.com/files/$latestFile" | tar -xv -
+    echo "${INFO} wget -c -O - https://pocket-snapshot.liquify.com/files/pruned/$latestFile | tar -xv -"
+    wget -c -O - "https://pocket-snapshot.liquify.com/files/pruned/$latestFile" | tar -xv -
     echo "${INFO} Snapshot Downloaded and Decompressed!"
     echo "${INFO} Removing temporary snapshot file metadata..."
     rm latest.txt
