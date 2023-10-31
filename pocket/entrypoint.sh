@@ -165,7 +165,7 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
     wget -O "${fileName}" "${MIRROR_URL}"
     echo "${INFO} $fileName: $(cat $fileName)"
     latestFile=$(cat $fileName)
-    if [ "$COMPRESSED_SNAPSHOT" == "yes" ]; then
+    if [ "$COMPRESSED_SNAPSHOT" == "Yes" ]; then
       echo "${INFO} Downloading and decompressing the latest compressed snapshot file..."
       echo "${INFO} while ! wget -c -O - ${latestFile} ${MIRROR_URL} | lz4 -d - | tar -xv -; do"
       echo "${INFO}   echo ""Command failed, retrying in 10 seconds..."""
