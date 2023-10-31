@@ -100,22 +100,22 @@ echo "${INFO} Check if initializing with SNAPSHOT..."
 if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
   
   if [ "$SNAPSHOT_MIRROR" == "U.S." ] then
-    $MIRROR_URL="https://pocket-snapshot-us.liquify.com/files/"
+    MIRROR_URL="https://pocket-snapshot-us.liquify.com/files/"
   elif [ "$SNAPSHOT_MIRROR" == "U.K." ] then
-    $MIRROR_URL="https://pocket-snapshot-uk.liquify.com/files/"
+    MIRROR_URL="https://pocket-snapshot-uk.liquify.com/files/"
   elif [ "$SNAPSHOT_MIRROR" == "Japan" ] then
-    $MIRROR_URL="https://pocket-snapshot-jp.liquify.com/files/"
+    MIRROR_URL="https://pocket-snapshot-jp.liquify.com/files/"
   else 
-    $MIRROR_URL="https://pocket-snapshot.liquify.com/files/"
+    MIRROR_URL="https://pocket-snapshot.liquify.com/files/"
   fi
   
-  if [ "$PRUNED_SNAPSHOT" == "yes" ]; then
+  if [ "$PRUNED_SNAPSHOT" == "Yes" ]; then
     MIRROR_URL=$MIRROR_URL"pruned/"
   else
     MIRROR_URL=$MIRROR_URL
   fi
 
-  if [ "$COMPRESSED_SNAPSHOT" == "yes" ]; then
+  if [ "$COMPRESSED_SNAPSHOT" == "Yes" ]; then
     fileName="latest_compressed.txt"
     SNAPSHOT_URL="$MIRROR_URL$fileName"
   else
@@ -123,7 +123,7 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
     SNAPSHOT_URL="$MIRROR_URL$fileName"
   fi
 
-  if [ "$ARIA2_SNAPSHOT" == "yes" ]; then
+  if [ "$ARIA2_SNAPSHOT" == "Yes" ]; then
     echo "${INFO} Initializing with SNAPSHOT, it could take several hours..."
     start_downloading_ui
     mkdir -p /home/app/.pocket/
@@ -189,7 +189,7 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
       done
       echo "${INFO} Snapshot Downloaded and Decompressed!"
       echo "${INFO} Removing temporary snapshot file metadata..."
-      rm latest.txt
+      rm $fileName
       echo "${INFO} Snapshot Ready!"
       stop_downloading_ui
     fi
