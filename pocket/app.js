@@ -207,7 +207,6 @@ const mainnetChains = {
     "0007": {"name": "Polygon Bor", "type": "ethereum"},
     "0021": {"name": "Ethereum", "type": "ethereum"},
     "0022": {"name": "Ethereum Archival", "type": "ethereum"},
-    "0025": {"name": "Rinkeby", "type": "ethereum"},
     "0026": {"name": "Goerli", "type": "ethereum"},
     "0027": {"name": "Gnosis Chain", "type": "ethereum"},
     "0028": {"name": "Ethereum Archival Trace", "type": "ethereum"},
