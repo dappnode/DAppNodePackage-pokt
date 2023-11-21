@@ -37,14 +37,14 @@ fields:
       type: environment
       name: ARIA2_SNAPSHOT
       service: pocket
-    title: "Inline Decompression?"
+    title: "Aria2c Download?"
     required: true
     enum: 
       - "Yes"
       - "No"
     description: >-
-      If you have limited disk space, and do not have room for ~1.7TB to download and extract the full snapshot (as of Late October 2023 the full compressed snapshot download is over 730 GB and needs to be downloaded fully and then extracted, using an enormous amount of diskspace during the initial download and extraction but once it's done it will be only ~ 800GB total for the full Pokt Chain.  If you don't have the space for this, but have have enugh space for the ~860GB Pokt blockchain, you can attempt to use inline decompression, this saves from needing to have double the disk space, however if you dont have a very reliable high badwidth internet connection, this method will fail and need to be restarted from the beginning and cannot be restarted from where it left off, select `Yes` if you would like to try this way. 
-      If you want to run a full node and have a lot of free space for install, select `No`.
+      If you have limited disk space, and do not have room for ~1.7TB to download and extract the full snapshot (as of Late October 2023 the full compressed snapshot download is over 730 GB and needs to be downloaded fully and then extracted, using an enormous amount of diskspace during the initial download and extraction but once it's done it will be only ~ 800GB total for the full Pokt Chain.  If you don't have the space for this, but have have enugh space for the ~860GB Pokt blockchain, you can attempt to use inline decompression, this saves from needing to have double the disk space, however if you dont have a very reliable high badwidth internet connection, this method will fail and need to be restarted from the beginning and cannot be restarted from where it left off, select `No` if you would like to try this way. 
+      If you want to run a full node and have a lot of free space for install, select `Yes`.
   - id: compressedSnapshot
     target:
       type: environment
@@ -62,14 +62,12 @@ fields:
       type: environment
       name: SNAPSHOT_MIRROR
       service: pocket
-    title: "Snapshot Mirror"
+    title: "Is Monday?"
     required: true
     enum: 
-      - "Master"
-      - "U.K."
-      - "U.S."
-      - "Japan"
+      - "No"
+      - "Yes"
     description: >-
       You can choose to download the snapshot file from the default master server in the U.K. which is the default option and is best to select if installing on a Monday, new snapshots are uploaded once a week on Mondays at 00:00UTC, first released on the UK master server, then is copied to the slave mirrors in the U.S. and Japan.
-      It's often best to leave this option as the default master server (It's found at ), but you can choose a mirror closer to your node's location for lower latency.
+      It's often best to leave this option as the default master domain which auto-selects the best mirror for your location), but on Mondays at 00:00UTC, the master server is updated first, and the slave mirrors are updated a few hours later, so if you are installing on a Monday, you may want to select `Yes` to use the U.K master server which will have the most up to date snapshot ready for download first before any of the other mirrors that would be auto-selected if you were not already in the Master UK zone anyway.
 

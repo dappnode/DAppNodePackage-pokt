@@ -75,7 +75,7 @@ kill $PID_SIMULATE_RELAY
 
 # Function to check if the download is complete
 function is_complete() {
-    if [[ -f "$latestFile" ]]; then
+    if [[ -f "${latestFile}" ]]; then
         # Check if the file is a valid tar archive
         tar -tf "$latestFile" >/dev/null 2>&1
         if [[ $? -eq 0 ]]; then
@@ -99,12 +99,8 @@ function extract_file() {
 echo "${INFO} Check if initializing with SNAPSHOT..."
 if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
   
-  if [ "$SNAPSHOT_MIRROR" == "U.S." ] then
-    MIRROR_URL="https://pocket-snapshot-us.liquify.com/files/"
-  elif [ "$SNAPSHOT_MIRROR" == "U.K." ] then
+  if [ "$SNAPSHOT_MIRROR" == "Yes" ]; then
     MIRROR_URL="https://pocket-snapshot-uk.liquify.com/files/"
-  elif [ "$SNAPSHOT_MIRROR" == "Japan" ] then
-    MIRROR_URL="https://pocket-snapshot-jp.liquify.com/files/"
   else 
     MIRROR_URL="https://pocket-snapshot.liquify.com/files/"
   fi
@@ -124,30 +120,36 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
   fi
 
   if [ "$ARIA2_SNAPSHOT" == "Yes" ]; then
-    echo "${INFO} Initializing with SNAPSHOT, it could take several hours..."
+    echo "${INFO} Initializing with Aria2 SNAPSHOT, it could take several hours..."
     start_downloading_ui
     mkdir -p /home/app/.pocket/
     cd /home/app/.pocket/
     echo "${INFO} Downloading snapshot file version..."
-    echo "${INFO} wget -O ${fileName} ${MIRROR_URL}"
-    wget -O "${fileName}" "${MIRROR_URL}"
-    echo "${INFO} $fileName: $(cat $fileName)"
+    echo "${INFO} wget -O ${fileName} ${SNAPSHOT_URL}"
+    wget -O "${fileName}" "${SNAPSHOT_URL}"
+    echo "${INFO} ${fileName}: $(cat $fileName)"
     latestFile=$(cat $fileName)
+    downloadURL="${MIRROR_URL}${latestFile}"
     
-    # Loop until the download is complete
-    while [[ ! $(is_complete) ]]; do
-        echo "Starting download..."
-        aria2c -x16 -s16 -o "${latestFile}" "${MIRROR_URL}"
-    done
+    echo "${INFO} Starting aria2 download..."
+    echo "${INFO} aria2c -x16 -s16 -o ${latestFile} ${downloadURL}"
+    aria2c -x16 -s16 -o "${latestFile}" "${downloadURL}"
 
-    echo "Download complete!"
+    # # Loop until the download is complete
+    # while [[ ! $(is_complete) ]]; do
+    #     echo "${INFO} Starting aria2 download..."
+    #     echo "${INFO} aria2c -x16 -s16 -o ${latestFile} ${downloadURL}"
+    #     aria2c -x16 -s16 -o "${latestFile}" "${downloadURL}"
+    # done
+
+    echo "${INFO} Download complete!"
 
     # Extract the downloaded file to /home/app/.pocket/ directory
-    echo "Extracting the downloaded file to /home/app/.pocket/..."
+    echo "${INFO} Extracting the downloaded file to /home/app/.pocket/..."
     extract_file
 
     # Delete the source file
-    echo "Deleting the source file..."
+    echo "${INFO} Deleting the source file..."
     rm "$latestFile"
 
     echo "${INFO} Extraction and cleanup of snapshot complete!"
@@ -161,17 +163,17 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
     mkdir -p /home/app/.pocket/
     cd /home/app/.pocket/
     echo "${INFO} Downloading snapshot file version..."
-    echo "${INFO} wget -O ${fileName} ${MIRROR_URL}"
+    echo "${INFO} wget -O ${fileName} ${SNAPSHOT_URL}"
     wget -O "${fileName}" "${MIRROR_URL}"
     echo "${INFO} $fileName: $(cat $fileName)"
     latestFile=$(cat $fileName)
     if [ "$COMPRESSED_SNAPSHOT" == "Yes" ]; then
       echo "${INFO} Downloading and decompressing the latest compressed snapshot file..."
-      echo "${INFO} while ! wget -c -O - ${latestFile} ${MIRROR_URL} | lz4 -d - | tar -xv -; do"
+      echo "${INFO} while ! wget -c -O - ${latestFile} ${SNAPSHOT_URL} | lz4 -d - | tar -xv -; do"
       echo "${INFO}   echo ""Command failed, retrying in 10 seconds..."""
       echo "${INFO}   sleep 10"
       echo "${INFO} done"
-      while ! wget -c -O - "${latestFile}" "${MIRROR_URL}" | lz4 -d - | tar -xv -; do
+      while ! wget -c -O - "${latestFile}" "${SNAPSHOT_URL}" | lz4 -d - | tar -xv -; do
         echo "Command failed, retrying in 10 seconds..."
         sleep 10
       done

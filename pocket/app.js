@@ -108,6 +108,11 @@ function checkAvalancheState(url) {
     }
 }
 
+// function checkPoktState(url) {
+//     try {
+        
+//     }
+
 function checkStateChain(type, url) {
     switch (type) {
         case "ethereum":
