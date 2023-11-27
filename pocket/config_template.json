@@ -62,7 +62,7 @@
             "AddrBook": "config/addrbook.json",
             "AddrBookStrict": false,
             "MaxNumInboundPeers": 28,
-            "MaxNumOutboundPeers": 14,
+            "MaxNumOutboundPeers": 16,
             "UnconditionalPeerIDs": "",
             "PersistentPeersMaxDialPeriod": 0,
             "FlushThrottleTimeout": 100000000,
@@ -156,7 +156,7 @@
         "iavl_cache_size": 5000000,
         "chains_hot_reload": true,
         "generate_token_on_start": false,
-	    "lean_pocket": false,
-	    "lean_pocket_user_key_file": "lean_nodes_keys.json"
+        "lean_pocket": false,
+        "lean_pocket_user_key_file": "lean_nodes_keys.json"
     }
 }
