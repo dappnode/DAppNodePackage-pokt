@@ -52,6 +52,10 @@
         "url": "http://sepolia-erigon.dappnode:8545"
     },
     {
+        "id": "0081",
+        "url": "http://holesky-erigon.dappnode:8545"
+    },
+    {
         "id": "000C",
         "url": "http://erigon-gnosis.dappnode:8545"
     }

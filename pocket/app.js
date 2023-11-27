@@ -221,6 +221,7 @@ const mainnetChains = {
     "0066": {"name": "Arbitrum One", "type": "ethereum"},
     "0077": {"name": "Sepolia", "type": "ethereum"},
     "0078": {"name": "Sepolia Archival", "type": "ethereum"},
+    "0081": {"name": "Holesky Full Node", "type": "ethereum"},
     "000C": {"name": "Gnosis Chain Archival", "type": "ethereum"},
 }
  
