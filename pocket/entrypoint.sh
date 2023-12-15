@@ -28,6 +28,27 @@ function stop_downloading_ui () {
   echo "${INFO} Downloading snapshot UI - Stopped"
 }
 
+# Function to check if the snapshot download is complete
+function is_complete() {
+    if [[ -f "${latestFile}" ]]; then
+        # Check if the file is a valid tar archive
+        tar -tf "$latestFile" >/dev/null 2>&1
+        if [[ $? -eq 0 ]]; then
+            return 0
+        fi
+    fi
+    return 1
+}    
+
+# Function to extract the downloaded file to /home/app/.pocket/ directory
+function extract_file() {
+    if [[ $latestFile == *.tar.lz4 ]]; then
+        lz4 -c -d "$latestFile" | tar -xv -C /home/app/.pocket/
+    elif [[ $latestFile == *.tar ]]; then
+        tar -xvf "$latestFile" -C /home/app/.pocket/
+    fi
+}
+
 ########
 # MAIN #
 ########
@@ -73,27 +94,6 @@ else
 fi
 kill $PID_SIMULATE_RELAY
 
-# Function to check if the download is complete
-function is_complete() {
-    if [[ -f "${latestFile}" ]]; then
-        # Check if the file is a valid tar archive
-        tar -tf "$latestFile" >/dev/null 2>&1
-        if [[ $? -eq 0 ]]; then
-            return 0
-        fi
-    fi
-    return 1
-}    
-
-# Function to extract the downloaded file to /home/app/.pocket/ directory
-function extract_file() {
-    if [[ $latestFile == *.tar.lz4 ]]; then
-        lz4 -c -d "$latestFile" | tar -xv -C /home/app/.pocket/
-    elif [[ $latestFile == *.tar ]]; then
-        tar -xvf "$latestFile" -C /home/app/.pocket/
-    fi
-}
-
 # Check if the node is initialized with SNAPSHOT
 # Handle Snapshot Download and Decompression if needed
 echo "${INFO} Check if initializing with SNAPSHOT..."
@@ -135,7 +135,7 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
     echo "${INFO} aria2c -x16 -s16 -o ${latestFile} ${downloadURL}"
     aria2c -x16 -s16 -o "${latestFile}" "${downloadURL}"
 
-    # # Loop until the download is complete
+    # # Loop until the download is complete \\ This does not work so far likely a syntax error, but so far no tests have led to failures yet with this config, on my test nodes at least
     # while [[ ! $(is_complete) ]]; do
     #     echo "${INFO} Starting aria2 download..."
     #     echo "${INFO} aria2c -x16 -s16 -o ${latestFile} ${downloadURL}"
@@ -149,9 +149,8 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
     extract_file
 
     # Delete the source file
-    echo "${INFO} Deleting the source file..."
-    rm "$latestFile"
-
+    echo "${INFO} Deleting the source file, and metadata file..."
+    rm "${latestFile}" "${fileName}"
     echo "${INFO} Extraction and cleanup of snapshot complete!"
     stop_downloading_ui
   else
@@ -164,7 +163,7 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
     cd /home/app/.pocket/
     echo "${INFO} Downloading snapshot file version..."
     echo "${INFO} wget -O ${fileName} ${SNAPSHOT_URL}"
-    wget -O "${fileName}" "${MIRROR_URL}"
+    wget -O "${fileName}" "${SNAPSHOT_URL}"
     echo "${INFO} $fileName: $(cat $fileName)"
     latestFile=$(cat $fileName)
     max_retries=5
@@ -173,11 +172,11 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
       echo "${INFO} Downloading and decompressing the latest compressed snapshot file..."
       echo "${INFO} while ! wget -c -O - ${latestFile} ${SNAPSHOT_URL} | lz4 -d - | tar -xv -; do"
       echo "${INFO} if [ $retries -ge $max_retries ]; then"
-      echo "${INFO}   echo ""Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."""
+      echo "${INFO}   echo Download failed after $max_retries retries, try using the Aria download method or a pruned snapshot if this fails multiple times. exiting..."
       echo "${INFO}   exit 1"
       echo "${INFO} fi"
       echo "${INFO} retries=$((retries+1))"
-      echo "${INFO} echo ""Download failed, retrying in 10 seconds (retry $retries of $max_retries)..."""
+      echo "${INFO} echo Download failed, retrying in 10 seconds (retry $retries of $max_retries)..."
       echo "${INFO} sleep 10"
       echo "${INFO} done"
       while ! wget -c -O - "${latestFile}" "${SNAPSHOT_URL}" | lz4 -d - | tar -xv -; do
@@ -191,27 +190,27 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
       done
       echo "${INFO} Snapshot Downloaded and Decompressed!"
       echo "${INFO} Removing temporary snapshot file metadata..."
-      rm $fileName
+      rm "${fileName}"
       echo "${INFO} Snapshot Ready!"
       stop_downloading_ui
     else
       echo "${INFO} Downloading and decompressing the latest uncompressed snapshot file..."
       echo "${INFO} while ! wget -c -O - ${latestFile} ${SNAPSHOT_URL} | tar -xv -; do"
       echo "${INFO}   if [ $retries -ge $max_retries ]; then"
-      echo "${INFO}     echo ""Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."""
+      echo "${INFO}     echo Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."
       echo "${INFO}     exit 1"
       echo "${INFO}   fi"
       echo "${INFO}   retries=$((retries+1))"
-      echo "${INFO}   echo ""Download failed, retrying in 10 seconds (retry $retries of $max_retries)..."""
+      echo "${INFO}   echo Download failed, retrying in 10 seconds (retry $retries of $max_retries)..."
       echo "${INFO}   sleep 10"
       echo "${INFO} done"
       while ! wget -c -O - "${latestFile}" "${SNAPSHOT_URL}" | tar -xv -; do
         if [ $retries -ge $max_retries ]; then
-          echo "Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."
+          echo "${INFO} Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."
           exit 1
         fi
         retries=$((retries+1))
-        echo "Download failed, retrying in 10 seconds (retry $retries of $max_retries)..."
+        echo "${INFO} Download failed, retrying in 10 seconds (retry $retries of $max_retries)..."
         sleep 10
       done
       echo "${INFO} Snapshot Downloaded and Decompressed!"  
