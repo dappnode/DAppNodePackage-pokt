@@ -1,7 +1,7 @@
 {
   "name": "pocket.dnp.dappnode.eth",
-  "version": "0.1.0",
-  "upstreamVersion": "RC-0.10.4",
+  "version": "0.1.6",
+  "upstreamVersion": "BETA-0.11.0",
   "upstreamRepo": "pokt-network/pocket-core",
   "upstreamArg": "UPSTREAM_VERSION",
   "shortDescription": "Web3 Infrastructure The Right Way.",
