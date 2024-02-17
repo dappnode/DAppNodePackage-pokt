@@ -9,7 +9,7 @@
     },
     {
         "id": "0021",
-        "url": "http://besu.public.dappnode:8545"
+        "url": "http://geth.dappnode:8545"
     },
     {
         "id": "0022",
@@ -17,7 +17,7 @@
     },    
     {
         "id": "0026",
-        "url": "http://goerli-erigon.dappnode:8545"
+        "url": "http://goerli-geth.dappnode:8545"
     },
     {
         "id": "0027",
@@ -53,10 +53,14 @@
     },
     {
         "id": "0081",
-        "url": "http://holesky-erigon.dappnode:8545"
+        "url": "http://holesky-geth.dappnode:8545"
     },
     {
         "id": "000C",
         "url": "http://erigon-gnosis.dappnode:8545"
+    },
+    {
+        "id": "A053",
+        "url": "http://optimism.optimism.public.dappnode:8545"
     }
 ]
