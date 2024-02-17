@@ -28,6 +28,27 @@ function stop_downloading_ui () {
   echo "${INFO} Downloading snapshot UI - Stopped"
 }
 
+# Function to check if the snapshot download is complete
+function is_complete() {
+    if [[ -f "${latestFile}" ]]; then
+        # Check if the file is a valid tar archive
+        tar -tf "$latestFile" >/dev/null 2>&1
+        if [[ $? -eq 0 ]]; then
+            return 0
+        fi
+    fi
+    return 1
+}    
+
+# Function to extract the downloaded file to /home/app/.pocket/ directory
+function extract_file() {
+    if [[ $latestFile == *.tar.lz4 ]]; then
+        lz4 -c -d "$latestFile" | tar -xv -C /home/app/.pocket/
+    elif [[ $latestFile == *.tar ]]; then
+        tar -xvf "$latestFile" -C /home/app/.pocket/
+    fi
+}
+
 ########
 # MAIN #
 ########
@@ -77,37 +98,113 @@ kill $PID_SIMULATE_RELAY
 # Handle Snapshot Download and Decompression if needed
 echo "${INFO} Check if initializing with SNAPSHOT..."
 if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
-  echo "${INFO} SNAPSHOT Url: ${SNAPSHOT_URL}"
-  echo "${INFO} Initializing with SNAPSHOT, it could take several hours..."
+  
+  if [ "$SNAPSHOT_MIRROR" == "Yes" ]; then
+    MIRROR_URL="https://pocket-snapshot-uk.liquify.com/files/"
+  else 
+    MIRROR_URL="https://pocket-snapshot.liquify.com/files/"
+  fi
+  
+  if [ "$PRUNED_SNAPSHOT" == "Yes" ]; then
+    MIRROR_URL=$MIRROR_URL"pruned/"
+  else
+    MIRROR_URL=$MIRROR_URL
+  fi
+
+  if [ "$COMPRESSED_SNAPSHOT" == "Yes" ]; then
+    fileName="latest_compressed.txt"
+    SNAPSHOT_URL="$MIRROR_URL$fileName"
+  else
+    fileName="latest.txt"
+    SNAPSHOT_URL="$MIRROR_URL$fileName"
+  fi
+
+  #Download Snapshot Metedata
   start_downloading_ui
   mkdir -p /home/app/.pocket/
   cd /home/app/.pocket/
-
-  #Update snapshot to Liquify Compressed Version to save disk space and bandwidth during initial sync
   echo "${INFO} Downloading snapshot file version..."
-  echo "${INFO} wget -O latest.txt ${SNAPSHOT_URL}"
-  wget -O latest.txt "${SNAPSHOT_URL}"
-  echo "${INFO} latest.txt: $(cat latest.txt)"
-  latestFile=$(cat latest.txt)
-  if [[ $SNAPSHOT_URL == *compressed.txt* ]]
-  then
-    echo "${INFO} Downloading and decompressing the latest compressed snapshot file..."
-    echo "${INFO} wget -c -O - https://pocket-snapshot.liquify.com/files/$latestFile | lz4 -d - | tar -xv -"
-    wget -c -O - "https://pocket-snapshot.liquify.com/files/$latestFile" | lz4 -d - | tar -xv -
-    echo "${INFO} Snapshot Downloaded and Decompressed!"
-    echo "${INFO} Removing temporary snapshot file metadata..."
-    rm latest.txt
-    echo "${INFO} Snapshot Ready!"
+  echo "${INFO} wget -O ${fileName} ${SNAPSHOT_URL}"
+  wget -O "${fileName}" "${SNAPSHOT_URL}"
+  echo "${INFO} ${fileName}: $(cat $fileName)"
+  latestFile=$(cat $fileName)
+  downloadURL="${MIRROR_URL}${latestFile}"
+
+  if [ "$ARIA2_SNAPSHOT" == "Yes" ]; then
+    echo "${INFO} Initializing with Aria2 SNAPSHOT, it could take several hours..."
+    echo "${INFO} Starting aria2 download..."
+    echo "${INFO} aria2c -x16 -s16 -o ${latestFile} ${downloadURL}"
+    aria2c -x16 -s16 -o "${latestFile}" "${downloadURL}"
+
+    # # Loop until the download is complete \\ This does not work so far likely a syntax error, but so far no tests have led to failures yet with this config, on my test nodes at least
+    # while [[ ! $(is_complete) ]]; do
+    #     echo "${INFO} Starting aria2 download..."
+    #     echo "${INFO} aria2c -x16 -s16 -o ${latestFile} ${downloadURL}"
+    #     aria2c -x16 -s16 -o "${latestFile}" "${downloadURL}"
+    # done
+
+    echo "${INFO} Download complete!"
+
+    # Extract the downloaded file to /home/app/.pocket/ directory
+    echo "${INFO} Extracting the downloaded file to /home/app/.pocket/..."
+    extract_file
+
+    # Delete the source file
+    echo "${INFO} Deleting the source file, and metadata file..."
+    rm "${latestFile}" "${fileName}"
+    echo "${INFO} Extraction and cleanup of snapshot complete!"
     stop_downloading_ui
   else
-    echo "${INFO} Downloading and decompressing the latest uncompressed snapshot file..."
-    echo "${INFO} wget -c -O - https://pocket-snapshot.liquify.com/files/$latestFile | tar -xv -"
-    wget -c -O - "https://pocket-snapshot.liquify.com/files/$latestFile" | tar -xv -
-    echo "${INFO} Snapshot Downloaded and Decompressed!"
-    echo "${INFO} Removing temporary snapshot file metadata..."
-    rm latest.txt
-    echo "${INFO} Snapshot Ready!"
-    stop_downloading_ui
+
+    ### WGET INLINE SNAPSHOT
+    ##############################################################################################################
+    echo "${INFO} Initializing with wget inline SNAPSHOT, it could take several hours..."
+    max_retries=5
+    retries=0
+
+    if [ "$COMPRESSED_SNAPSHOT" == "Yes" ]; then
+      echo "${INFO} Downloading and decompressing the latest compressed snapshot file..."
+      echo "${INFO} while ! wget -c -O - ${downloadURL} | lz4 -d - | tar -xv -; do"
+      while ! wget -c -O - "${downloadURL}" | lz4 -d - | tar -xv -; do
+        if [ $retries -ge $max_retries ]; then
+          echo "Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."
+          exit 1
+        fi
+        retries=$((retries+1))
+        echo "Download failed, retrying in 10 seconds (retry $retries of $max_retries)..."
+        sleep 10
+      done
+      echo "${INFO} Snapshot Downloaded and Decompressed!"
+      echo "${INFO} Removing temporary snapshot file metadata..."
+      rm "${fileName}"
+      echo "${INFO} Snapshot Ready!"
+      stop_downloading_ui
+    else
+      echo "${INFO} Downloading and decompressing the latest uncompressed snapshot file..."
+      echo "${INFO} while ! wget -c -O - ${downloadURL} | tar -xv -; do"
+      echo "${INFO}   if [ $retries -ge $max_retries ]; then"
+      echo "${INFO}     echo Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."
+      echo "${INFO}     exit 1"
+      echo "${INFO}   fi"
+      echo "${INFO}   retries=$((retries+1))"
+      echo "${INFO}   echo Download failed, retrying in 10 seconds (retry $retries of $max_retries)..."
+      echo "${INFO}   sleep 10"
+      echo "${INFO} done"
+      while ! wget -c -O - "${downloadURL}" | tar -xv -; do
+        if [ $retries -ge $max_retries ]; then
+          echo "${INFO} Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."
+          exit 1
+        fi
+        retries=$((retries+1))
+        echo "${INFO} Download failed, retrying in 10 seconds (retry $retries of $max_retries)..."
+        sleep 10
+      done
+      echo "${INFO} Snapshot Downloaded and Decompressed!"  
+      echo "${INFO} Removing temporary snapshot file metadata..."
+      rm $fileName
+      echo "${INFO} Snapshot Ready!"
+      stop_downloading_ui
+    fi
   fi
 fi
 

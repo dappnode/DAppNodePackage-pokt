@@ -20,10 +20,6 @@
         "url": "http://erigon.dappnode:8545"
     },    
     {
-        "id": "0025",
-        "url": "http://rinkeby.dappnode:8545"
-    },
-    {
         "id": "0026",
         "url": "http://goerli-geth.dappnode:8545"
     },
@@ -60,7 +56,15 @@
         "url": "http://sepolia-erigon.dappnode:8545"
     },
     {
+        "id": "0081",
+        "url": "http://holesky-geth.dappnode:8545"
+    },
+    {
         "id": "000C",
         "url": "http://erigon-gnosis.dappnode:8545"
+    },
+    {
+        "id": "A053",
+        "url": "http://optimism.optimism.public.dappnode:8545"
     }
 ]
