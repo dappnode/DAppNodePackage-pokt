@@ -1,4 +1,3 @@
-
 # Dappnode Pokt
 
 Hardware Requirements: 4 CPU’s (or vCPU’s) | 16 GB RAM | 800GB Disk for POKT node + disk space for nodes to relay
