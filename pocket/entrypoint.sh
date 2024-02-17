@@ -166,11 +166,12 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
     wget -O "${fileName}" "${SNAPSHOT_URL}"
     echo "${INFO} $fileName: $(cat $fileName)"
     latestFile=$(cat $fileName)
+    downloadURL="${MIRROR_URL}${latestFile}"
     max_retries=5
     retries=0
     if [ "$COMPRESSED_SNAPSHOT" == "Yes" ]; then
       echo "${INFO} Downloading and decompressing the latest compressed snapshot file..."
-      echo "${INFO} while ! wget -c -O - ${latestFile} ${SNAPSHOT_URL} | lz4 -d - | tar -xv -; do"
+      echo "${INFO} while ! wget -c -O - ${downloadURL} | lz4 -d - | tar -xv -; do"
       echo "${INFO} if [ $retries -ge $max_retries ]; then"
       echo "${INFO}   echo Download failed after $max_retries retries, try using the Aria download method or a pruned snapshot if this fails multiple times. exiting..."
       echo "${INFO}   exit 1"
@@ -179,7 +180,7 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
       echo "${INFO} echo Download failed, retrying in 10 seconds (retry $retries of $max_retries)..."
       echo "${INFO} sleep 10"
       echo "${INFO} done"
-      while ! wget -c -O - "${latestFile}" "${SNAPSHOT_URL}" | lz4 -d - | tar -xv -; do
+      while ! wget -c -O - "${downloadURL}" | lz4 -d - | tar -xv -; do
         if [ $retries -ge $max_retries ]; then
           echo "Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."
           exit 1
@@ -195,7 +196,7 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
       stop_downloading_ui
     else
       echo "${INFO} Downloading and decompressing the latest uncompressed snapshot file..."
-      echo "${INFO} while ! wget -c -O - ${latestFile} ${SNAPSHOT_URL} | tar -xv -; do"
+      echo "${INFO} while ! wget -c -O - ${downloadURL} | tar -xv -; do"
       echo "${INFO}   if [ $retries -ge $max_retries ]; then"
       echo "${INFO}     echo Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."
       echo "${INFO}     exit 1"
@@ -204,7 +205,7 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
       echo "${INFO}   echo Download failed, retrying in 10 seconds (retry $retries of $max_retries)..."
       echo "${INFO}   sleep 10"
       echo "${INFO} done"
-      while ! wget -c -O - "${latestFile}" "${SNAPSHOT_URL}" | tar -xv -; do
+      while ! wget -c -O - "${downloadURL}" | tar -xv -; do
         if [ $retries -ge $max_retries ]; then
           echo "${INFO} Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."
           exit 1
