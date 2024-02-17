@@ -16,7 +16,6 @@ services:
       KEYFILE_PASSPHRASE: null
       NETWORK: mainnet
       CUSTOM_UI_HTTP_PORT: 80
-      SNAPSHOT_URL: "https://pocket-snapshot.liquify.com/files/latest_compressed.txt"
       SNAPSHOT_MIRROR: "No"
       ARIA2_SNAPSHOT: "Yes"
       PRUNED_SNAPSHOT: "Yes"
@@ -24,7 +23,11 @@ services:
       EXTRA_OPTS: ""
     ulimits:
       nofile:
-        soft: 32768
-        hard: 32768
+        soft: 100000
+        hard: 100000
+    deploy:
+      resources:
+        limits:
+          memory: 32768M
 volumes:
   pocket-mainnet: {}
