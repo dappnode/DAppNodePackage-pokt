@@ -5,6 +5,6 @@
     },
     {
         "id": "0021",
-        "url": "http://besu.public.dappnode:8545"
+        "url": "http://geth.dappnode:8545"
     }
 ]
