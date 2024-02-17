@@ -108,10 +108,21 @@ function checkAvalancheState(url) {
     }
 }
 
-// function checkPoktState(url) {
-//     try {
-        
-//     }
+// TODO: Test Pokt State Functionality
+function checkPoktState(url) {
+    try {
+        url = `https://pocket-pocket.${domain}:443`
+        const localHeight = JSON.parse(shell.exec(`curl ${url}/v1/query/height`).stdout.trim());
+        const currentHeight = JSON.parse(shell.exec(`curl https://mainnet.rpc.grove.city/v1/e6abbfca/v1/query/height`).stdout.trim());
+        // const nodeHeight = JSON.parse(shell.exec(`pocket query height --datadir=/home/app/.pocket/ | tail -n +2`).stdout.trim());
+        if (currentHeight.result.height - localHeight.result.height === 0) {
+            return 2;
+        }
+        return 1;
+    } catch (error) {
+        return 0;
+    }
+}
 
 function checkStateChain(type, url) {
     switch (type) {
@@ -123,6 +134,7 @@ function checkStateChain(type, url) {
             return checkAvalancheState(url);
         case "pokt":
             return 2;
+            // return checkPoktState();
         default:
             return 0;
     }
@@ -209,7 +221,9 @@ const testnetChains = {
 const mainnetChains = {
     "0001": {"name": "Pokt", "type": "pokt"},
     "0003": {"name": "Avalanche", "type": "avalanche"},
-    "0007": {"name": "Polygon Bor", "type": "ethereum"},
+    "0004": {"name": "BSC Mainnet", "type": "ethereum"},
+    "0009": {"name": "Polygon Mainnet", "type": "ethereum"},
+    "0010": {"name": "BSC Archival", "type": "ethereum"},
     "0021": {"name": "Ethereum", "type": "ethereum"},
     "0022": {"name": "Ethereum Archival", "type": "ethereum"},
     "0026": {"name": "Goerli", "type": "ethereum"},
@@ -221,7 +235,14 @@ const mainnetChains = {
     "0066": {"name": "Arbitrum One", "type": "ethereum"},
     "0077": {"name": "Sepolia", "type": "ethereum"},
     "0078": {"name": "Sepolia Archival", "type": "ethereum"},
+    "0079": {"name": "Base Mainnet", "type": "ethereum"},
+    "0080": {"name": "Base Testnet (Goerli)", "type": "ethereum"},
     "0081": {"name": "Holesky Full Node", "type": "ethereum"},
+    "000B": {"name": "Polygon Archival", "type": "ethereum"},
     "000C": {"name": "Gnosis Chain Archival", "type": "ethereum"},
+    "000F": {"name": "Polygon Mumbai", "type": "ethereum"},
+    "03DF": {"name": "EVM AVAX DFK Subnet", "type": "avalanche"},
+    "A003": {"name": "Avalanche Archival", "type": "avalanche"},
+    "A053": {"name": "Optimism Archival", "type": "ethereum"},
 }
  
