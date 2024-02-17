@@ -111,8 +111,8 @@ function checkAvalancheState(url) {
 // TODO: Test Pokt State Functionality
 function checkPoktState(url) {
     try {
-        url = `https://pocket-pocket.${domain}:443`
-        const localHeight = JSON.parse(shell.exec(`curl ${url}/v1/query/height`).stdout.trim());
+        url = `https://pocket-pocket.${domain}`
+        const localHeight = JSON.parse(shell.exec(`curl -X POST -H {Content-Type:\ application/json} --json {} ${url}/v1/query/height`).stdout.trim());
         const currentHeight = JSON.parse(shell.exec(`curl https://mainnet.rpc.grove.city/v1/e6abbfca/v1/query/height`).stdout.trim());
         // const nodeHeight = JSON.parse(shell.exec(`pocket query height --datadir=/home/app/.pocket/ | tail -n +2`).stdout.trim());
         if (currentHeight.result.height - localHeight.result.height === 0) {
