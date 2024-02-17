@@ -1,11 +1,11 @@
-version: "3.4"
+version: "3.5"
 services:
   pocket:
-    image: "pocket.pocket.dnp.dappnode.eth:0.1.6"
+    image: "pocket.pocket.dnp.dappnode.eth:0.1.7"
     build:
       context: pocket
       args:
-        UPSTREAM_VERSION: RC-0.10.4
+        UPSTREAM_VERSION: RC-0.11.1
     restart: unless-stopped
     volumes:
       - "pocket-mainnet:/home/app/.pocket/"
