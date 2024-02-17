@@ -9,19 +9,15 @@
     },
     {
         "id": "0021",
-        "url": "http://geth.dappnode:8545"
+        "url": "http://besu.public.dappnode:8545"
     },
     {
         "id": "0022",
         "url": "http://erigon.dappnode:8545"
     },    
     {
-        "id": "0025",
-        "url": "http://rinkeby.dappnode:8545"
-    },
-    {
         "id": "0026",
-        "url": "http://goerli-geth.dappnode:8545"
+        "url": "http://goerli-erigon.dappnode:8545"
     },
     {
         "id": "0027",
