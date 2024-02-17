@@ -119,18 +119,19 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
     SNAPSHOT_URL="$MIRROR_URL$fileName"
   fi
 
+  #Download Snapshot Metedata
+  start_downloading_ui
+  mkdir -p /home/app/.pocket/
+  cd /home/app/.pocket/
+  echo "${INFO} Downloading snapshot file version..."
+  echo "${INFO} wget -O ${fileName} ${SNAPSHOT_URL}"
+  wget -O "${fileName}" "${SNAPSHOT_URL}"
+  echo "${INFO} ${fileName}: $(cat $fileName)"
+  latestFile=$(cat $fileName)
+  downloadURL="${MIRROR_URL}${latestFile}"
+
   if [ "$ARIA2_SNAPSHOT" == "Yes" ]; then
     echo "${INFO} Initializing with Aria2 SNAPSHOT, it could take several hours..."
-    start_downloading_ui
-    mkdir -p /home/app/.pocket/
-    cd /home/app/.pocket/
-    echo "${INFO} Downloading snapshot file version..."
-    echo "${INFO} wget -O ${fileName} ${SNAPSHOT_URL}"
-    wget -O "${fileName}" "${SNAPSHOT_URL}"
-    echo "${INFO} ${fileName}: $(cat $fileName)"
-    latestFile=$(cat $fileName)
-    downloadURL="${MIRROR_URL}${latestFile}"
-    
     echo "${INFO} Starting aria2 download..."
     echo "${INFO} aria2c -x16 -s16 -o ${latestFile} ${downloadURL}"
     aria2c -x16 -s16 -o "${latestFile}" "${downloadURL}"
@@ -158,28 +159,12 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
     ### WGET INLINE SNAPSHOT
     ##############################################################################################################
     echo "${INFO} Initializing with wget inline SNAPSHOT, it could take several hours..."
-    start_downloading_ui
-    mkdir -p /home/app/.pocket/
-    cd /home/app/.pocket/
-    echo "${INFO} Downloading snapshot file version..."
-    echo "${INFO} wget -O ${fileName} ${SNAPSHOT_URL}"
-    wget -O "${fileName}" "${SNAPSHOT_URL}"
-    echo "${INFO} $fileName: $(cat $fileName)"
-    latestFile=$(cat $fileName)
-    downloadURL="${MIRROR_URL}${latestFile}"
     max_retries=5
     retries=0
+
     if [ "$COMPRESSED_SNAPSHOT" == "Yes" ]; then
       echo "${INFO} Downloading and decompressing the latest compressed snapshot file..."
       echo "${INFO} while ! wget -c -O - ${downloadURL} | lz4 -d - | tar -xv -; do"
-      echo "${INFO} if [ $retries -ge $max_retries ]; then"
-      echo "${INFO}   echo Download failed after $max_retries retries, try using the Aria download method or a pruned snapshot if this fails multiple times. exiting..."
-      echo "${INFO}   exit 1"
-      echo "${INFO} fi"
-      echo "${INFO} retries=$((retries+1))"
-      echo "${INFO} echo Download failed, retrying in 10 seconds (retry $retries of $max_retries)..."
-      echo "${INFO} sleep 10"
-      echo "${INFO} done"
       while ! wget -c -O - "${downloadURL}" | lz4 -d - | tar -xv -; do
         if [ $retries -ge $max_retries ]; then
           echo "Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."
