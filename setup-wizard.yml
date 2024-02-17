@@ -17,7 +17,6 @@ fields:
       service: pocket
     title: Passphrase
     secret: true
-    pattern: ^[^$!\n]{8,50}$ 
     description: >-
       Passphrase to decrypt the keyfile.
       Note: Please do not use a `$` or `!` in your passphrase because it may cause issues with the Pokt UI and will break the CLI used in advanced troubleshooting (Doesn't make it impossible, but adds a step). If your wallet already created has these characters please change your keyfile passphrase by going [here](https://wallet.pokt.network/) input your wallet via its private key or the keyfile and its original password, once you've logged into your wallet via one of those 2 methods you can export the wallet as a keyfile and it will have you set a new keyfile password, be sure to make it compliant with these rules. Upload this keyfile to your node and enter the new compliant password to begin the app and click update.
