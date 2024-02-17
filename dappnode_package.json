@@ -1,6 +1,6 @@
 {
   "name": "pocket.dnp.dappnode.eth",
-  "version": "0.1.7",
+  "version": "0.1.6",
   "upstreamVersion": "RC-0.11.1",
   "upstreamRepo": "pokt-network/pocket-core",
   "upstreamArg": "UPSTREAM_VERSION",
