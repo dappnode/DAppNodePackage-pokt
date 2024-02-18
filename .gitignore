@@ -2,3 +2,4 @@
 build_*
 releases.json
 pocket/ui/yarn.lock
+.DS_Store
