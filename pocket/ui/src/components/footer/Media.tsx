@@ -4,7 +4,7 @@ import { FaDiscord, FaDiscourse, FaGithub, FaTwitter } from "react-icons/fa";
 export default function Media() {
   return (
     <div className="footer-media">
-      <a href="https://github.com/dappnode">
+      <a href="https://github.com/dappnode/DAppNodePackage-pokt">
         <FaGithub />
       </a>
       <a href="https://discord.gg/dappnode">

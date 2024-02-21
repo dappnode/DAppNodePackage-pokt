@@ -1,9 +1,10 @@
 
 # Dappnode Pokt
 
-Hardware Requirements: 4 CPU’s (or vCPU’s) | 16 GB RAM | 800GB Disk for POKT node + disk space for nodes to relay
+Hardware Requirements: 4 CPU’s (or vCPU’s) | 32 GB RAM | 1TB+ Disk for full POKT Chain and node + additional disk space for other chains to relay.
+  - Pruned Nodes require under 100 GB for the Pokt node, but the Pokt chain cannot be relayed as it's pruned.
 Ports: Expose Pocket RPC via HTTPS (Default :8081) and P2P port (Default: 26656)  
-(With UPnP disabled on your router, please, map TCP 26656 and TCP 443 to your Dappnode)  
+  - This is handled automatically on install (however with UPnP disabled on your router, please map TCP 26656 and TCP 443 to your Dappnode)  
 
 Check your [wallet](https://wallet.pokt.network/)  
 Check the [explorer](https://explorer.pokt.network/)
