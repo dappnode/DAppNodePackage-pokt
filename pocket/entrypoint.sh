@@ -7,6 +7,49 @@ ERROR="[ ERROR ]"
 WARN="[ WARN ]"
 INFO="[ INFO ]"
 
+#Determine Global ENVs for Execution Clients on Goerli and Mainnet
+case $_DAPPNODE_GLOBAL_EXECUTION_CLIENT_PRATER in
+"goerli-geth.dnp.dappnode.eth")
+    GLOBAL_EXECUTION_CLIENT_GOERLI="http://goerli-geth.dappnode:8545"
+    ;;
+"goerli-nethermind.dnp.dappnode.eth")
+    GLOBAL_EXECUTION_CLIENT_GOERLI="http://goerli-nethermind.dappnode:8545"
+    ;;
+"goerli-besu.dnp.dappnode.eth")
+    GLOBAL_EXECUTION_CLIENT_GOERLI="http://goerli-besu.dappnode:8545"
+    ;;
+"goerli-erigon.dnp.dappnode.eth")
+    GLOBAL_EXECUTION_CLIENT_GOERLI="http://goerli-erigon.dappnode:8545"
+    ;;
+*)
+    echo "Unknown value for _DAPPNODE_GLOBAL_EXECUTION_CLIENT_PRATER: $_DAPPNODE_GLOBAL_EXECUTION_CLIENT_PRATER"
+    GLOBAL_EXECUTION_CLIENT_GOERLI="http://goerli-geth.dappnode:8545"
+    ;;
+esac
+export GLOBAL_EXECUTION_CLIENT_GOERLI=$GLOBAL_EXECUTION_CLIENT_GOERLI
+
+case $_DAPPNODE_GLOBAL_EXECUTION_CLIENT_MAINNET in
+"geth.dnp.dappnode.eth")
+    GLOBAL_EXECUTION_CLIENT_MAINNET="http://geth.dappnode:8545"
+    ;;
+"nethermind.public.dappnode.eth")
+    GLOBAL_EXECUTION_CLIENT_MAINNET="http://nethermind.public.dappnode:8545"
+    ;;
+"besu.public.dappnode.eth")
+    GLOBAL_EXECUTION_CLIENT_MAINNET="http://besu.public.dappnode:8545"
+    ;;
+"erigon.dnp.dappnode.eth")
+    GLOBAL_EXECUTION_CLIENT_MAINNET="http://erigon.dappnode:8545"
+    ;;
+*)
+    echo "Unknown value for _DAPPNODE_GLOBAL_EXECUTION_CLIENT_MAINNET: $_DAPPNODE_GLOBAL_EXECUTION_CLIENT_MAINNET"
+    GLOBAL_EXECUTION_CLIENT_MAINNET="http://geth.dappnode:8545"
+    ;;
+esac
+export GLOBAL_EXECUTION_CLIENT_MAINNET=$GLOBAL_EXECUTION_CLIENT_MAINNET
+
+
+
 # Replace domain
 export DOMAIN=${_DAPPNODE_GLOBAL_DOMAIN}
 envsubst < /home/app/.pocket/config/config_template.json > /home/app/.pocket/config/config.json
