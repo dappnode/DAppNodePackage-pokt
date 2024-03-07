@@ -30,9 +30,10 @@ fields:
     enum: 
       - "Yes"
       - "No"
+    default: "Yes"
     description: >-
-      If you have limited disk space and cannot hold the full ~1TB Pokt chain or have issues downloading the chain snapshot due to disconnections from an unstable connection, etc., then you can download a pruned snapshot of the Pokt chain that currently is only ~60gb instead of ~1TB.
-      Note: THIS PARAMETER CANNOT BE CHANGED once set initially during setup before snapshot download.  While you can technically change the setting to non-pruned after downloading the pruned snapshot, it will not work to relay as it's pruned down very heavily and if you enable fulll snapshot after downloading the pruned snapshot it will enable the ability to select Potk as a relay chain to stake in the Pokt UI but because it's not a full node it may possibly get your node penalties or which will a If you use a pruned snapshot you cannot relay the Pokt chain on your node since you only have the data needed to keep you verifying the chain but not storing any unessecary but realyed data. The app may automatically disable this option for you but if it doesn't just be sure not to enable relaying Pokt Mainnet Chain (0001) if you downloaded a pruned snapshot.
+      If you have limited disk space and cannot hold the full ~1.1TB Pokt chain or have issues downloading the chain snapshot due to disconnections from an unstable connection, etc., then you can download a pruned snapshot of the Pokt chain that currently is only ~60gb instead of ~1TB.
+      Note: THIS PARAMETER CANNOT BE CHANGED once set initially during setup, before the snapshot download begins.  While you can technically change the setting to non-pruned after downloading the pruned snapshot, it will not work to relay as the Pokt chain is pruned down very heavily and if you enable full snapshot after downloading the pruned snapshot it may enable the ability to select Pokt as a relay chain to stake in the Pokt UI but because it's not nearly a full node it may possibly result in penalties for your node or if you choose to use a pruned snapshot to relay that you cannot relay the full Pokt chain on your node since you only have the pruned data needed to keep you verifying the chain but not storing any (technically and normally not needed data: Historical Transactions, Historical states, and Historical blocks, etc.). This app does or shortly will automatically disable this option for you but if it doesn't just be sure not to enable relaying/staking the Pokt Mainnet Chain (0001) if you downloaded a pruned snapshot, or pruned your own chain.
   - id: inlineDecompression
     target:
       type: environment
@@ -43,6 +44,7 @@ fields:
     enum: 
       - "Yes"
       - "No"
+    default: "Yes"
     description: >-
       If you have limited disk space, and do not have room for ~2TB to download and extract the full snapshot (as of Late December 2023 the full compressed snapshot download is over 730 GB and needs to be downloaded fully and then extracted, using an enormous amount of diskspace during the initial download and extraction but once it's done it will be only ~ 800GB total for the full (unpruned, read more on pruned snapshots below) Pokt Chain.  If you don't have the space for this, but have have enugh space for the ~1TB Pokt blockchain, you can attempt to use inline decompression, this saves from needing to have double the disk space, however if you dont have a very reliable high badwidth internet connection, this method will fail and need to be restarted from the beginning and cannot be restarted from where it left off, select `No` if you would like to try this way. 
       If you want to run a full node and have a lot of free space for install, select `Yes`.
@@ -56,6 +58,7 @@ fields:
     enum: 
       - "Yes"
       - "No"
+    default: "Yes"
     description: >-
       You can choose to download the snapshot file as a .tar archive, or as a compressed lz4.tar archive.  The lz4.tar archive is slightly smaller, but takes more system resources to decompress.  If you have a slower internet connection, or a fast node, and want to save download time and bandwidth, select `No`.
   - id: snapshotMirror
@@ -68,7 +71,106 @@ fields:
     enum: 
       - "No"
       - "Yes"
+    default: "No"
     description: >-
       You can choose to download the snapshot file from the default master server in the U.K. which is the default option and is best to select if installing on a Monday, new snapshots are uploaded once a week on Mondays at 00:00UTC, first released on the UK master server, then is copied to the slave mirrors in the U.S. and Japan.
       It's often best to leave this option as the default master domain which auto-selects the best mirror for your location), but on Mondays at 00:00UTC, the master server is updated first, and the slave mirrors are updated a few hours later, so if you are installing on a Monday, you may want to select `Yes` to use the U.K master server which will have the most up to date snapshot ready for download first before any of the other mirrors that would be auto-selected if you were not already in the Master UK zone anyway.
-
+  - id: advancedConfig
+    description: >-
+      If you are an advanced user or troubleshooting with support and would like to configure the config file with more advanced configuration options such as: max peers, session rollover, edit seeds from defaults, set persistent peers, select `Yes`.
+    target:
+      type: environment
+      name: ADVANCED_CONFIG
+      service: pocket
+    title: "Advanced Configuration Options?"
+    enum: 
+      - "Yes"
+      - "No"
+  - id: maxPeersInbound
+    target:
+      type: environment
+      name: MAX_PEERS_INBOUND
+      service: pocket
+    title: "Max Inbound Peers"
+    description: >-
+      The maximum number of inbound peers that your node will accept.  The default is 28, but you can set this to a higher/lower number if you have limited bandwidth or system resources resulting in poor performance.
+      Be sure to set this to a number that is less than the number of peers you have set in the `persistentPeers` field if you have set that field.
+      Also if be sure to increase this value before increasing Outbound peers.
+    pattern: "^(?:[0-9]|[1-3][0-9]|40)$"
+    patternMessage: "Please enter a whole number between 0 and 40."
+    required: true
+    default: 28
+    if: { "advancedConfig": { "emum": ["Yes"] } }
+  - id: maxPeersOutbound
+    target:
+      type: environment
+      name: MAX_PEERS_OUTBOUND
+      service: pocket
+    title: "Max Outbound Peers"
+    description: >-
+      The maximum number of outbound peers that your node will connect to.  The default is 7, but you can set this to a higher/lower number if you have limited bandwidth or system resources resulting in poor performance, lower this number.
+      Be sure to set this to a number that is less than the number of peers you have set in the `persistentPeers` field if you have set that field.
+      Also if be sure to keep this value at default of 7 before decreasing Inbound peers, if you have unlimited fast bandwidth or bad peers shown in the logs, you may want to increase this value above the default of 7.
+    pattern: "^(?:[0-9]|1[0-9]|20)$"
+    patternMessage: "Please enter a whole number between 0 and 40."
+    required: true
+    default: 7
+    if: { "advancedConfig": { "emum": ["Yes"] } }
+  - id: sessionRollover
+    target:
+      type: environment
+      name: SESSION_ROLLOVER
+      service: pocket
+    title: "Session Rollover"
+    description: >-
+      Session Rollover is an advanced option to allow claims+proofs to rollover to the next session, by default this is set to 0 and nothing rolls over sessions, possibly decreasing rewards.
+      If you would like to possibly increase rewards by allowing claims+proofs to rollover to the next session, set this to 1, this may have a negative effect on your node's performance and may not be recommended for all nodes.
+    enum:
+      - 0
+      - 1
+    required: true
+    default: 0
+    if: { "advancedConfig": { "emum": ["Yes"] } }
+  - id: persistentPeers
+    target:
+      type: environment
+      name: PERSISTENT_PEERS
+      service: pocket
+    title: "Persistent Peers"
+    description: >-
+      A comma separated list of persistent peers to connect to.  If you have a list of peers that you would like to connect to, you can enter them here.  If you do not have a list of peers, leave this field blank.
+      Note: If you have a list of persistent peers set, be sure to set the `maxPeersInbound` and `maxPeersOutbound` fields to a number that is higher than the number of persistent peers you have set here.
+    pattern: "^(?:[a-zA-Z0-9]+@[0-9]+(?:\\.[0-9]+){3}:[0-9]+,?)+$"
+    patternMessage: "Please enter a comma separated list of known peers in the format `<peerAddress>@<peerIP>:<peerP2pPort>`."
+    if: { "advancedConfig": { "emum": ["Yes"] } }
+  - id: seeds
+    target:
+      type: environment
+      name: SEEDS
+      service: pocket
+    title: "Seeds"
+    description: >-
+      A comma separated list of seeds to connect to.  If you have a list of seeds that you would like to connect to, you can enter them here.  If you do not have a list of seeds, leave this field blank.
+      Note: If you leave this field blank, the default seeds will be applied to your config file, if you have a list of seeds set here, the default seeds will be overwritten with your selection of seeds here.  If you want to add seeds to the default seeds, you can add them here in addition to the default seeds `7c0d7ec36db6594c1ffaa99724e1f8300bbd52d0@seed1.mainnet.pokt.network:26662,cdcf936d70726dd724e0e6a8353d8e5ba5abdd20@seed2.mainnet.pokt.network:26663,74b4322a91c4a7f3e774648d0730c1e610494691@seed3.mainnet.pokt.network:26662,b3235089ff302c9615ba661e13e601d9d6265b15@seed4.mainnet.pokt.network:26663`
+    default: "7c0d7ec36db6594c1ffaa99724e1f8300bbd52d0@seed1.mainnet.pokt.network:26662,cdcf936d70726dd724e0e6a8353d8e5ba5abdd20@seed2.mainnet.pokt.network:26663,74b4322a91c4a7f3e774648d0730c1e610494691@seed3.mainnet.pokt.network:26662,b3235089ff302c9615ba661e13e601d9d6265b15@seed4.mainnet.pokt.network:26663"
+    pattern: "^(?:[a-zA-Z0-9]+@[0-9]+(?:\\.[0-9]+){3}:[0-9]+,?)+$"
+    patternMessage: "Please enter a comma separated list of seeds in the format `<seedAddress>@<seedIP>:<seedP2pPort>`."
+    if: { "advancedConfig": { "emum": ["Yes"] } }
+  - id: backFirePrevention
+    target:
+      type: environment
+      name: BACKFIRE_PREVENTION
+      service: pocket
+    title: "Backfire Prevention Enabled?"
+    description: >-
+      Backfire Prevention is an advanced option to attempt to prevent your node from processing claims that may result in a reward lower than the cost of the claim.
+      Leave this setting at 0 if you do not want to enable backfire prevention, which is the default Pokt setting.
+      By setting this value to 1, you are allowing your node to prevent claims that may result in a reward lower than the cost of the claim, which is 0.01 Pokt currently.
+      Note: This is not an exact setting as the claim reward value is an estimate until the proof is submitted, so this setting may not be 100% effective in preventing claims that may result in a reward lower than the cost of the claim.
+      Also note that this setting may have a larger effect on nodes staked in the lowest bracket as they earn far less rewards than those in upper breackets, Also this setting may have a negative effect on your node's performance for chains with very little activity.
+    enum:
+      - 0
+      - 1
+    required: true
+    default: 0
+    if: { "advancedConfig": { "emum": ["Yes"] } }

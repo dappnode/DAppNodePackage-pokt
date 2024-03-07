@@ -20,6 +20,13 @@ services:
       ARIA2_SNAPSHOT: "Yes"
       PRUNED_SNAPSHOT: "Yes"
       COMPRESSED_SNAPSHOT: "Yes"
+      BACKFIRE_PROTECTION: false
+      PERSISTENT_PEERS: ""
+      MAX_PEERS_INBOUND: 28
+      MAX_PEERS_OUTBOUND: 7
+      SEEDS: "7c0d7ec36db6594c1ffaa99724e1f8300bbd52d0@seed1.mainnet.pokt.network:26662,cdcf936d70726dd724e0e6a8353d8e5ba5abdd20@seed2.mainnet.pokt.network:26663,74b4322a91c4a7f3e774648d0730c1e610494691@seed3.mainnet.pokt.network:26662,b3235089ff302c9615ba661e13e601d9d6265b15@seed4.mainnet.pokt.network:26663"
+      SESSION_ROLLOVER: 0
+      ADVANCED_CONFIG: "No"
       EXTRA_OPTS: ""
     ulimits:
       nofile:

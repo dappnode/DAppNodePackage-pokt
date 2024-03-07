@@ -48,8 +48,6 @@ function App() {
       chains.forEach((chain: Chain) => {
         if (currentAccount?.node && currentAccount.node.chains.includes(chain.id)) {
           handleChange(chain.id, true);
-        } else if (chain.name.toLowerCase() === 'pokt') {
-          handleChange(chain.id, true);
         }
       });
       setAvailableChains(chains);
@@ -71,7 +69,7 @@ function App() {
     try {
       setTxhash(null);
       if ((amountToStake ?? 0) < 15100) {
-        throw new Error(`Minimum amount to stake is 15100 POKT`);
+        throw new Error(`Minimum amount to stake is 15,100 POKT`);
       }
       if ((amountToStake ?? 0) > ((Number(account?.amount ?? 0) + Number(account?.amountStaked ?? 0)) / 1000000) - 1) {
         throw new Error(`You do not have enough POKT to stake`);
@@ -130,6 +128,7 @@ function App() {
     switch (state) {
       case 1: return "Syncing";
       case 2: return "Running";
+      case 3: return "Running but Pruned";
       default: return "Not installed";
     }
   }
@@ -178,7 +177,7 @@ function App() {
               minLength={5}
             />
             <Form.Text>
-              The amount of POKT to stake. Must be higher than the current value of the StakeMinimum parameter, found <a href="https://docs.pokt.network/learn/economics/nodes/#node-staking" target="_blank" rel="noreferrer">here</a>.
+              The amount of POKT to stake. Must be higher than the current value of the StakeMinimum parameter, found <a href="https://docs.pokt.network/node-operators/manual-node-setup-guide/part-5-going-live#staking-your-node" target="_blank" rel="noreferrer">here</a>.
             </Form.Text>
           </div>
           <div>
@@ -190,7 +189,7 @@ function App() {
                   onChange={e => {handleChange(chain.id, e.target.checked)}}
                   defaultChecked={selectedChains?.get(chain.id) ?? false}
                   label={`${chain.name} - ${chainState(chain.state)}`}
-                  disabled={chain.name.toLowerCase() === 'pokt' ? true : chain.state !== 2}
+                  disabled={chain.state !== 2}
                 />
               ))
             }
@@ -207,12 +206,12 @@ function App() {
             </div>
             <div>
             <Form.Text>
-              Ensure the node is all the way synced before proceeding to stake the validator.
+              Ensure your Pokt Chain is fully synced before proceeding to stake the validator.
             </Form.Text>
             </div>
             <div>
             <Form.Text>
-              You can ensure your node is fully synced by checking the block height at <a href="https://explorer.pokt.network" target="_blank" rel="noreferrer">https://explorer.pokt.network</a>
+              You can ensure your node is fully synced by checking the block height at <a href="https://poktscan.com" target="_blank" rel="noreferrer">https://explorer.pokt.network</a>
             </Form.Text>
             </div>
             <div>
@@ -239,7 +238,7 @@ function App() {
             </div>
             <div>
             <Form.Text>
-              Stake = Initial Stake. Re-stake = staking again after changing chains or amount staked.
+              Stake = Initial Stake. Re-stake = staking again after changing chains or amount of Pokt staked.
             </Form.Text>
             </div>
           </div>
@@ -251,7 +250,7 @@ function App() {
       <ToastContainer
         position="bottom-center"
         pauseOnHover={true}
-        autoClose={5000}
+        autoClose={10000}
         hideProgressBar={false}
         newestOnTop={false}
         rtl={false}
