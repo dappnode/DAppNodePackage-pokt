@@ -88,7 +88,7 @@ PID_SIMULATE_RELAY=$!
 sleep 2
 OUTPUT=$(curl -X POST --data '{"relay_network_id":"0021","payload":{"data":"{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0x8D97689C9818892B700e27F316cc3E41e17fBeb9\", \"latest\"],\"id\":1}","method":"POST","path":"","headers":{}}}' https://pocket-pocket.${_DAPPNODE_GLOBAL_DOMAIN}/v1/client/sim)
 if echo "$OUTPUT" | grep "no such host"; then
-  echo "${ERROR} It has not been possible to simulate relay"
+  echo "${ERROR} It has not been possible to simulate relays"
 else
   echo "${INFO} OK"
 fi
@@ -119,7 +119,7 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
     SNAPSHOT_URL="$MIRROR_URL$fileName"
   fi
 
-  #Download Snapshot Metedata
+  #Download Snapshot Metedata for Latest Snapshot File
   start_downloading_ui
   mkdir -p /home/app/.pocket/
   cd /home/app/.pocket/
@@ -142,11 +142,53 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
     #     echo "${INFO} aria2c -x16 -s16 -o ${latestFile} ${downloadURL}"
     #     aria2c -x16 -s16 -o "${latestFile}" "${downloadURL}"
     # done
+    ################################################################
+    # # BSC aria restart script for aria2c
+    #!/bin/bash
+# if [ $# -eq 1 ]; then 
+#         dir=$(pwd)
+# elif [ $# -eq 2 ]; then 
+#         dir=$2
+# else 
+#         echo "Usage: $0 <uri> [filepath] "
+#         exit 1
+# fi
+# uri=$1
+# filename=$(basename "$uri")
+# status=-1
+# while (( status != 0 ))
+# do 
+#         PIDS=$(pgrep '^aria2c$')
+#         if [ -z "$PIDS" ]; then
+#                 echo "aria2c -d $dir -o $filename -s14 -x14 -k100M $uri"
+#                 aria2c -d $dir -o $filename -s14 -x14 -k100M $uri
+#         fi
+#         status=$?
+#         pid=$(pidof aria2c)
+#         wait $pid 
+#         echo aria2c exit.
+#         case $status in 
+#                 3)
+#                         echo file not exist.
+#                         exit 3
+#                         ;;
+#                 9)
+#                         echo No space left on device.
+#                         exit 9
+#                         ;;
+#                 *)
+#                         continue
+#                         ;;
+#         esac
+# done
+# echo download succeed.
+# exit 0
+    ################################################################
 
     echo "${INFO} Download complete!"
 
     # Extract the downloaded file to /home/app/.pocket/ directory
-    echo "${INFO} Extracting the downloaded file to /home/app/.pocket/..."
+    echo "${INFO} Extracting the downloaded file to /home/app/.pocket/ ..."
     extract_file
 
     # Delete the source file

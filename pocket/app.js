@@ -108,17 +108,23 @@ function checkAvalancheState(url) {
     }
 }
 
-// TODO: Test Pokt State Functionality
+// TODO: Test Pokt State Functionality + Remove other params commented out when successful with current params
 function checkPoktState(url) {
     try {
-        url = `https://pocket-pocket.${domain}`
-        const localHeight = JSON.parse(shell.exec(`curl -X POST -H {Content-Type:\ application/json} --json {} ${url}/v1/query/height`).stdout.trim());
-        const currentHeight = JSON.parse(shell.exec(`curl https://mainnet.rpc.grove.city/v1/e6abbfca/v1/query/height`).stdout.trim());
-        // const nodeHeight = JSON.parse(shell.exec(`pocket query height --datadir=/home/app/.pocket/ | tail -n +2`).stdout.trim());
-        if (currentHeight.result.height - localHeight.result.height === 0) {
+        url = `tcp://localhost:26657`;
+        const localNodeHeight = JSON.parse(shell.exec(`curl ${url}/status`).stdout.trim());
+        //if (localNodeHeight.result.sync_info.catching_up === false && prunedSnapshot.result === ........
+        const prunedSnapshot = JSON.parse(shell.exec(`echo $PRUNED_SNAPSHOT`).stdout.trim());
+        //const localHeight = JSON.parse(shell.exec(`curl -X POST -H {Content-Type:\ application/json} --json {} ${url}/v1/query/height`).stdout.trim());
+        //const currentHeight = JSON.parse(shell.exec(`curl https://mainnet.rpc.grove.city/v1/xxxxxxxx/v1/query/height`).stdout.trim());
+        //const nodeHeight = JSON.parse(shell.exec(`pocket query height --datadir=/home/app/.pocket/ | tail -n +2`).stdout.trim());
+        if (localNodeHeight.result.sync_info.catching_up === false && prunedSnapshot.result === "Yes") {
+            return 3;
+        } else if (localNodeHeight.result.sync_info.catching_up === false && prunedSnapshot.result === "No") {
             return 2;
+        } else if (localNodeHeight.result.sync_info.catching_up === true) {
+            return 1;
         }
-        return 1;
     } catch (error) {
         return 0;
     }
@@ -133,8 +139,7 @@ function checkStateChain(type, url) {
         case "avalanche":
             return checkAvalancheState(url);
         case "pokt":
-            return 2;
-            // return checkPoktState();
+            return checkPoktState();
         default:
             return 0;
     }
