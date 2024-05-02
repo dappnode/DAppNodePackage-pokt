@@ -2,7 +2,7 @@
     "tendermint_config": {
         "RootDir": "/home/app/.pocket",
         "ProxyApp": "tcp://127.0.0.1:26658",
-        "Moniker": "node1-DOMAIN",
+        "Moniker": "${DOMAIN}",
         "FastSyncMode": true,
         "DBBackend": "goleveldb",
         "LevelDBOptions": {
@@ -61,8 +61,8 @@
             "UPNP": false,
             "AddrBook": "config/addrbook.json",
             "AddrBookStrict": false,
-            "MaxNumInboundPeers": "${MAX_PEERS_INBOUND}",
-            "MaxNumOutboundPeers": "${MAX_PEERS_OUTBOUND}",
+            "MaxNumInboundPeers": 28,
+            "MaxNumOutboundPeers": 7,
             "UnconditionalPeerIDs": "",
             "PersistentPeersMaxDialPeriod": 0,
             "FlushThrottleTimeout": 100000000,
@@ -134,7 +134,7 @@
         "tendermint_uri": "tcp://localhost:26657",
         "keybase_name": "pocket-keybase",
         "rpc_port": "8081",
-        "client_session_sync_allowance": "${SESSION_ROLLOVER}",
+        "client_session_sync_allowance": 0,
         "client_block_sync_allowance": 10,
         "max_evidence_cache_entries": 500,
         "max_session_cache_entries": 500,
@@ -157,6 +157,6 @@
         "generate_token_on_start": false,
         "lean_pocket": false,
         "lean_pocket_user_key_file": "lean_nodes_keys.json",
-        "prevent_negative_reward_claim": "${BACKFIRE_PROTECTION}"
+        "prevent_negative_reward_claim": false
     }
 }
