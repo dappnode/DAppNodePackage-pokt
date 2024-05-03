@@ -168,7 +168,6 @@ fields:
       name: BACKFIRE_PREVENTION
       service: pocket
     title: "Backfire Prevention Enabled?"
-    type:  boolean
     description: >-
       Backfire Prevention is an advanced option to attempt to prevent your node from processing claims that may result in a reward lower than the cost of the claim.
       Leave this setting as `false` if you do not want to enable backfire prevention, which is the default Pokt setting.
