@@ -15,7 +15,7 @@ More information about the source project can be found at their [Official Websit
 
 <!--What can you do with this package?: -->
 
-Support your favorite applications and networks by sharing access to your node's enpoint via Pokt Network's by providing decentralized access for developers and users building and running applications on the Pokt Network. Join this novel decentalized infrastructure network that rewards servicer and validator nodes for the necessary work to keep public RPC endpoints for dozens of different blockchains properly decentralized and secure.
+Support your favorite applications and networks by sharing access to your node's endpoint via Pokt Network's by providing decentralized access for developers and users building and running applications on the Pokt Network. Join this novel decentalized infrastructure network that rewards servicer and validator nodes for the necessary work to keep public RPC endpoints for dozens of different blockchains properly decentralized and secure.
 
 ### Requirements
 
