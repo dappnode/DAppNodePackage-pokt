@@ -1,7 +1,7 @@
 import { Badge } from "react-bootstrap";
 import { FaWallet } from "react-icons/fa";
 import { Account } from '../../../types';
-import { upoktToPokt } from "../../../Functions";
+import { upoktToPokt } from '../../../Functions';
 
 import "./Wallet.scss";
 
@@ -10,11 +10,6 @@ export default function Wallet({
 }: {
   account: Account | undefined;
 }) {
-
-// function shortenAddress(address: string) {
-//    return address.substring(0, 4) + "..." + address.substring(address.length - 4);
-  }
-
   return (
     <div className="wallet">
       {account && (
