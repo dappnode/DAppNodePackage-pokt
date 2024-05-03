@@ -8,8 +8,7 @@ fields:
     title: Wallet keyfile 
     description: >-
       Upload an account using an Encrypted ASCII armored keyfile. You can create a new [keyfile/wallet here](https://wallet.pokt.network/) and then upload the generated keyfile.json here.
-      Currently the Pocket Web Wallet allows for making these armored keyfiles needed to stake usisng a few methods, please use the keyfile option, if you use Ledger you cannot stake with that account, you can only hold coins not staked or as a cold wallet for holding non-custodial rewards in an offline wallet though it will matter more once we introduce non-custodial staking where you can stake only th minimum required stake while all rewards go to a controller address, which can be offline to keep from earning rewards in your hot wallet needed to Stake with Pokt(Make sure it's a custodial address, we do not yet have non custodial funtionality but it's on our short term roadmap along with allowing for LeanPocket use, a way to easily run multiple separate staked addresses on one machine and package using just a single Pocket Chain Instance) 
-      Note: Please do not use a `$` or `!` in your passphrase because it may cause issues with the Pokt UI and will break the CLI.
+      Currently the Pocket Web Wallet allows for making these armored keyfiles needed to stake usisng a few methods, please use the keyfile option, if you use Ledger you cannot stake with that account (currently at least, there is a project in progress to enable this functionality), you can only hold coins not staked or as a cold wallet for holding non-custodial rewards in an offline wallet though it will matter more once we introduce non-custodial staking where you can stake only th minimum required stake while all rewards go to a controller address, which can be offline to keep from earning rewards in your hot wallet needed to Stake with Pokt(Make sure it's a custodial address, we do not yet have non custodial funtionality but it's on our short term roadmap along with allowing for LeanPocket use, a way to easily run multiple separate staked addresses on one machine and package using just a single Pocket Chain Instance) 
   - id: passphrase
     target:
       type: environment
@@ -17,9 +16,11 @@ fields:
       service: pocket
     title: Passphrase
     secret: true
+    required: true
     description: >-
       Passphrase to decrypt the keyfile.
-      Note: Please do not use a `$` or `!` in your passphrase because it may cause issues with the Pokt UI and will break the CLI used in advanced troubleshooting (Doesn't make it impossible, but adds a step). If your wallet already created has these characters please change your keyfile passphrase by going [here](https://wallet.pokt.network/) input your wallet via its private key or the keyfile and its original password, once you've logged into your wallet via one of those 2 methods you can export the wallet as a keyfile and it will have you set a new keyfile password, be sure to make it compliant with these rules. Upload this keyfile to your node and enter the new compliant password to begin the app and click update.
+      Note: If you get errors in the logs while starting up that keeps the logs in a loop, or if you get errors while attempting to stake/re-stake, unjail, unstake, or sign messages, there may be an issue with your chosen passphrase. There have been issues in the past where certain special characters such as `$`, `!`, and some other more obscure special characters in your passphrase may cause issues with the Pokt UI may break the CLI used in our backend.
+      Please reach out to Dappnode support on Discord if you have issues like this, as we discovvered the root of the issue and beleive we have resolved this issue, though we havent tested every edge case, so please contact support if you have an issue with your passphrase.
   - id: prunedSnapshot
     target:
       type: environment
@@ -60,7 +61,7 @@ fields:
       - "No"
     default: "Yes"
     description: >-
-      You can choose to download the snapshot file as a .tar archive, or as a compressed lz4.tar archive.  The lz4.tar archive is slightly smaller, but takes more system resources to decompress.  If you have a slower internet connection, or a fast node, and want to save download time and bandwidth, select `No`.
+      You can choose to download the snapshot file as a .tar archive, or as a compressed .lz4.tar archive.  The .lz4.tar archive is slightly smaller, but takes more system resources to decompress.  If you have a slower internet connection, or a fast node, and want to save download time and bandwidth, feel free to select `No` in most cases you'll want the Compressed Snapshot.
   - id: snapshotMirror
     target:
       type: environment
@@ -77,7 +78,7 @@ fields:
       It's often best to leave this option as the default master domain which auto-selects the best mirror for your location), but on Mondays at 00:00UTC, the master server is updated first, and the slave mirrors are updated a few hours later, so if you are installing on a Monday, you may want to select `Yes` to use the U.K master server which will have the most up to date snapshot ready for download first before any of the other mirrors that would be auto-selected if you were not already in the Master UK zone anyway.
   - id: advancedConfig
     description: >-
-      If you are an advanced user or troubleshooting with support and would like to configure the config file with more advanced configuration options such as: max peers, session rollover, edit seeds from defaults, set persistent peers, select `Yes`.
+      If you are an advanced user or troubleshooting with support and would like to configure the config file with more advanced configuration options such as: max peers, session rollover, edit seeds from defaults, set persistent peers, etc. select `Yes` to display these options.
     target:
       type: environment
       name: ADVANCED_CONFIG
@@ -86,36 +87,40 @@ fields:
     enum: 
       - "Yes"
       - "No"
+    default: "No"
+    required: true
   - id: maxPeersInbound
     target:
       type: environment
       name: MAX_PEERS_INBOUND
       service: pocket
     title: "Max Inbound Peers"
+    type: number
     description: >-
       The maximum number of inbound peers that your node will accept.  The default is 28, but you can set this to a higher/lower number if you have limited bandwidth or system resources resulting in poor performance.
       Be sure to set this to a number that is less than the number of peers you have set in the `persistentPeers` field if you have set that field.
       Also if be sure to increase this value before increasing Outbound peers.
     pattern: "^(?:[0-9]|[1-3][0-9]|40)$"
     patternMessage: "Please enter a whole number between 0 and 40."
-    required: true
     default: 28
-    if: { "advancedConfig": { "emum": ["Yes"] } }
+    required: true
+    if: { "advancedConfig": { "enum": ["Yes"] } }
   - id: maxPeersOutbound
     target:
       type: environment
       name: MAX_PEERS_OUTBOUND
       service: pocket
     title: "Max Outbound Peers"
+    type: number
     description: >-
       The maximum number of outbound peers that your node will connect to.  The default is 7, but you can set this to a higher/lower number if you have limited bandwidth or system resources resulting in poor performance, lower this number.
       Be sure to set this to a number that is less than the number of peers you have set in the `persistentPeers` field if you have set that field.
       Also if be sure to keep this value at default of 7 before decreasing Inbound peers, if you have unlimited fast bandwidth or bad peers shown in the logs, you may want to increase this value above the default of 7.
     pattern: "^(?:[0-9]|1[0-9]|20)$"
-    patternMessage: "Please enter a whole number between 0 and 40."
+    patternMessage: "Please enter a whole number between 0 and 20."
     required: true
     default: 7
-    if: { "advancedConfig": { "emum": ["Yes"] } }
+    if: { "advancedConfig": { "enum": ["Yes"] } }
   - id: sessionRollover
     target:
       type: environment
@@ -124,13 +129,13 @@ fields:
     title: "Session Rollover"
     description: >-
       Session Rollover is an advanced option to allow claims+proofs to rollover to the next session, by default this is set to 0 and nothing rolls over sessions, possibly decreasing rewards.
-      If you would like to possibly increase rewards by allowing claims+proofs to rollover to the next session, set this to 1, this may have a negative effect on your node's performance and may not be recommended for all nodes.
+      If you would like to possibly increase rewards by allowing claims+proofs to rollover to the next session, set this to `1`, though this may have a negative effect on your node's performance and may not be recommended for all nodes.
     enum:
-      - 0
-      - 1
+      - "0"
+      - "1"
     required: true
-    default: 0
-    if: { "advancedConfig": { "emum": ["Yes"] } }
+    default: "0"
+    if: { "advancedConfig": { "enum": ["Yes"] } }
   - id: persistentPeers
     target:
       type: environment
@@ -140,9 +145,9 @@ fields:
     description: >-
       A comma separated list of persistent peers to connect to.  If you have a list of peers that you would like to connect to, you can enter them here.  If you do not have a list of peers, leave this field blank.
       Note: If you have a list of persistent peers set, be sure to set the `maxPeersInbound` and `maxPeersOutbound` fields to a number that is higher than the number of persistent peers you have set here.
-    pattern: "^(?:[a-zA-Z0-9]+@[0-9]+(?:\\.[0-9]+){3}:[0-9]+,?)+$"
-    patternMessage: "Please enter a comma separated list of known peers in the format `<peerAddress>@<peerIP>:<peerP2pPort>`."
-    if: { "advancedConfig": { "emum": ["Yes"] } }
+    #pattern: "^(?:[a-zA-Z0-9]+@[0-9]+(?:\\.[0-9]+){3}:[0-9]+,?)+$"
+    #patternMessage: "Please enter a comma separated list of peers in the format `<nodeAddress>@<nodeIP>:<peerP2pPort>`."
+    if: { "advancedConfig": { "enum": ["Yes"] } }
   - id: seeds
     target:
       type: environment
@@ -151,26 +156,28 @@ fields:
     title: "Seeds"
     description: >-
       A comma separated list of seeds to connect to.  If you have a list of seeds that you would like to connect to, you can enter them here.  If you do not have a list of seeds, leave this field blank.
-      Note: If you leave this field blank, the default seeds will be applied to your config file, if you have a list of seeds set here, the default seeds will be overwritten with your selection of seeds here.  If you want to add seeds to the default seeds, you can add them here in addition to the default seeds `7c0d7ec36db6594c1ffaa99724e1f8300bbd52d0@seed1.mainnet.pokt.network:26662,cdcf936d70726dd724e0e6a8353d8e5ba5abdd20@seed2.mainnet.pokt.network:26663,74b4322a91c4a7f3e774648d0730c1e610494691@seed3.mainnet.pokt.network:26662,b3235089ff302c9615ba661e13e601d9d6265b15@seed4.mainnet.pokt.network:26663`
-    default: "7c0d7ec36db6594c1ffaa99724e1f8300bbd52d0@seed1.mainnet.pokt.network:26662,cdcf936d70726dd724e0e6a8353d8e5ba5abdd20@seed2.mainnet.pokt.network:26663,74b4322a91c4a7f3e774648d0730c1e610494691@seed3.mainnet.pokt.network:26662,b3235089ff302c9615ba661e13e601d9d6265b15@seed4.mainnet.pokt.network:26663"
-    pattern: "^(?:[a-zA-Z0-9]+@[0-9]+(?:\\.[0-9]+){3}:[0-9]+,?)+$"
-    patternMessage: "Please enter a comma separated list of seeds in the format `<seedAddress>@<seedIP>:<seedP2pPort>`."
-    if: { "advancedConfig": { "emum": ["Yes"] } }
+      Note: If you leave this field blank, the default seeds will be applied to your config file, if you have a list of seeds set here, the default seeds will be overwritten with your selection of seeds here.  If you want to add seeds to the default seeds, you can add them here in addition to the default seeds `7c0d7ec36db6594c1ffaa99724e1f8300bbd52d0@seed1.mainnet.pokt.network:26662,cdcf936d70726dd724e0e6a8353d8e5ba5abdd20@seed2.mainnet.pokt.network:26663,74b4322a91c4a7f3e774648d0730c1e610494691@seed3.mainnet.pokt.network:26662,b3235089ff302c9615ba661e13e601d9d6265b15@seed4.mainnet.pokt.network:26663,ab5776d1c9a50d47e30e90a0600e787d9fb74643@seed5.mainnet.pokt.network:26664,a6dec84acfe1bae887cd6c4f2eeb864fae29c9f7@seed6.mainnet.pokt.network:26664`
+    default: "7c0d7ec36db6594c1ffaa99724e1f8300bbd52d0@seed1.mainnet.pokt.network:26662,cdcf936d70726dd724e0e6a8353d8e5ba5abdd20@seed2.mainnet.pokt.network:26663,74b4322a91c4a7f3e774648d0730c1e610494691@seed3.mainnet.pokt.network:26662,b3235089ff302c9615ba661e13e601d9d6265b15@seed4.mainnet.pokt.network:26663,ab5776d1c9a50d47e30e90a0600e787d9fb74643@seed5.mainnet.pokt.network:26664,a6dec84acfe1bae887cd6c4f2eeb864fae29c9f7@seed6.mainnet.pokt.network:26664"
+    #pattern: "^(?:[a-zA-Z0-9]+@[0-9]+(?:\\.[0-9]+){3}:[0-9]+,?)+$"
+    #patternMessage: "Please enter a comma separated list of seeds in the format `<seedAddress>@<seedIP>:<seedP2pPort>`."
+    required: true
+    if: { "advancedConfig": { "enum": ["Yes"] } }
   - id: backFirePrevention
     target:
       type: environment
       name: BACKFIRE_PREVENTION
       service: pocket
     title: "Backfire Prevention Enabled?"
+    type:  boolean
     description: >-
       Backfire Prevention is an advanced option to attempt to prevent your node from processing claims that may result in a reward lower than the cost of the claim.
-      Leave this setting at 0 if you do not want to enable backfire prevention, which is the default Pokt setting.
-      By setting this value to 1, you are allowing your node to prevent claims that may result in a reward lower than the cost of the claim, which is 0.01 Pokt currently.
+      Leave this setting as `false` if you do not want to enable backfire prevention, which is the default Pokt setting.
+      By setting this value to `true`, you are allowing your node to prevent claims that may result in a reward lower than the cost of the claim, which is 0.01 POKT (10,000 uPOKT) currently.
       Note: This is not an exact setting as the claim reward value is an estimate until the proof is submitted, so this setting may not be 100% effective in preventing claims that may result in a reward lower than the cost of the claim.
       Also note that this setting may have a larger effect on nodes staked in the lowest bracket as they earn far less rewards than those in upper breackets, Also this setting may have a negative effect on your node's performance for chains with very little activity.
     enum:
-      - 0
-      - 1
+      - "true"
+      - "false"
     required: true
-    default: 0
-    if: { "advancedConfig": { "emum": ["Yes"] } }
+    default: "false"
+    if: { "advancedConfig": { "enum": ["Yes"] } }
