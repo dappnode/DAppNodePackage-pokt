@@ -1,6 +1,6 @@
 {
   "name": "pocket.dnp.dappnode.eth",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "upstreamVersion": "RC-0.11.1",
   "upstreamRepo": "pokt-network/pocket-core",
   "upstreamArg": "UPSTREAM_VERSION",
@@ -10,8 +10,8 @@
   "architectures": ["linux/amd64"],
   "mainService": "pocket",
   "author": "DAppNode Association <admin@dappnode.io> (https://github.com/dappnode)",
-  "contributors": ["eduadiez <edu@dappnode.io> (https://github.com/eduadiez)",
-    "Voss <voss@visnovalabs.io> (https://github.com/alexpeterson91)",
+  "contributors": ["Voss <voss@visnovalabs.io> (https://github.com/alexpeterson91)",
+    "eduadiez <edu@dappnode.io> (https://github.com/eduadiez)",
     "mgarciate <mgarciate@shardlabs.io> (https://github.com/mgarciate)"],
   "categories": ["Blockchain", "Economic incentive"],
   "keywords": ["blockchain", "ethereum", "web3", "infrastructure", "pocket", "pokt", "rpc", "dappnode"],
