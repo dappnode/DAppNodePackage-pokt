@@ -4,6 +4,8 @@ export interface Account {
   address: string;
   network: string;
   node: any;
+  jailed: boolean;
+  shortAddress: string;
 }
 
 export interface Chain {
