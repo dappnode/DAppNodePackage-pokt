@@ -20,7 +20,7 @@ export class AppService {
         return response.data;
     }
 
-    public async unstake(): Promise<any> {
+    public async unstakeNode(): Promise<any> {
         const account = await this.getAccount();
         const response = await axios.post(`/api/unstake`, {account});
         return response.data;
