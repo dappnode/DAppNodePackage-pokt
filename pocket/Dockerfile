@@ -8,8 +8,9 @@ COPY ui /app/ui
 
 WORKDIR /app/ui
 RUN yarn && yarn build
+RUN npx update-browserslist-db@latest
 
-#Starting with version BETA-0.10.2 of the v0 Pokt Core, the Docker package registry has been replaced by the Github Container Registry at ghcr.io/pokt-network/pocket-v0:BETA-0.10.2
+#Starting with version BETA-0.10.2 of the v0 Pokt Core, the DockerHub package registry has been replaced by the Github Container Registry at ghcr.io/pokt-network/pocket-v0:latest.
 FROM ghcr.io/pokt-network/pocket-v0:${UPSTREAM_VERSION}
 
 WORKDIR /home/app/
@@ -17,6 +18,7 @@ WORKDIR /home/app/
 USER root
 
 # RUN apk add -u gettext curl jq nginx supervisor lz4 aria2
+# RUN apk update
 RUN apk add -u gettext curl jq nodejs npm supervisor lz4 aria2
 
 ADD entrypoint.sh /usr/local/bin/entrypoint.sh
@@ -32,10 +34,12 @@ ADD app.js /home/app/app.js
 ADD chains/chains_mainnet_template.json /home/app/chains_mainnet_template.json
 ADD chains/chains_testnet_template.json /home/app/chains_testnet_template.json
 RUN npm install express shelljs
+RUN npx update-browserslist-db@latest
 
 COPY --from=build-ui /app/ui/build /home/app/build
 COPY dummyui /home/app/dummyui
 
+EXPOSE 80
 EXPOSE 8081
 EXPOSE 26656
 ENTRYPOINT ["entrypoint.sh"]
