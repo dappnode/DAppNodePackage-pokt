@@ -1,6 +1,6 @@
 # build environment
 ARG UPSTREAM_VERSION
-FROM node:16.17.0-alpine as build-ui
+FROM node:18.16.0-alpine as build-ui
 WORKDIR /app
 COPY ui /app/ui
 # COPY ui/package.json ./
