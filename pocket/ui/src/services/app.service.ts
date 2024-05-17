@@ -25,4 +25,9 @@ export class AppService {
         return response.data;
     }
 
+    public async signMessage(message: string) {
+        const response = await axios.post(`/api/signMessage`, {message});
+        return response.data;
+    }
+
 }
