@@ -3,7 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import NavBar from "./components/navbar/NavBar";
 import Footer from "./components/footer/Footer";
 import { AppService } from './services/app.service';
-import { upoktToPokt } from "./Functions";
+import { upoktToPokt } from "./utils";
 // Styles
 import "./App.scss";
 import "bootstrap/dist/css/bootstrap.css";
@@ -65,31 +65,50 @@ function App() {
     setCurrentBlock(block);
   }
 
+  const unjailNode = async () => {
+    try {
+      setTxhash(null);
+      if (account?.jailed === false) {
+        throw new Error("Your Node is not jailed, you cannot Unjail your Node");
+      }
+      const responseUnjailNode = await appService.unjailNode();
+      console.log(responseUnjailNode);
+      if (!(responseUnjailNode.code) && !(responseUnjailNode.raw_log) && responseUnjailNode.txhash) {
+        toast.success("It can take 15+ minutes for the next block to process on the Pocket blockchain. This means you may have to wait 15+ minutes before your validator will become active again when the Unjail Tx is broadcast to the network and included in a block.");
+      setTxhash(responseUnjailNode.txhash);
+      //await getAccount();
+      await getCurrentBlock();
+      return;
+      }
+      throw new Error(`Error while Unjailing Node: ${JSON.stringify(responseUnjailNode.raw_log)}`);
+    } catch (e) {
+      toast.error((e as Error).message);
+      console.error(e);
+    }
+  }
+
   const stakeCustodial = async () => {
     try {
       setTxhash(null);
       if (account?.jailed === true) {
         throw new Error("Your Node is jailed, you must Unjail your Node before Staking/Re-Staking");
       }
-      if ((amountToStake ?? 0) < 15100) {
-        throw new Error(`Minimum amount to stake is 15,100 POKT`);
+      if ((amountToStake ?? 0) <= 15001) {
+        throw new Error(`Minimum amount to stake is 15,001 POKT`);
       }
       if ((amountToStake ?? 0) > upoktToPokt(Number(account?.amount ?? 0) + Number(account?.amountStaked ?? 0)) - 1) {
         throw new Error(`You do not have enough POKT to stake`);
       }
       if ((amountToStake ?? 0) < upoktToPokt(Number(account?.amountStaked ?? 0))) {
-        throw new Error(`You cannot re-stake below the amount you have already staked`);
+        throw new Error(`You cannot Re-Stake below the amount you have already staked, you can only Re-Stake the same amount you have staked with different selected chains to relay, and/or increase the amount to stake, you muust UnStake your node to withdraw your Staked POKT, a process that takes 21 days to complete.`);
       }
-      if (selectedChains.keys.length === 0) {
-        throw new Error(`You must select at least one chain to Stake/Re-Stake`);
-      }
-      if (selectedChains.keys.length > 15) {
-        throw new Error(`You cannot stake more than 15 chains at a time`);
+   if (selectedChains.keys.length > 15) {
+       throw new Error(`You cannot stake more than 15 chains at a time`);
       }
       const responseStakeCustodial = await appService.stakeCustodial(amountToStake ?? 0, Array.from(selectedChains.keys()).join(','));
       console.log(responseStakeCustodial);
       if (!(responseStakeCustodial.code) && !(responseStakeCustodial.raw_log) && responseStakeCustodial.txhash) {
-        toast.success(`It can take 15+ minutes for the next block to process on the Pocket blockchain. This means you may have to wait 15+ minutes before your validator will be active when staking for the first time, and similarly while re-staking chains or amounts, etc.`);
+        toast.success(`It can take 15+ minutes for the next block to process on the Pocket blockchain. This means you may have to wait 15+ minutes before your validator will be active when staking for the first time, and similarly while re-staking, chainging selected chains or amounts, etc.`);
         setTxhash(responseStakeCustodial.txhash);
         await replaceChains();
         return;
@@ -115,6 +134,7 @@ function App() {
   /**
    * Check wallet balance every 30s
    */
+  /**ESlint */
   useEffect(() => {
     async function getBalance() {
       try {
@@ -134,7 +154,9 @@ function App() {
     return () => {
       clearInterval(interval);
     };
-  }, [first, selectedChains, txhash, getCurrentBlock, getAccount]);
+  }, [first, selectedChains, txhash]);
+  // }, [first, selectedChains, txhash, getCurrentBlock, getAccount]);
+//
 
   const chainState = (state: number) => {
     switch (state) {
@@ -223,12 +245,12 @@ function App() {
             </div>
             <div>
             <Form.Text>
-              You can ensure your node is fully synced by checking the block height at <a href="https://poktscan.com" target="_blank" rel="noreferrer">https://explorer.pokt.network</a>
+              You can ensure your node is fully synced by checking the block height at <a href="https://poktscan.com" target="_blank" rel="noreferrer">PoktScan</a>
             </Form.Text>
             </div>
             <div>
             <Form.Text>
-              More info <a href="https://docs.pokt.network/home/paths/node-runner#stake-the-validator" target="_blank" rel="noreferrer">here</a>.
+              More info <a href="https://docs.pokt.network/node-operators/manual-node-setup-guide/part-5-going-live#staking-your-node" target="_blank" rel="noreferrer">here</a>.
             </Form.Text>
             </div>
             </div>
@@ -252,7 +274,23 @@ function App() {
             <Form.Text>
               Stake = Initial Stake. Re-stake = staking again after changing chains or amount of Pokt staked.
             </Form.Text>
-            </div>
+          </div>
+          <div>
+            <Button
+              onClick={() => unjailNode()}
+              disabled={!account?.jailed || (currentBlock ?? 0) === 0}
+            >Unjail Node</Button>
+            {txhash && (
+              <Form.Text>
+                {` `}Tx: {txhash}
+              </Form.Text>
+            )}
+          </div>
+          <div>
+            <Form.Text>
+              Ensure your Pokt node is fully synced then submit a request to Unjail your node using the Unjail button above, so that it will be allowed to participate in relaying and earn rewards again.
+            </Form.Text>
+          </div>
           </div>
         </Form.Group>
 
