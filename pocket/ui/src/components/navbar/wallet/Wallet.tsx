@@ -25,7 +25,7 @@ export default function Wallet({
             </Badge>
           </h4>
           <h4>
-            {account.unstakingTime !== '0001-01-01T00:00:00Z' && <Badge> <FaClock />  Unstaked Date: {account.unstakingTime}</Badge>}
+            {account.unstakingTime.getTime() !== new Date('0001-01-01T00:00:00Z').getTime() && <Badge> <FaClock /> Unstaked Date: {account.unstakingTime.toISOString()}</Badge>}
           </h4>
           <h4>
             <Badge> {account.jailed ? "Jailed" : "Not Jailed"}</Badge>
