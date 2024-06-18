@@ -43,9 +43,10 @@ app.get('/api/account', (req, res) => {
         address: account?.address ?? address,
         network: network,
         initialized: account != null ? true : false,
-        shortAddress: account?.shortAddress ?? shortAddress,
         node: node,
         jailed: node?.jailed ?? false,
+        publicKey: node?.public_key ?? "Unknown",
+        unstakingTime: node?.unstaking_time ?? "0001-01-01T00:00:00Z",
     };
     res.send(response);
 });
@@ -96,7 +97,7 @@ function checkEthereumState(url) {
 function checkBeaconState(url) {
     try {
         const syncing = JSON.parse(shell.exec(`curl -X GET -H "accept: application/json" ${url}/eth/v1/node/syncing`).stdout.trim());
-        if (syncing.data.is_syncing === false) {
+        if (syncing.data.is_syncing === false && syncing.data.is_optimistic === false && syncing.data.el_offline === false) {
             return 2;
         }
         return 1;
@@ -218,6 +219,15 @@ app.post('/api/replaceChains', (req, res) => {
     }
 })
 
+app.post('/api/unjailNode', (req, res) => {
+    // pocket nodes unjail <operatorAddr> <fromAddr> <networkID> <fee> <isBefore8.0> [flags]
+    const account = shell.exec(`pocket accounts list --datadir=/home/app/.pocket/ | cut -d' ' -f2- `).stdout.trim();
+    const network = shell.exec(`echo $NETWORK`).stdout.trim();
+    const passphrase = shell.exec(`echo $KEYFILE_PASSPHRASE`).stdout.trim();
+    const response = shell.exec(`pocket nodes unjail ${account} ${account} ${network} 10000 false --datadir=/home/app/.pocket/ --pwd ${passphrase} | tail -n +3`).stdout.trim();
+    res.send(response);
+})
+
 app.post('/api/stakeCustodial', (req, res) => {
     // console.log(req.body.amount);
     // console.log(req.body.chains);
@@ -228,9 +238,17 @@ app.post('/api/stakeCustodial', (req, res) => {
     const address = shell.exec(`pocket accounts list --datadir=/home/app/.pocket/ | cut -d' ' -f2- `).stdout.trim();
     const domain = shell.exec(`echo $_DAPPNODE_GLOBAL_DOMAIN`).stdout.trim();
     // https://discord.com/channels/553741558869131266/564836328202567725/967105908347895819
-    const response = shell.exec(`pocket nodes stake custodial ${address} ${req.body.amount} ${req.body.chains} https://pocket-pocket.${domain}:443 ${network} 10000 false --datadir=/home/app/.pocket/ --pwd "${passphrase}" | tail -n +3`).stdout.trim();
+    const response = shell.exec(`pocket nodes stake custodial ${address} ${req.body.amount} ${req.body.chains} https://pocket-pocket.${domain}:443 ${network} 10000 false --datadir=/home/app/.pocket/ --pwd ${passphrase} | tail -n +3`).stdout.trim();
     res.send(response);
 })
+
+// app.post('/api/stakeNonCustodial', (req, res) => {
+// //   pocket nodes stake non-custodial <operatorPublicKey> <outputAddress> <amount> <RelayChainIDs> <serviceURI> <networkID> <fee> <isBefore8.0> [flags]
+// const network = shell.exec(`echo $NETWORK`).stdout.trim();
+// const passphrase = shell.exec(`echo $KEYFILE_PASSPHRASE`).stdout.trim();
+// const domain = shell.exec(`echo $_DAPPNODE_GLOBAL_DOMAIN`).stdout.trim();
+// const operatorPublicKey = shell.exec().stdout.trim();
+// })
 
 var server = app.listen(CUSTOM_UI_HTTP_PORT, function () {
     var host = server.address().address;
