@@ -1,4 +1,4 @@
-import { upoktToPokt } from "../Functions";
+import { poktToUpokt } from "../utils";
 const axios = require('axios');
 
 export class AppService {
@@ -16,7 +16,7 @@ export class AppService {
     }
 
     public async stakeCustodial(stakeAmount: number, chains: string) {
-        const amount = Math.floor(upoktToPokt(stakeAmount));
+        const amount = Math.floor(poktToUpokt(stakeAmount));
         const response = await axios.post(`/api/stakeCustodial`, {amount, chains});
         return response.data;
     }
@@ -26,4 +26,8 @@ export class AppService {
         return response.data;
     }
 
+    public async unjailNode() {
+        const response = await axios.post(`/api/unjailNode`);
+        return response.data;
+    }
 }
