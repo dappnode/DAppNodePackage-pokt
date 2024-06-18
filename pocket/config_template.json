@@ -27,7 +27,7 @@
         "RPC": {
             "RootDir": "/home/app/.pocket",
             "ListenAddress": "tcp://0.0.0.0:26657",
-            "CORSAllowedOrigins": [],
+            "CORSAllowedOrigins": ["*"],
             "CORSAllowedMethods": [
                 "HEAD",
                 "GET",
