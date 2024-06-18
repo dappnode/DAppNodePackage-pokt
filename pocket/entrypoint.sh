@@ -7,6 +7,19 @@ ERROR="[ ERROR ]"
 WARN="[ WARN ]"
 INFO="[ INFO ]"
 
+##############
+#   CONFIG   #
+##############
+
+# Replace the config_template.json file with the updated version
+echo "${INFO} Updating config_template.json..."
+cp /home/app/config_template.json /home/app/.pocket/config/config_template.json
+if [ $? -ne 0 ]; then
+  echo "${ERROR} Failed to update config_template.json with new version Exiting..."
+  sleep 60
+  exit 1
+fi
+
 # Replace domain, seeds, max peers inbound/outbound, backfire protection, session rollover and persistent peers in the config file with environment variables
 export DOMAIN=${_DAPPNODE_GLOBAL_DOMAIN}
 export SEEDS=${SEEDS}
@@ -25,6 +38,7 @@ if [ $? -ne 0 ]; then
   sleep 60
   exit 1
 fi
+
 # Process the modified config_template.json file with jq commands and write the output to config.json
 jq --arg max_peers_inbound "${MAX_PEERS_INBOUND}" '.tendermint_config.P2P.MaxNumInboundPeers = ($max_peers_inbound|tonumber)' temp.json > temp2.json && rm temp.json
 if [ $? -ne 0 ]; then
@@ -53,24 +67,37 @@ else
   echo "${INFO} Config file updated successfully!"
 fi
 
-#jq --arg session_rollover "${SESSION_ROLLOVER}" 'if $session_rollover == 1 then .pocket_config.client_session_sync_allowance = 1 else .pocket_config.client_session_sync_allowance = 0 end' temp3.json > temp4.json
-#jq --arg backfire_prevention "${BACKFIRE_PREVENTION}" 'if $backfire_prevention == true then .pocket_config.prevent_negative_reward_claim = true else .pocket_config.prevent_negative_reward_claim = false end' temp4.json > /home/app/.pocket/config/config.json
+# Add addrbook.json from liquify to config directory if it doesn't exist already Causing a restart loop and failure to connect to any peers or seeds.
+# MAY WANT TO USE A CUSTOM DAPPNODE/VISNOVALABS LINK TO A NEWER ADDR BOOK (CURRENTLY LIQUIFY IS 5 MONTHS OLD) THAT INCLUDES OUR DAPPNODE PEERS THAT ARE ONLINE ALREADY AND HAVE BEEN, ALONG WITH NEW RECRUITS, HOPE TO USE PERSISTENT PEERS TO HELP PEERING FOR DAPPNODE USERS ESPECIALLY PRUNED USERS AS THEY CAN HAVE TROUBLE SYNCING TO HEAD AFTER SNAPSHOT SINCE THEY DONT HAVE ALL DATA AND PEERS WILL DROP THEM.
+if [! -f /home/app/.pocket/config/addrbook.json]; then
+  echo "${INFO} Downloading addrbook.json..."
+  wget -O /home/app/.pocket/config/addrbook.json https://pocket-snapshot.liquify.com/files/addrbook.json
+  if [ $? -ne 0 ]; then
+    echo "${ERROR} Failed to download addrbook.json. Exiting..."
+    sleep 60
+    exit 1
+  else
+    echo "${INFO} addrbook.json downloaded successfully!"
+  fi
+else
+  echo "${INFO} addrbook.json already exists!"
+fi
 
 #############
 # FUNCTIONS #
 #############
 
-function start_downloading_ui () {
-  echo "${INFO} Downloading snapshot UI - Starting"
+function start_snapshot_ui () {
+  echo "${INFO} Snapshot Download UI - Starting"
   cd /home/app/dummyui && node app.js &
-  echo "${INFO} Downloading snapshot UI - Started"
+  echo "${INFO} Snapshot Downlad UI - Started"
 }
 
-function stop_downloading_ui () {
-  echo "${INFO} Downloading snapshot UI - Stopping"
+function stop_snapshot_ui () {
+  echo "${INFO} Snapshot Download UI - Stopping"
   pkill node
   sleep 2
-  echo "${INFO} Downloading snapshot UI - Stopped"
+  echo "${INFO} Snapshot Download UI - Stopped"
 }
 
 # Function to cleanup failed snapshot downloads
@@ -126,77 +153,24 @@ function download_snapshot() {
   return 0
 }
 
-# Function to check if the snapshot download is complete
-function is_complete() {
-  if [[ -f "${latestFile}" ]]; then
-    # Check if the file is a valid tar archive
-    file "${latestFile}"
-    if [[ $? -eq 0 ]] && [[ "${latestFile}" == *.tar ]] || [[ "${latestFile}" == *.tar.lz4 ]]; then
-      if [[ "${latestFile}" == *.tar.lz4 ]]; then
-        lz4 -cd "${latestFile}" | tar -tf -
-      else
-        tar -tf "${latestFile}"
-      fi
-      if [[ $? -eq 0 ]]; then
-        return 0
-      fi
-    fi
-  fi
-  return 1
-}
-
+# # Function to check if the snapshot download is complete was used in a previous iteration of a while loop that did not work well, this is likely uneeded now. Aria should and does validate files downloaded AFAIK, but the real reason for removing is that to check integrity of a comprssed snapshot which is likely gonna be the norm pruned or full, it needs to extract the lz4 layer firt then list the contents of the tar arvhice which is like doubleing time, and space yet again, so leaving to be stashed, or used in a furture iteration if needed.
 # function is_complete() {
 #   if [[ -f "${latestFile}" ]]; then
-#     # Check if the file is a valid tar archive
-#     tar -tf "$latestFile" >/dev/null 2>&1
-#     if [[ $? -eq 0 ]]; then
-#       return 0
+#     # Check if the file is a valid tar or tar.lz4 archive
+#     file "${latestFile}"
+#     if [[ $? -eq 0 ]] && [[ "${latestFile}" == *.tar ]] || [[ "${latestFile}" == *.tar.lz4 ]]; then
+#       if [[ "${latestFile}" == *.tar.lz4 ]]; then
+#         lz4 -cd "${latestFile}" | tar -tf -
+#       else
+#         tar -tf "${latestFile}"
+#       fi
+#       if [[ $? -eq 0 ]]; then
+#         return 0
+#       fi
 #     fi
 #   fi
 #   return 1
-# }    
-
-# Tabnine suggests this function to download the snapshot inline, but is not tested yet.
-function download_inline_snapshot() {
-  local downloadURL="$1"
-  local latestFile="$2"
-  local retries=0
-  local max_retries=5
-
-  while ! [ -f "$latestFile" ] || ! [ -s "$latestFile" ]; do
-    if [ $retries -ge $max_retries ]; then
-      echo "${ERROR} Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."
-      echo "${INFO} Cleaning up and exiting..."
-      cleanup_failed_snapshot
-      sleep 500
-      exit 1
-    fi
-    retries=$((retries+1))
-    echo "${INFO} Download failed, retrying in 10 seconds (retry $retries of $max_retries)..."
-    sleep 10
-
-    if [[ "$latestFile" == *.tar.lz4 ]]; then
-      echo "${INFO} Downloading and decompressing the latest compressed snapshot file..."
-      echo "${INFO} wget -c -O - ${downloadURL} | lz4 -d - | tar -xv -"
-      wget -c -O - "${downloadURL}" | lz4 -d - | tar -xv -
-    else
-      echo "${INFO} Downloading and decompressing the latest uncompressed snapshot file..."
-      echo "${INFO} wget -c -O - ${downloadURL} | tar -xv -"
-      wget -c -O - "${downloadURL}" | tar -xv -
-    fi
-
-    if [ ! -f "$latestFile" ] || ! [ -s "$latestFile" ]; then
-      echo "${ERROR} Download failed, the downloaded file is not a valid tar archive."
-      rm "$latestFile"
-    fi
-  done
-
-  echo "${INFO} Snapshot Downloaded and Decompressed!"
-  echo "${INFO} Removing temporary snapshot file metadata..."
-  rm "${fileName}"
-  echo "${INFO} Snapshot Ready!"
-  stop_downloading_ui
-}
+# }
 
 # Function to extract the downloaded file to /home/app/.pocket/ directory
 function extract_file() {
@@ -257,19 +231,19 @@ fi
 # Handle Snapshot Download and Decompression if needed
 echo "${INFO} Check if initializing with SNAPSHOT..."
 if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
-  
+  # Is Monday? ENV
   if [ "$SNAPSHOT_MIRROR" == "Yes" ]; then
     MIRROR_URL="https://pocket-snapshot-uk.liquify.com/files/"
   else 
     MIRROR_URL="https://pocket-snapshot.liquify.com/files/"
   fi
-  
+  # Pruned? ENV
   if [ "$PRUNED_SNAPSHOT" == "Yes" ]; then
     MIRROR_URL=$MIRROR_URL"pruned/"
   else
     MIRROR_URL=$MIRROR_URL
   fi
-
+  # Compressed? ENV
   if [ "$COMPRESSED_SNAPSHOT" == "Yes" ]; then
     fileName="latest_compressed.txt"
     SNAPSHOT_URL="$MIRROR_URL$fileName"
@@ -279,7 +253,7 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
   fi
 
   #Download Snapshot Metedata for Latest Snapshot File
-  start_downloading_ui
+  start_snapshot_ui
   mkdir -p /home/app/.pocket/
   cd /home/app/.pocket/
   echo "${INFO} Downloading latest snapshot file version..."
@@ -292,49 +266,53 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
   if [ "$ARIA2_SNAPSHOT" == "Yes" ]; then
     echo "${INFO} Initializing with Aria2c SNAPSHOT, it could take several hours to complete for an non-pruned full node..."
     echo "${INFO} Starting Aria2c download..."
-    # echo "${INFO} aria2c -x16 -s16 -o ${latestFile} ${downloadURL}"
-    # aria2c -x16 -s16 -o "${latestFile}" "${downloadURL}"
-
-    # # Loop until the download is complete \\ This does not work so far likely a syntax error, but so far no tests have led to failures yet with this config, on my test nodes at least
-    # while [[ ! $(is_complete) ]]; do
-    #     echo "${INFO} Starting aria2 download..."
-    #     echo "${INFO} aria2c -x16 -s16 -o ${latestFile} ${downloadURL}"
-    #     aria2c -x16 -s16 -o "${latestFile}" "${downloadURL}"
-    # done
-    ################################################################
 
     # Call the Aria2c Download Snapshot Function
     download_snapshot
     echo "${INFO} Aria2 Download of Snapshot Complete!"
 
     # Extract the downloaded file to /home/app/.pocket/ directory
-    echo "${INFO} Extracting the downloaded file to /home/app/.pocket/ ..."
-    extract_file
-    if [ $? -ne 0 ]; then
-      echo "${ERROR} extracting the downloaded snapshot exited with non-zero exit code. Exiting..."
+    for attempt in {1..3}; do
+      echo "${INFO} Attempt ${attempt}: Extracting the downloaded snapshot to /home/app/.pocket/ ..."
+      extract_file
+      if [ $? -eq 0 ]; then
+        break
+      else
+        echo "${ERROR} Attempt ${attempt} failed: extracting the downloaded snapshot exited with non-zero exit code."
+        if [ $attempt -lt 3 ]; then
+          echo "${INFO} Cleaning up data directory before retry..."
+          rm -rf /home/app/.pocket/data
+          sleep 10
+        fi
+      fi
+    done
+
+    if [ $attempt -eq 3 ]; then
+      echo "${ERROR} FATAL ERROR: All extraction attempts failed. Exiting..."
+      echo "${ERROR} The extraction of the downloaded snapshot failed. Please check the integrity of the snapshot file and try downloading again, contact Dappnode Support on Discord if the issue persists."
       echo "${INFO} Cleaning up and exiting..."
       cleanup_failed_snapshot
       sleep 500
       exit 1
     fi
-    
+
     # Delete the source file
     echo "${INFO} Deleting the Snapshot source file and metadata file..."
     rm "${latestFile}" "${fileName}"
     echo "${INFO} Extraction and cleanup of snapshot complete!"
-    stop_downloading_ui
+    stop_snapshot_ui
   else
 
-    ### WGET INLINE SNAPSHOT#########  curl option should be faster and more resiliant  curl -L -O -C - "${downloadURL}" | lz4 -d - | tar -xv -
+    ### WGET INLINE SNAPSHOT#########  curl option mqy be faster and more resiliant? WGET tested out well though, never had an error with a failed download due to conection loss as was the initial issuse when the snapshots were chsnged but liquify has upgraded their infra since to help as it was not isolated to me. ##  curl -L -O -C - "${downloadURL}" | lz4 -d - | tar -xv -
     ##########################################################################################
-    echo "${INFO} Initializing with wget inline SNAPSHOT, it could take several hours or days to download a NON-pruned snapshot..."
+    echo "${INFO} Initializing with Wget inline SNAPSHOT, it could take several hours or days to download and a NON-pruned snapshot on lower end residential ISP speeed offerings..."
     max_retries=5
     retries=0
 
     if [ "$COMPRESSED_SNAPSHOT" == "Yes" ]; then
       echo "${INFO} Downloading and decompressing the latest compressed snapshot file..."
-      echo "${INFO} while ! wget -c -O - ${downloadURL} | lz4 -d - | tar -xv -; do"
-      while ! wget -c -O - "${downloadURL}" | lz4 -d - | tar -xv -; do
+      echo "${INFO} while ! wget -c ${downloadURL} -O- | lz4 -d - | tar -xv -C /home/app/.pocket/; do"
+      while ! wget -c "${downloadURL}" -O- | lz4 -d - | tar -xv -C /home/app/.pocket/; do
         if [ $retries -ge $max_retries ]; then
           echo "Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."
           echo "${INFO} Cleaning up and exiting..."
@@ -350,19 +328,11 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
       echo "${INFO} Removing temporary snapshot file metadata..."
       rm "${fileName}"
       echo "${INFO} Snapshot Ready!"
-      stop_downloading_ui
+      stop_snapshot_ui
     else
       echo "${INFO} Downloading and decompressing the latest uncompressed snapshot file..."
-      echo "${INFO} while ! wget -c -O - ${downloadURL} | tar -xv -; do"
-      echo "${INFO}   if [ $retries -ge $max_retries ]; then"
-      echo "${INFO}     echo Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."
-      echo "${INFO}     exit 1"
-      echo "${INFO}   fi"
-      echo "${INFO}   retries=$((retries+1))"
-      echo "${INFO}   echo Download failed, retrying in 10 seconds (retry $retries of $max_retries)..."
-      echo "${INFO}   sleep 10"
-      echo "${INFO} done"
-      while ! wget -c -O - "${downloadURL}" | tar -xv -; do
+      echo "${INFO} while ! wget -c ${downloadURL} -O- | tar -xv -C /home/app/.pocket/; do"
+      while ! wget -c "${downloadURL}" -O- | tar -xv -C /home/app/.pocket/; do
         if [ $retries -ge $max_retries ]; then
           echo "${INFO} Download failed after $max_retries retries, try using aria download or a pruned download if this fails multiple times. exiting..."
           echo "${INFO} Cleaning up and exiting..."
@@ -378,7 +348,7 @@ if [ "$NETWORK" == "mainnet" ] && ! $is_update; then
       echo "${INFO} Removing temporary snapshot file metadata..."
       rm $fileName
       echo "${INFO} Snapshot Ready!"
-      stop_downloading_ui
+      stop_snapshot_ui
     fi
   fi
 fi
