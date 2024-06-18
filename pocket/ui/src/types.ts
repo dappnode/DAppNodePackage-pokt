@@ -4,6 +4,9 @@ export interface Account {
   address: string;
   network: string;
   node: any;
+  jailed: boolean;
+  unstakingTime: Date;
+  publicKey: string;
 }
 
 export interface Chain {
