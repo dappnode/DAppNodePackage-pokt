@@ -90,7 +90,7 @@ fi
 function start_snapshot_ui () {
   echo "${INFO} Snapshot Download UI - Starting"
   cd /home/app/dummyui && node app.js &
-  echo "${INFO} Snapshot Downlad UI - Started"
+  echo "${INFO} Snapshot Download UI - Started"
 }
 
 function stop_snapshot_ui () {
@@ -102,7 +102,7 @@ function stop_snapshot_ui () {
 
 # Function to cleanup failed snapshot downloads
 function cleanup_failed_snapshot () {
-  rm -r -f /home/app/.pocket/data \
+  rm -rf /home/app/.pocket/data \
   /home/app/.pocket/pocket* \
   /home/app/.pocket/$fileName \
   /home/app/.pocket/$latestFile \
