@@ -33,7 +33,7 @@
     },
     {
         "id": "0053",
-        "url": "http://optimism.optimism.public.dappnode:8545"
+        "url": "http://op-node.op-node.dappnode:9545"
     },
     {
         "id": "0063",
@@ -61,7 +61,7 @@
     },
     {
         "id": "A053",
-        "url": "http://optimism.optimism.public.dappnode:8545"
+        "url": "http://op-node.op-node.dappnode:9545"
     },
     {
         "id": "B021",
