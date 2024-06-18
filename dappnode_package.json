@@ -17,7 +17,7 @@
   "keywords": ["blockchain", "ethereum", "web3", "infrastructure", "pocket", "pokt", "rpc", "dappnode"],
   "license": "GPL-3.0",
   "links": {
-    "ui": "http://pocket.pocket.dappnode",
+    "ui": "http://pocket.dappnode",
     "homepage": "https://pokt.network",
     "Wallet": "https://wallet.pokt.network",
     "Explorer": "https://poktscan.com",
