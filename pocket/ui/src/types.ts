@@ -5,7 +5,8 @@ export interface Account {
   network: string;
   node: any;
   jailed: boolean;
-  shortAddress: string;
+  unstakingTime: Date;
+  publicKey: string;
 }
 
 export interface Chain {
