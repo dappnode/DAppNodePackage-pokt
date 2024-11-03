@@ -5,7 +5,7 @@ services:
     build:
       context: pocket
       args:
-        UPSTREAM_VERSION: RC-0.11.1
+        UPSTREAM_VERSION: RC-0.12.0
     restart: unless-stopped
     volumes:
       - pocket-mainnet:/home/app/.pocket/
@@ -22,7 +22,7 @@ services:
       BACKFIRE_PREVENTION: "false"
       PERSISTENT_PEERS: ""
       MAX_PEERS_INBOUND: 28
-      MAX_PEERS_OUTBOUND: 7
+      MAX_PEERS_OUTBOUND: 10
       SEEDS: >-
         7c0d7ec36db6594c1ffaa99724e1f8300bbd52d0@seed1.mainnet.pokt.network:26662,cdcf936d70726dd724e0e6a8353d8e5ba5abdd20@seed2.mainnet.pokt.network:26663,74b4322a91c4a7f3e774648d0730c1e610494691@seed3.mainnet.pokt.network:26662,b3235089ff302c9615ba661e13e601d9d6265b15@seed4.mainnet.pokt.network:26663,ab5776d1c9a50d47e30e90a0600e787d9fb74643@seed5.mainnet.pokt.network:26664,a6dec84acfe1bae887cd6c4f2eeb864fae29c9f7@seed6.mainnet.pokt.network:26664
       SESSION_ROLLOVER: "0"
