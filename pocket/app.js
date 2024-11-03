@@ -17,13 +17,6 @@ app.get('/version', (req, res) => {
     res.send(version)
 })
 
-function upoktToPokt(upokt) {
-    return upokt / 1000000;
-}
-
-function poktToUpokt(pokt) {
-    return pokt * 1000000;
-}
 
 app.get('/api/account', (req, res) => {
     // res.send(
@@ -50,7 +43,9 @@ app.get('/api/account', (req, res) => {
         address: account?.address ?? address,
         network: network,
         initialized: account != null ? true : false,
+        shortAddress: account?.shortAddress ?? shortAddress,
         node: node,
+        jailed: node?.jailed ?? false,
     };
     res.send(response);
 });
@@ -84,6 +79,32 @@ function checkEthereumState(url) {
     }
 }
 
+// curl -X GET http://lighthouse-holesky.dappnode:3500/eth/v1/node/syncing -H  "accept: application/json" | jq
+
+//  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+//                                 Dload  Upload   Total   Spent    Left  Speed
+// 100   112  100   112    0     0    245      0 --:--:-- --:--:-- --:--:--   245
+// {
+//   "data": {
+//     "is_syncing": false,
+//     "is_optimistic": false,
+//     "el_offline": false,
+//     "head_slot": "1475263",
+//     "sync_distance": "1"
+//   }
+// }
+function checkBeaconState(url) {
+    try {
+        const syncing = JSON.parse(shell.exec(`curl -X GET -H "accept: application/json" ${url}/eth/v1/node/syncing`).stdout.trim());
+        if (syncing.data.is_syncing === false) {
+            return 2;
+        }
+        return 1;
+    } catch (error) {
+        return 0;
+    }
+}
+
 function checkNearState(url) {
     try {
         const syncing = JSON.parse(shell.exec(`curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"status","params":[],"id":1}' ${url}`).stdout.trim());
@@ -108,17 +129,24 @@ function checkAvalancheState(url) {
     }
 }
 
-// TODO: Test Pokt State Functionality
+// TODO: Test Pokt State Functionality + Remove other params commented out when successful with current params
 function checkPoktState(url) {
     try {
-        url = `https://pocket-pocket.${domain}`
-        const localHeight = JSON.parse(shell.exec(`curl -X POST -H {Content-Type:\ application/json} --json {} ${url}/v1/query/height`).stdout.trim());
-        const currentHeight = JSON.parse(shell.exec(`curl https://mainnet.rpc.grove.city/v1/e6abbfca/v1/query/height`).stdout.trim());
-        // const nodeHeight = JSON.parse(shell.exec(`pocket query height --datadir=/home/app/.pocket/ | tail -n +2`).stdout.trim());
-        if (currentHeight.result.height - localHeight.result.height === 0) {
+        //url = `tcp://localhost:26657`; MUST USE HTTP for cURL to work doesn't support tcp://localhost:26657
+        var newUrl = url.replace(/:8081$/, ':26657');
+        //const syncing = JSON.parse(shell.exec(`curl ${newUrl}/status`).stdout.trim());
+        const syncing = JSON.parse(shell.exec(`curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"status","params":[],"id":-1}' "${newUrl}"`).stdout.trim());
+        //const syncing = JSON.parse(shell.exec(`curl http://localhost:26657/status`).stdout.trim());
+        var prunedSnapshot = shell.exec(`echo $PRUNED_SNAPSHOT`).stdout.trim();
+        //const localHeight = JSON.parse(shell.exec(`curl -X POST -H {Content-Type:\ application/json} --json {} ${url}/v1/query/height`).stdout.trim()); 
+        //const currentHeight = JSON.parse(shell.exec(`curl https://mainnet.rpc.grove.city/v1/xxxxxxxx/v1/query/height`).stdout.trim());
+        //const nodeHeight = JSON.parse(shell.exec(`pocket query height --datadir=/home/app/.pocket/ | tail -n +2`).stdout.trim());
+        if (syncing.result.sync_info.catching_up === false && prunedSnapshot == 'Yes') {
+            return 3;
+        } else if (syncing.result.sync_info.catching_up === false && prunedSnapshot == 'No') {
             return 2;
-        }
-        return 1;
+        } else if (syncing.result.sync_info.catching_up === true) {
+          }  return 1;
     } catch (error) {
         return 0;
     }
@@ -132,9 +160,10 @@ function checkStateChain(type, url) {
             return checkNearState(url);
         case "avalanche":
             return checkAvalancheState(url);
+        case "beacon":
+            return checkBeaconState(url);
         case "pokt":
-            return 2;
-            // return checkPoktState();
+            return checkPoktState(url);
         default:
             return 0;
     }
@@ -159,7 +188,6 @@ app.get('/api/availableChains', (req, res) => {
             state: checkStateChain(chains[chain.id].type, chain.url),
         }
     });
-    
     res.send(response);
 })
 
@@ -183,14 +211,14 @@ app.post('/api/replaceChains', (req, res) => {
     if (chainsFiltered && chainsFiltered.length > 0) {
         let response = JSON.stringify(chainsFiltered, null, 2);
         shell.exec(`echo '${response}' > /home/app/.pocket/config/chains.json`);
-        shell.exec(`pkill pocket`);
+//        shell.exec(`pkill pocket`); This should no longer be needed since the addition of the config option for hot chains reload to be set to `true` this command no longer kills the Pocket process improving performance on initial test nodes so far, with no errors without kiling the process everytime it needs to reload the chains.json file.
         res.send(response);
     } else {
         throw new Error("Empty json");
     }
 })
 
-app.post('/api/stake', (req, res) => {
+app.post('/api/stakeCustodial', (req, res) => {
     // console.log(req.body.amount);
     // console.log(req.body.chains);
     // res.send({});
@@ -244,5 +272,6 @@ const mainnetChains = {
     "03DF": {"name": "EVM AVAX DFK Subnet", "type": "avalanche"},
     "A003": {"name": "Avalanche Archival", "type": "avalanche"},
     "A053": {"name": "Optimism Archival", "type": "ethereum"},
-}
- 
+    "B021": {"name": "Ethereum Beacon", "type": "beacon"},
+    "B081": {"name": "Holesky Beacon", "type": "beacon"},
+};
