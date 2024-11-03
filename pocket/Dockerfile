@@ -1,7 +1,7 @@
 # Build UI Environment
 ARG UPSTREAM_VERSION
 
-FROM node:18.20.3-alpine as build-ui
+FROM node:20-alpine as build-ui
 
 WORKDIR /app
 
