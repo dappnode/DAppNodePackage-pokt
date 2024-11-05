@@ -2,16 +2,22 @@ export interface Account {
   amount: number;
   amountStaked: number;
   address: string;
-  network: string;
+  network: String;
   node: any;
-  jailed: boolean;
+//<<<<<<< Local/Devel/RC.0.12.0
+  jailed: Boolean;
   unstakingTime: Date;
-  publicKey: string;
+  publicKey: String;
+//=======
+//  jailed: boolean;
+//  unstakingTime: Date;
+//  publicKey: string;
+//>>>>>>> Voss/devel
 }
 
 export interface Chain {
   id: string;
-  name: string;
-  url: string;
+  name: String;
+  url: String;
   state: number;
 }
