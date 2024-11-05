@@ -102,8 +102,8 @@ function App() {
       if ((amountToStake ?? 0) < upoktToPokt(Number(account?.amountStaked ?? 0))) {
         throw new Error(`You cannot Re-Stake below the amount you have already staked, you can only Re-Stake the same amount you have staked with different selected chains to relay, and/or increase the amount to stake, you muust UnStake your node to withdraw your Staked POKT, a process that takes 21 days to complete.`);
       }
-      if (selectedChains.keys.length > 15) {
-       throw new Error(`You cannot stake more than 15 chains at a time`);
+      if (selectedChains.keys.length > 8) {
+       throw new Error(`You cannot stake more than 8 chains at a time`);
       }
       const responseStakeCustodial = await appService.stakeCustodial(amountToStake ?? 0, Array.from(selectedChains.keys()).join(','));
       console.log(responseStakeCustodial);
@@ -134,7 +134,7 @@ function App() {
   /**
    * Check wallet balance every 30s
    */
-  /**ESlint */
+  //ESlint ignore-next-line 
   useEffect(() => {
     async function getBalance() {
       try {

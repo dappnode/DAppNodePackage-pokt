@@ -1,17 +1,17 @@
 export interface Account {
   amount: number;
-  amountStaked: number;
+  amountStaked: Number;
   address: string;
-  network: string;
+  network: String;
   node: any;
-  jailed: boolean;
+  jailed: Boolean;
   unstakingTime: Date;
-  publicKey: string;
+  publicKey: String;
 }
 
 export interface Chain {
   id: string;
-  name: string;
-  url: string;
+  name: String;
+  url: String;
   state: number;
 }

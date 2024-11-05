@@ -2,6 +2,7 @@
 ARG UPSTREAM_VERSION
 
 FROM node:18.20.3-alpine as build-ui
+#FROM node:20.15.0-alpine AS build-ui
 
 WORKDIR /app
 
@@ -24,19 +25,20 @@ USER root
 # RUN apk add -u gettext curl jq nginx supervisor lz4 aria2
 RUN apk update
 RUN apk add -u gettext curl jq nodejs npm supervisor lz4 aria2
+RUN mkdir -p /home/app/.pocket/config
 
-ADD entrypoint.sh /usr/local/bin/entrypoint.sh
-ADD chains/chains_mainnet.json /home/app/.pocket/config/chains.json
-ADD genesis_mainnet.json /home/app/.pocket/config/genesis.json
-ADD config_template.json /home/app/.pocket/config/config_template.json
-ADD supervisord.conf /etc/supervisord/supervisord.conf
-# ADD nginx.conf /etc/nginx/nginx.conf
-# ADD index.html /usr/share/nginx/html/index.html 
-# ADD index.html /home/app/index.html 
-ADD app.js /home/app/app.js
-ADD chains/chains_mainnet_template.json /home/app/chains_mainnet_template.json
-ADD chains/chains_testnet_template.json /home/app/chains_testnet_template.json
-ADD config_template.json /home/app/config_template.json
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY chains/chains_mainnet.json /home/app/.pocket/config/chains.json
+COPY genesis_mainnet.json /home/app/.pocket/config/genesis.json
+COPY config_template.json /home/app/.pocket/config/config_template.json
+COPY supervisord.conf /etc/supervisord/supervisord.conf
+# COPY nginx.conf /etc/nginx/nginx.conf
+# COPY index.html /usr/share/nginx/html/index.html 
+# COPY index.html /home/app/index.html 
+COPY app.js /home/app/app.js
+COPY chains/chains_mainnet_template.json /home/app/chains_mainnet_template.json
+COPY chains/chains_testnet_template.json /home/app/chains_testnet_template.json
+COPY config_template.json /home/app/config_template.json
 
 RUN npm install express shelljs
 RUN npx update-browserslist-db@latest

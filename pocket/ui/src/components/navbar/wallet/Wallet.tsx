@@ -28,7 +28,7 @@ export default function Wallet({
             {account.unstakingTime.getTime() !== new Date('0001-01-01T00:00:00Z').getTime() && <Badge> <FaClock /> Unstaked Date: {account.unstakingTime.toISOString()}</Badge>}
           </h4>
           <h4>
-            <Badge> {account.jailed ? "Jailed" : "Not Jailed"}</Badge>
+            <Badge> {account.jailed ? "Jailed" : "Not Jailed"} </Badge>
           </h4>
           <h4>
             <Badge> {account.network}</Badge>
