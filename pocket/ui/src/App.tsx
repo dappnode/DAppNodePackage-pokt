@@ -135,6 +135,7 @@ function App() {
    * Check wallet balance every 30s
    */
   /**ESlint */
+  // eslint-disable-next-line 
   useEffect(() => {
     async function getBalance() {
       try {
