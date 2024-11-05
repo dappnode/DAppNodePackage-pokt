@@ -121,8 +121,8 @@ function checkTendermintState(url) {
         const syncing = JSON.parse(shell.exec(`curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"status","params":[],"id":1}' ${url}`).stdout.trim());
         if (syncing.result.sync_info.catching_up === false) {
             return 2;
-        }
-        return 1;
+        } else if (syncing.result.sync_info.catching_up === true) {
+          }  return 1;
     } catch (error) {
         return 0;
     }
