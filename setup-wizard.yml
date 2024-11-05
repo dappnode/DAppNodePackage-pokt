@@ -35,7 +35,7 @@ fields:
       - "No"
     default: "Yes"
     description: >-
-      If you have limited disk space and cannot hold the full ~1.3TB Pokt chain or have issues downloading the chain snapshot due to disconnections from an unstable connection, etc., then you can download a pruned snapshot of the Pokt chain that currently is only ~80GB instead of ~1.2TB.
+      If you have limited disk space and cannot hold the full ~1.6TB Pokt chain or have issues downloading the chain snapshot due to disconnections from an unstable connection, etc., then you can download a pruned snapshot of the Pokt chain that currently is only ~80GB instead of ~1.6TB.
       Note: THIS PARAMETER CANNOT BE CHANGED once set initially during setup, before the snapshot download begins.  While you can technically change the setting to non-pruned after downloading the pruned snapshot, it will not work to relay as the Pokt chain is pruned down very heavily and if you enable full snapshot after downloading the pruned snapshot it may enable the ability to select Pokt as a relay chain to stake in the Pokt UI but because it's not nearly a full node it may possibly result in penalties for your node or if you choose to use a pruned snapshot to relay that you cannot relay the full Pokt chain on your node since you only have the pruned data needed to keep you verifying the chain but not storing any (technically and normally not needed data: Historical Transactions, Historical states, and Historical blocks, etc.). This app does not yet but shortly will automatically disable this option for you but if it doesn't just be sure not to enable relaying/staking the Pokt Mainnet Chain (0001) if you downloaded a pruned snapshot, or pruned your own chain.
   - id: inlineDecompression
     target:
@@ -49,7 +49,7 @@ fields:
       - "No"
     default: "No"
     description: >-
-      If you have limited disk space, and do not have room for ~2.5TB to download and extract the full snapshot seprately (as of Early June 2024 the full compressed snapshot download is over 1.1TB and needs to be downloaded fully and then extracted, using an enormous amount of diskspace (Double ~2.5TB) during the initial download and extraction but once it's done it will be only ~1.3TB total for the full (unpruned, read more on pruned snapshots below) Pokt Chain.  If you don't have the space for this, but have have enugh space for the ~1.3TB Pokt blockchain, you can attempt to use inline decompression, this saves from needing to have double the disk space, however if you dont have a very reliable high badwidth internet connection, this method may fail and need to be restarted from the beginning and cannot be restarted from where it left off, select `No` if you would like to try this way. 
+      If you have limited disk space, and do not have room for ~3.5TB to download and extract the full snapshot seprately (as of Early November 2024 the full compressed snapshot download is over 1.23TB and needs to be downloaded fully and then extracted, using an enormous amount of diskspace (Double ~3.5TB) during the initial download and extraction but once it's done it will be only ~1.3TB total for the full (unpruned, read more on pruned snapshots below) Pokt Chain.  If you don't have the space for this, but have have enugh space for the ~1.6TB Pokt blockchain, you can attempt to use inline decompression, this saves from needing to have double the disk space, however if you dont have a very reliable high badwidth internet connection, this method may fail and need to be restarted from the beginning and cannot be restarted from where it left off, select `No` if you would like to try this way. 
       If you want to run a full node and have a lot of free space for install, select `Yes`.
   - id: compressedSnapshot
     target:
@@ -115,13 +115,13 @@ fields:
     title: "Max Outbound Peers"
     type: number
     description: >-
-      The maximum number of outbound peers that your node will connect to.  The default is 7, but you can set this to a higher/lower number if you have limited bandwidth or system resources resulting in poor performance, lower this number.
+      The maximum number of outbound peers that your node will connect to.  The default is 10, but you can set this to a higher/lower number if you have limited bandwidth or system resources resulting in poor performance, lower this number.
       Be sure to set this to a number that is less than the number of peers you have set in the `persistentPeers` field if you have set that field.
-      Also if be sure to keep this value at default of 7 before decreasing Inbound peers, if you have unlimited fast bandwidth or bad peers shown in the logs, you may want to increase this value above the default of 7.
+      Also if be sure to keep this value at default of 10 before decreasing Inbound peers, if you have unlimited fast bandwidth or bad peers shown in the logs, you may want to increase this value above the default of 10.
     pattern: "^(?:[0-9]|1[0-9]|20)$"
     patternMessage: "Please enter a whole number between 0 and 20."
     required: true
-    default: 7
+    default: 10
     if: { "advancedConfig": { "enum": ["Yes"] } }
   - id: sessionRollover
     target:
