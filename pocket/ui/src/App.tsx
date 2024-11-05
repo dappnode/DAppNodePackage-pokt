@@ -135,7 +135,6 @@ function App() {
    * Check wallet balance every 30s
    */
   /**ESlint */
-  // eslint-disable-next-line 
   useEffect(() => {
     async function getBalance() {
       try {
@@ -155,6 +154,7 @@ function App() {
     return () => {
       clearInterval(interval);
     };
+    // eslint-disable-next-line
   }, [first, selectedChains, txhash]);
   // }, [first, selectedChains, txhash, getCurrentBlock, getAccount]);
 //
