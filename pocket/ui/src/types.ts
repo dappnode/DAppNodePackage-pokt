@@ -1,6 +1,6 @@
 export interface Account {
   amount: number;
-  amountStaked: Number;
+  amountStaked: number;
   address: string;
   network: String;
   node: any;
