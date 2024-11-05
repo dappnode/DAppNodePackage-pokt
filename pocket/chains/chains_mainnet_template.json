@@ -9,7 +9,7 @@
     },
     {
         "id": "0021",
-        "url": "http://geth.dappnode:8545"
+        "url": "${GLOBAL_EXEXUTION_CLIENT_MAINNET}"
     },
     {
         "id": "0022",
@@ -17,7 +17,7 @@
     },    
     {
         "id": "0026",
-        "url": "http://goerli-geth.dappnode:8545"
+        "url": "${GLOBAL_EXEXUTION_CLIENT_GOERLI}"
     },
     {
         "id": "0027",
