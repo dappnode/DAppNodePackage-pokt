@@ -80,20 +80,6 @@ function checkEthereumState(url) {
     }
 }
 
-// curl -X GET http://lighthouse-holesky.dappnode:3500/eth/v1/node/syncing -H  "accept: application/json" | jq
-
-//  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-//                                 Dload  Upload   Total   Spent    Left  Speed
-// 100   112  100   112    0     0    245      0 --:--:-- --:--:-- --:--:--   245
-// {
-//   "data": {
-//     "is_syncing": false,
-//     "is_optimistic": false,
-//     "el_offline": false,
-//     "head_slot": "1475263",
-//     "sync_distance": "1"
-//   }
-// }
 function checkBeaconState(url) {
     try {
         const syncing = JSON.parse(shell.exec(`curl -X GET -H "accept: application/json" ${url}/eth/v1/node/syncing`).stdout.trim());
@@ -130,18 +116,23 @@ function checkAvalancheState(url) {
     }
 }
 
-// TODO: Test Pokt State Functionality + Remove other params commented out when successful with current params
+function checkTendermintState(url) {
+    try {
+        const syncing = JSON.parse(shell.exec(`curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"status","params":[],"id":1}' ${url}`).stdout.trim());
+        if (syncing.result.sync_info.catching_up === false) {
+            return 2;
+        } else if (syncing.result.sync_info.catching_up === true) {
+          }  return 1;
+    } catch (error) {
+        return 0;
+    }
+}
+
 function checkPoktState(url) {
     try {
-        //url = `tcp://localhost:26657`; MUST USE HTTP for cURL to work doesn't support tcp://localhost:26657
         var newUrl = url.replace(/:8081$/, ':26657');
-        //const syncing = JSON.parse(shell.exec(`curl ${newUrl}/status`).stdout.trim());
         const syncing = JSON.parse(shell.exec(`curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"status","params":[],"id":-1}' "${newUrl}"`).stdout.trim());
-        //const syncing = JSON.parse(shell.exec(`curl http://localhost:26657/status`).stdout.trim());
         var prunedSnapshot = shell.exec(`echo $PRUNED_SNAPSHOT`).stdout.trim();
-        //const localHeight = JSON.parse(shell.exec(`curl -X POST -H {Content-Type:\ application/json} --json {} ${url}/v1/query/height`).stdout.trim()); 
-        //const currentHeight = JSON.parse(shell.exec(`curl https://mainnet.rpc.grove.city/v1/xxxxxxxx/v1/query/height`).stdout.trim());
-        //const nodeHeight = JSON.parse(shell.exec(`pocket query height --datadir=/home/app/.pocket/ | tail -n +2`).stdout.trim());
         if (syncing.result.sync_info.catching_up === false && prunedSnapshot == 'Yes') {
             return 3;
         } else if (syncing.result.sync_info.catching_up === false && prunedSnapshot == 'No') {
