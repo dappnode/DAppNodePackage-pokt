@@ -1,17 +1,17 @@
 version: "3.5"
 services:
   pocket:
-    image: "pocket.pocket.dnp.dappnode.eth:0.1.0"
+    image: pocket.pocket.dnp.dappnode.eth:0.1.0
     build:
       context: pocket
       args:
-        UPSTREAM_VERSION: RC-0.11.1
+        UPSTREAM_VERSION: RC-0.12.0
     restart: unless-stopped
     volumes:
-      - "pocket-mainnet:/home/app/.pocket/"
+      - pocket-mainnet:/home/app/.pocket/
     ports:
-      - "26656:26656/udp"
-      - "26656:26656/tcp"
+      - 26656:26656/udp
+      - 26656:26656/tcp
     environment:
       KEYFILE_PASSPHRASE: null
       NETWORK: mainnet
