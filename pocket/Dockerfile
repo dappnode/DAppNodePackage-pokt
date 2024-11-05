@@ -1,8 +1,12 @@
 # Build UI Environment
 ARG UPSTREAM_VERSION
 
-FROM node:18.20.3-alpine as build-ui
+#<<<<<<< Devel-Bump-to-RC-12.0
+FROM node:20-alpine as build-ui
+#=======
+#FROM node:18.20.3-alpine as build-ui
 #FROM node:20.15.0-alpine AS build-ui
+#>>>>>>> Voss/devel
 
 WORKDIR /app
 
