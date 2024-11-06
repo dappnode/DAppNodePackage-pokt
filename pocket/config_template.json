@@ -2,7 +2,7 @@
     "tendermint_config": {
         "RootDir": "/home/app/.pocket",
         "ProxyApp": "tcp://127.0.0.1:26658",
-        "Moniker": "node1-DOMAIN",
+        "Moniker": "${DOMAIN}",
         "FastSyncMode": true,
         "DBBackend": "goleveldb",
         "LevelDBOptions": {
@@ -27,7 +27,7 @@
         "RPC": {
             "RootDir": "/home/app/.pocket",
             "ListenAddress": "tcp://0.0.0.0:26657",
-            "CORSAllowedOrigins": [],
+            "CORSAllowedOrigins": ["*"],
             "CORSAllowedMethods": [
                 "HEAD",
                 "GET",
@@ -56,13 +56,13 @@
             "RootDir": "/home/app/.pocket",
             "ListenAddress": "tcp://0.0.0.0:26656",
             "ExternalAddress": "tcp://${_DAPPNODE_GLOBAL_DOMAIN}:26656",
-            "Seeds": "7c0d7ec36db6594c1ffaa99724e1f8300bbd52d0@seed1.mainnet.pokt.network:26662,cdcf936d70726dd724e0e6a8353d8e5ba5abdd20@seed2.mainnet.pokt.network:26663,74b4322a91c4a7f3e774648d0730c1e610494691@seed3.mainnet.pokt.network:26662,b3235089ff302c9615ba661e13e601d9d6265b15@seed4.mainnet.pokt.network:26663",
-            "PersistentPeers": "",
+            "Seeds": "${SEEDS}",
+            "PersistentPeers": "${PERSISTENT_PEERS}",
             "UPNP": false,
             "AddrBook": "config/addrbook.json",
             "AddrBookStrict": false,
             "MaxNumInboundPeers": 28,
-            "MaxNumOutboundPeers": 16,
+            "MaxNumOutboundPeers": 10,
             "UnconditionalPeerIDs": "",
             "PersistentPeersMaxDialPeriod": 0,
             "FlushThrottleTimeout": 100000000,
@@ -130,12 +130,11 @@
         "data_dir": "/home/app/.pocket",
         "genesis_file": "genesis.json",
         "chains_name": "chains.json",
-        "session_db_name": "session",
         "evidence_db_name": "pocket_evidence",
         "tendermint_uri": "tcp://localhost:26657",
         "keybase_name": "pocket-keybase",
         "rpc_port": "8081",
-        "client_session_sync_allowance": 1,
+        "client_session_sync_allowance": 0,
         "client_block_sync_allowance": 10,
         "max_evidence_cache_entries": 500,
         "max_session_cache_entries": 500,
@@ -147,7 +146,7 @@
         "rpc_timeout": 30000,
         "pocket_prometheus_port": "8083",
         "prometheus_max_open_files": 3,
-        "max_claim_age_for_proof_retry": 32,
+        "max_claim_age_for_proof_retry": 96,
         "proof_prevalidation": false,
         "ctx_cache_size": 20,
         "abci_logging": false,
@@ -157,6 +156,7 @@
         "chains_hot_reload": true,
         "generate_token_on_start": false,
         "lean_pocket": false,
-        "lean_pocket_user_key_file": "lean_nodes_keys.json"
+        "lean_pocket_user_key_file": "lean_nodes_keys.json",
+        "prevent_negative_reward_claim": false
     }
 }

@@ -1,6 +1,7 @@
 import { Badge } from "react-bootstrap";
-import { FaWallet } from "react-icons/fa";
+import { FaWallet, FaClock } from "react-icons/fa";
 import { Account } from '../../../types';
+import { upoktToPokt } from '../../../utils';
 
 import "./Wallet.scss";
 
@@ -23,12 +24,21 @@ export default function Wallet({
               <FaWallet /> {shortenAddress(account.address)}
             </Badge>
           </h4>
-
+          <h4>
+            {new Date(account.unstakingTime).getTime() !== new Date('0001-01-01T00:00:00Z').getTime() && (
+              <Badge>
+                <FaClock /> Unstaked Date: {new Date(account.unstakingTime).toISOString()}
+              </Badge>
+            )}
+          </h4>
+          <h4>
+            <Badge> {account.jailed ? "Jailed" : "Not Jailed"} </Badge>
+          </h4>
           <h4>
             <Badge> {account.network}</Badge>
           </h4>
           <h4>
-            {account.amount ? <Badge>{(account.amount / 1000000).toFixed(2)} POKT</Badge> : <Badge>Unknown</Badge>}
+            {account.amount ? <Badge>{upoktToPokt(account.amount).toFixed(2)} POKT</Badge> : <Badge>Unknown</Badge>}
           </h4>
         </>
       )}
