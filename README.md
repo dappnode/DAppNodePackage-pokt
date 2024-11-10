@@ -23,10 +23,10 @@ Requirements to run DAppNode package for Pocket
 
 <!--Requirements to run the dappnode package in a list: -->
 
-Minimum Hardware Requirements: 4 CPU Cores | 16 GB RAM | 800GB SSD or NVMe for POKT node + disk space for nodes you intend to relay on Pocket Network.
+Minimum Hardware Requirements: 4 CPU Cores | 32 GB RAM | 500GB (Pruned) OR 2TB (Full Node) SSD or NVMe for POKT node + disk space for nodes you intend to relay on Pocket Network.
 
-Ports: Be sure your node has properly exposed the Pocket RPC via HTTPS (Container Default Port 8081 to be forwarded via HTTPS:443) and P2P port (Default: 26656/TCP)
-This package attempts to automatically properly map the RPC port via the HTTPS Portal during installation.
+Ports: Be sure your node has properly exposed the Pocket RPC via HTTPS (Container Default Port 8081 to be forwarded via HTTPS:443, this internal proxying happens automatically with no user input) User Must only confirm that your router has your node's HTTPS port (443/TCP) and the Pokt P2P port (Default: 26656/TCP) forwarded to the open internet.
+This package attempts to automatically properly map the RPC port via the HTTPS Portal during installation, If you get any errors related to the HTTPS package during install please contact support on Discord.
 
 UPnP (if enabled on your router and Dappnode) will attempt to forward ports 26656/TCP and 443/TCP to your Dappnode. If you have UPnP disabled, please ensure to forward these ports manually.
 
@@ -38,6 +38,7 @@ UPnP (if enabled on your router and Dappnode) will attempt to forward ports 2665
 |      Updated       | Champion/s |
 | :----------------: | :--------: |
 | :heavy_check_mark: | @mgarciate |
+| :heavy_check_mark: | @alexpeterson91 |
 
 ### Additional links
 

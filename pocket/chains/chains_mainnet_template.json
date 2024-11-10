@@ -33,7 +33,7 @@
     },
     {
         "id": "0053",
-        "url": "http://optimism.optimism.public.dappnode:8545"
+        "url": "http://op-node.op-node.dappnode:9545"
     },
     {
         "id": "0063",
@@ -61,6 +61,14 @@
     },
     {
         "id": "A053",
-        "url": "http://optimism.optimism.public.dappnode:8545"
+        "url": "http://op-node.op-node.dappnode:9545"
+    },
+    {
+        "id": "B021",
+        "url": "http://beacon-chain.lodestar.dappnode:3500"
+    },
+    {
+        "id": "B081",
+        "url": "http://beacon-chain.teku-holesky.dappnode:3500"
     }
 ]
