@@ -233,6 +233,17 @@ app.post('/api/stakeCustodial', (req, res) => {
     res.send(response);
 })
 
+app.post('/api/unstakeNode', (req, res) => {
+    // res.send({});
+    // return;
+    const network = shell.exec(`echo $NETWORK`).stdout.trim();
+    const passphrase = shell.exec(`echo $KEYFILE_PASSPHRASE`).stdout.trim();
+    const address = shell.exec(`pocket accounts list --datadir=/home/app/.pocket/ | cut -d' ' -f2- `).stdout.trim();
+    const response = shell.exec(`pocket nodes unstake ${address} ${address} ${network} 10000 false --datadir=/home/app/.pocket/ --pwd ${passphrase} | tail -n +3`).stdout.trim();
+    res.send(response);
+})
+
+
 // app.post('/api/stakeNonCustodial', (req, res) => {
 // //   pocket nodes stake non-custodial <operatorPublicKey> <outputAddress> <amount> <RelayChainIDs> <serviceURI> <networkID> <fee> <isBefore8.0> [flags]
 // const network = shell.exec(`echo $NETWORK`).stdout.trim();
@@ -240,6 +251,7 @@ app.post('/api/stakeCustodial', (req, res) => {
 // const domain = shell.exec(`echo $_DAPPNODE_GLOBAL_DOMAIN`).stdout.trim();
 // const operatorPublicKey = shell.exec().stdout.trim();
 // })
+
 
 var server = app.listen(CUSTOM_UI_HTTP_PORT, function () {
     var host = server.address().address;

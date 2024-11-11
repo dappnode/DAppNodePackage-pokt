@@ -120,6 +120,28 @@ function App() {
     }
   }
 
+  const unstakeNode = async () => {
+    try {
+      setTxhash(null);
+      if (account && ((account.amountStaked) < 0)) {
+        throw new Error(`You do not have any POKT staked`);
+      }
+      const responseUnstakeNode = await appService.unstakeNode();
+      console.log(responseUnstakeNode);
+      if (!(responseUnstakeNode.code) && !(responseUnstakeNode.raw_log) && responseUnstakeNode.txhash) {
+        toast.success(`It can take 15+ minutes for the next block to process on the Pocket blockchain. This means you will likely have to wait 15+ minutes before your validator will begin Unstaking.`);
+        setTxhash(responseUnstakeNode.txhash);
+        await replaceChains();
+        return;
+      }
+      throw new Error(`Error while unstaking: ${JSON.stringify(responseUnstakeNode)}`);
+    } catch (e) {
+      toast.error((e as Error).message);
+      console.error(e);
+    }
+  }
+
+
   function handleChange(id:string, isChecked: boolean) {
     let modifiedMap = selectedChains;
     if(modifiedMap?.get(id) && !isChecked) {
@@ -293,8 +315,40 @@ function App() {
             </Form.Text>
           </div>
           </div>
+          <div>
+            <div>
+              <div>
+              <Form.Label>Before Un-staking</Form.Label>
+              </div>
+              <div>
+              <Form.Text>
+                Remember it takes 21 days to unstake your node.
+              </Form.Text>
+              </div>
+              <div>
+              <Form.Text>
+                More info <a href="https://docs.pokt.network/node/staking/#unstaking" target="_blank" rel="noreferrer">here</a>.
+              </Form.Text>
+              </div>
+              </div>
+              <div>
+                <Button
+                  onClick={() => unstakeNode()}
+                  disabled={(currentBlock ?? 0) === 0 || !account?.node}
+                >Un-Stake Node</Button>
+                {txhash && (
+                  <Form.Text>
+                    {` `}Tx: {txhash}
+                  </Form.Text>
+                )}
+                {(currentBlock ?? 0) === 0 && (
+                  <Form.Text>
+                    {` `}(Not Staked)
+                  </Form.Text>
+                )}
+              </div>
+            </div>
         </Form.Group>
-
       </div>
 
       <Footer />
