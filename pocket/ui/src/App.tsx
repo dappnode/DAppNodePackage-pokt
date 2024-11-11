@@ -334,8 +334,8 @@ function App() {
               <div>
                 <Button
                   onClick={() => unstakeNode()}
-                  disabled={(currentBlock ?? 0) === 0}
-                >{account?.node ?? `Un-Stake`}</Button>
+                  disabled={(currentBlock ?? 0) === 0 || !account?.node}
+                >Un-Stake Node</Button>
                 {txhash && (
                   <Form.Text>
                     {` `}Tx: {txhash}
