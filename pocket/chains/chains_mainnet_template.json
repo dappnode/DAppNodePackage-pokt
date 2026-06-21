@@ -9,19 +9,15 @@
     },
     {
         "id": "0021",
-        "url": "http://geth.dappnode:8545"
+        "url": "http://execution.mainnet.staker.dappnode:8545"
     },
     {
         "id": "0022",
         "url": "http://erigon.dappnode:8545"
     },    
     {
-        "id": "0026",
-        "url": "http://goerli-geth.dappnode:8545"
-    },
-    {
         "id": "0027",
-        "url": "http://nethermind-xdai.dappnode:8545"
+        "url": "http://execution.gnosis.staker.dappnode:8545"
     },
     {
         "id": "0028",
@@ -34,10 +30,6 @@
     {
         "id": "0053",
         "url": "http://op-node.op-node.dappnode:9545"
-    },
-    {
-        "id": "0063",
-        "url": "http://goerli-erigon.dappnode:8545"
     },
     {
         "id": "0066",
@@ -53,7 +45,7 @@
     },
     {
         "id": "0081",
-        "url": "http://holesky-geth.dappnode:8545"
+        "url": "http://execution.holesky.staker.dappnode:8545"
     },
     {
         "id": "000C",

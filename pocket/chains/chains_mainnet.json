@@ -5,6 +5,6 @@
     },
     {
         "id": "0021",
-        "url": "http://geth.dappnode:8545"
+        "url": "http://execution.mainnet.staker.dappnode:8545"
     }
 ]
